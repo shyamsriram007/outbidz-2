@@ -1,0 +1,476 @@
+// Player data - IPL players sorted by auction categories
+export type PlayerRole = "batsman" | "bowler" | "all-rounder" | "wicket-keeper";
+export type PlayerCategory = "marquee" | "batsman" | "bowler" | "wicket-keeper" | "all-rounder" | "uncapped";
+
+export interface Player {
+    id: string;
+    name: string;
+    country: string;
+    countryCode: string;
+    role: PlayerRole;
+    basePrice: number;
+    category: PlayerCategory;
+    stats?: { matches?: number; runs?: number; wickets?: number };
+}
+
+// Player data: [name, country, countryCode, role, basePrice, category]
+type PlayerData = [string, string, string, PlayerRole, number, PlayerCategory];
+
+const CRICKETER_DATA: PlayerData[] = [
+    // ============= SET 1: MARQUEE PLAYERS =============
+    ["Virat Kohli", "India", "IN", "batsman", 200, "marquee"],
+    ["Rohit Sharma", "India", "IN", "batsman", 200, "marquee"],
+    ["MS Dhoni", "India", "IN", "wicket-keeper", 200, "marquee"],
+    ["Jasprit Bumrah", "India", "IN", "bowler", 200, "marquee"],
+    ["Hardik Pandya", "India", "IN", "all-rounder", 200, "marquee"],
+    ["Ravindra Jadeja", "India", "IN", "all-rounder", 200, "marquee"],
+    ["Suryakumar Yadav", "India", "IN", "batsman", 200, "marquee"],
+    ["Rishabh Pant", "India", "IN", "wicket-keeper", 200, "marquee"],
+    ["KL Rahul", "India", "IN", "wicket-keeper", 200, "marquee"],
+    ["Rashid Khan", "Afghanistan", "AF", "bowler", 200, "marquee"],
+    ["Jos Buttler", "England", "GB", "wicket-keeper", 200, "marquee"],
+    ["David Warner", "Australia", "AU", "batsman", 200, "marquee"],
+    ["Glenn Maxwell", "Australia", "AU", "all-rounder", 200, "marquee"],
+    ["Pat Cummins", "Australia", "AU", "bowler", 200, "marquee"],
+    ["Quinton de Kock", "South Africa", "ZA", "wicket-keeper", 200, "marquee"],
+    ["Kagiso Rabada", "South Africa", "ZA", "bowler", 200, "marquee"],
+    ["Heinrich Klaasen", "South Africa", "ZA", "wicket-keeper", 200, "marquee"],
+    ["Trent Boult", "New Zealand", "NZ", "bowler", 200, "marquee"],
+    ["Andre Russell", "West Indies", "WI", "all-rounder", 200, "marquee"],
+    ["Sunil Narine", "West Indies", "WI", "all-rounder", 200, "marquee"],
+    ["Nicholas Pooran", "West Indies", "WI", "wicket-keeper", 200, "marquee"],
+    ["Sam Curran", "England", "GB", "all-rounder", 200, "marquee"],
+    ["Ben Stokes", "England", "GB", "all-rounder", 200, "marquee"],
+    ["Cameron Green", "Australia", "AU", "all-rounder", 200, "marquee"],
+    ["Mitchell Starc", "Australia", "AU", "bowler", 200, "marquee"],
+
+    // ============= SET 2: CAPPED BATSMEN =============
+    ["Shubman Gill", "India", "IN", "batsman", 150, "batsman"],
+    ["Yashasvi Jaiswal", "India", "IN", "batsman", 150, "batsman"],
+    ["Shreyas Iyer", "India", "IN", "batsman", 150, "batsman"],
+    ["Faf du Plessis", "South Africa", "ZA", "batsman", 150, "batsman"],
+    ["David Miller", "South Africa", "ZA", "batsman", 150, "batsman"],
+    ["Aiden Markram", "South Africa", "ZA", "batsman", 150, "batsman"],
+    ["Kane Williamson", "New Zealand", "NZ", "batsman", 150, "batsman"],
+    ["Devon Conway", "New Zealand", "NZ", "batsman", 150, "batsman"],
+    ["Shimron Hetmyer", "West Indies", "WI", "batsman", 150, "batsman"],
+    ["Harry Brook", "England", "GB", "batsman", 150, "batsman"],
+    ["Tim David", "Australia", "AU", "batsman", 150, "batsman"],
+    ["Travis Head", "Australia", "AU", "batsman", 150, "batsman"],
+    ["Ruturaj Gaikwad", "India", "IN", "batsman", 100, "batsman"],
+    ["Prithvi Shaw", "India", "IN", "batsman", 75, "batsman"],
+    ["Devdutt Padikkal", "India", "IN", "batsman", 75, "batsman"],
+    ["Rahul Tripathi", "India", "IN", "batsman", 75, "batsman"],
+    ["Tilak Varma", "India", "IN", "batsman", 75, "batsman"],
+    ["Nitish Rana", "India", "IN", "batsman", 75, "batsman"],
+    ["Mayank Agarwal", "India", "IN", "batsman", 75, "batsman"],
+    ["Tristan Stubbs", "South Africa", "ZA", "batsman", 100, "batsman"],
+    ["Dewald Brevis", "South Africa", "ZA", "batsman", 100, "batsman"],
+    ["Rilee Rossouw", "South Africa", "ZA", "batsman", 100, "batsman"],
+    ["Glenn Phillips", "New Zealand", "NZ", "batsman", 100, "batsman"],
+    ["Finn Allen", "New Zealand", "NZ", "batsman", 100, "batsman"],
+    ["Jake Fraser-McGurk", "Australia", "AU", "batsman", 100, "batsman"],
+    ["Dawid Malan", "England", "GB", "batsman", 100, "batsman"],
+    ["Rovman Powell", "West Indies", "WI", "batsman", 100, "batsman"],
+    ["Rassie van der Dussen", "South Africa", "ZA", "batsman", 75, "batsman"],
+    ["Jason Roy", "England", "GB", "batsman", 75, "batsman"],
+    ["Mark Chapman", "New Zealand", "NZ", "batsman", 75, "batsman"],
+    ["Brandon King", "West Indies", "WI", "batsman", 75, "batsman"],
+    ["Tom Banton", "England", "GB", "batsman", 50, "batsman"],
+    ["Manish Pandey", "India", "IN", "batsman", 50, "batsman"],
+    ["Sherfane Rutherford", "West Indies", "WI", "batsman", 50, "batsman"],
+
+    // ============= SET 3: CAPPED BOWLERS =============
+    ["Mohammed Shami", "India", "IN", "bowler", 150, "bowler"],
+    ["Yuzvendra Chahal", "India", "IN", "bowler", 150, "bowler"],
+    ["Ravichandran Ashwin", "India", "IN", "bowler", 150, "bowler"],
+    ["Bhuvneshwar Kumar", "India", "IN", "bowler", 150, "bowler"],
+    ["Anrich Nortje", "South Africa", "ZA", "bowler", 150, "bowler"],
+    ["Lockie Ferguson", "New Zealand", "NZ", "bowler", 150, "bowler"],
+    ["Jofra Archer", "England", "GB", "bowler", 150, "bowler"],
+    ["Mark Wood", "England", "GB", "bowler", 150, "bowler"],
+    ["Josh Hazlewood", "Australia", "AU", "bowler", 150, "bowler"],
+    ["Kuldeep Yadav", "India", "IN", "bowler", 100, "bowler"],
+    ["Deepak Chahar", "India", "IN", "bowler", 100, "bowler"],
+    ["Arshdeep Singh", "India", "IN", "bowler", 100, "bowler"],
+    ["Harshal Patel", "India", "IN", "bowler", 100, "bowler"],
+    ["Varun Chakravarthy", "India", "IN", "bowler", 100, "bowler"],
+    ["Matheesha Pathirana", "Sri Lanka", "LK", "bowler", 100, "bowler"],
+    ["Maheesh Theekshana", "Sri Lanka", "LK", "bowler", 100, "bowler"],
+    ["Mustafizur Rahman", "Bangladesh", "BD", "bowler", 100, "bowler"],
+    ["Fazalhaq Farooqi", "Afghanistan", "AF", "bowler", 100, "bowler"],
+    ["Lungi Ngidi", "South Africa", "ZA", "bowler", 100, "bowler"],
+    ["Gerald Coetzee", "South Africa", "ZA", "bowler", 100, "bowler"],
+    ["Tim Southee", "New Zealand", "NZ", "bowler", 100, "bowler"],
+    ["Adam Zampa", "Australia", "AU", "bowler", 100, "bowler"],
+    ["Spencer Johnson", "Australia", "AU", "bowler", 100, "bowler"],
+    ["Adil Rashid", "England", "GB", "bowler", 100, "bowler"],
+    ["Alzarri Joseph", "West Indies", "WI", "bowler", 100, "bowler"],
+    ["Avesh Khan", "India", "IN", "bowler", 75, "bowler"],
+    ["Ravi Bishnoi", "India", "IN", "bowler", 75, "bowler"],
+    ["Mujeeb Ur Rahman", "Afghanistan", "AF", "bowler", 75, "bowler"],
+    ["Naveen-ul-Haq", "Afghanistan", "AF", "bowler", 75, "bowler"],
+    ["Tabraiz Shamsi", "South Africa", "ZA", "bowler", 75, "bowler"],
+    ["Reece Topley", "England", "GB", "bowler", 75, "bowler"],
+    ["Kyle Jamieson", "New Zealand", "NZ", "bowler", 75, "bowler"],
+    ["Matt Henry", "New Zealand", "NZ", "bowler", 75, "bowler"],
+    ["Nathan Ellis", "Australia", "AU", "bowler", 75, "bowler"],
+    ["Jhye Richardson", "Australia", "AU", "bowler", 75, "bowler"],
+    ["Akeal Hosein", "West Indies", "WI", "bowler", 75, "bowler"],
+    ["Josh Little", "Ireland", "IE", "bowler", 75, "bowler"],
+    ["Sandeep Lamichhane", "Nepal", "NP", "bowler", 75, "bowler"],
+    ["Rahul Chahar", "India", "IN", "bowler", 50, "bowler"],
+    ["Tushar Deshpande", "India", "IN", "bowler", 50, "bowler"],
+    ["Umran Malik", "India", "IN", "bowler", 50, "bowler"],
+    ["Mukesh Kumar", "India", "IN", "bowler", 50, "bowler"],
+    ["Mohit Sharma", "India", "IN", "bowler", 50, "bowler"],
+    ["Shivam Mavi", "India", "IN", "bowler", 50, "bowler"],
+    ["Akash Madhwal", "India", "IN", "bowler", 50, "bowler"],
+    ["Mohsin Khan", "India", "IN", "bowler", 50, "bowler"],
+    ["Sai Kishore", "India", "IN", "bowler", 50, "bowler"],
+    ["Piyush Chawla", "India", "IN", "bowler", 50, "bowler"],
+    ["Chetan Sakariya", "India", "IN", "bowler", 50, "bowler"],
+    ["Sheldon Cottrell", "West Indies", "WI", "bowler", 50, "bowler"],
+    ["Oshane Thomas", "West Indies", "WI", "bowler", 50, "bowler"],
+    ["Obed McCoy", "West Indies", "WI", "bowler", 50, "bowler"],
+    ["Noor Ahmad", "Afghanistan", "AF", "bowler", 50, "bowler"],
+    ["Sisanda Magala", "South Africa", "ZA", "bowler", 50, "bowler"],
+    ["Sean Abbott", "Australia", "AU", "bowler", 50, "bowler"],
+    ["Riley Meredith", "Australia", "AU", "bowler", 50, "bowler"],
+    ["Tanveer Sangha", "Australia", "AU", "bowler", 50, "bowler"],
+    ["Dushmantha Chameera", "Sri Lanka", "LK", "bowler", 50, "bowler"],
+    ["Dilshan Madushanka", "Sri Lanka", "LK", "bowler", 50, "bowler"],
+    ["Blessing Muzarabani", "Zimbabwe", "ZW", "bowler", 50, "bowler"],
+
+    // ============= SET 4: CAPPED WICKET-KEEPERS =============
+    ["Sanju Samson", "India", "IN", "wicket-keeper", 150, "wicket-keeper"],
+    ["Jonny Bairstow", "England", "GB", "wicket-keeper", 150, "wicket-keeper"],
+    ["Phil Salt", "England", "GB", "wicket-keeper", 150, "wicket-keeper"],
+    ["Ishan Kishan", "India", "IN", "wicket-keeper", 100, "wicket-keeper"],
+    ["Rahmanullah Gurbaz", "Afghanistan", "AF", "wicket-keeper", 100, "wicket-keeper"],
+    ["Alex Carey", "Australia", "AU", "wicket-keeper", 100, "wicket-keeper"],
+    ["Shai Hope", "West Indies", "WI", "wicket-keeper", 100, "wicket-keeper"],
+    ["Dinesh Karthik", "India", "IN", "wicket-keeper", 75, "wicket-keeper"],
+    ["Matthew Wade", "Australia", "AU", "wicket-keeper", 75, "wicket-keeper"],
+    ["Dhruv Jurel", "India", "IN", "wicket-keeper", 50, "wicket-keeper"],
+    ["Jitesh Sharma", "India", "IN", "wicket-keeper", 50, "wicket-keeper"],
+    ["Sam Billings", "England", "GB", "wicket-keeper", 50, "wicket-keeper"],
+    ["Litton Das", "Bangladesh", "BD", "wicket-keeper", 50, "wicket-keeper"],
+
+    // ============= SET 5: CAPPED ALL-ROUNDERS =============
+    ["Marco Jansen", "South Africa", "ZA", "all-rounder", 150, "all-rounder"],
+    ["Rachin Ravindra", "New Zealand", "NZ", "all-rounder", 150, "all-rounder"],
+    ["Jason Holder", "West Indies", "WI", "all-rounder", 150, "all-rounder"],
+    ["Liam Livingstone", "England", "GB", "all-rounder", 150, "all-rounder"],
+    ["Mitchell Marsh", "Australia", "AU", "all-rounder", 150, "all-rounder"],
+    ["Marcus Stoinis", "Australia", "AU", "all-rounder", 150, "all-rounder"],
+    ["Axar Patel", "India", "IN", "all-rounder", 100, "all-rounder"],
+    ["Shardul Thakur", "India", "IN", "all-rounder", 100, "all-rounder"],
+    ["Shivam Dube", "India", "IN", "all-rounder", 100, "all-rounder"],
+    ["Wanindu Hasaranga", "Sri Lanka", "LK", "all-rounder", 100, "all-rounder"],
+    ["Shakib Al Hasan", "Bangladesh", "BD", "all-rounder", 100, "all-rounder"],
+    ["Mohammad Nabi", "Afghanistan", "AF", "all-rounder", 100, "all-rounder"],
+    ["Mitchell Santner", "New Zealand", "NZ", "all-rounder", 100, "all-rounder"],
+    ["Moeen Ali", "England", "GB", "all-rounder", 100, "all-rounder"],
+    ["Will Jacks", "England", "GB", "all-rounder", 100, "all-rounder"],
+    ["Kyle Mayers", "West Indies", "WI", "all-rounder", 100, "all-rounder"],
+    ["Venkatesh Iyer", "India", "IN", "all-rounder", 75, "all-rounder"],
+    ["Washington Sundar", "India", "IN", "all-rounder", 75, "all-rounder"],
+    ["Krunal Pandya", "India", "IN", "all-rounder", 75, "all-rounder"],
+    ["Rahul Tewatia", "India", "IN", "all-rounder", 75, "all-rounder"],
+    ["Riyan Parag", "India", "IN", "all-rounder", 75, "all-rounder"],
+    ["Chris Woakes", "England", "GB", "all-rounder", 75, "all-rounder"],
+    ["Tom Curran", "England", "GB", "all-rounder", 75, "all-rounder"],
+    ["David Willey", "England", "GB", "all-rounder", 75, "all-rounder"],
+    ["Ashton Agar", "Australia", "AU", "all-rounder", 75, "all-rounder"],
+    ["Romario Shepherd", "West Indies", "WI", "all-rounder", 75, "all-rounder"],
+    ["Abhishek Sharma", "India", "IN", "all-rounder", 50, "all-rounder"],
+    ["Shahbaz Ahmed", "India", "IN", "all-rounder", 50, "all-rounder"],
+    ["Vijay Shankar", "India", "IN", "all-rounder", 50, "all-rounder"],
+    ["Harpreet Brar", "India", "IN", "all-rounder", 50, "all-rounder"],
+    ["Odean Smith", "West Indies", "WI", "all-rounder", 50, "all-rounder"],
+    ["Fabian Allen", "West Indies", "WI", "all-rounder", 50, "all-rounder"],
+    ["Gulbadin Naib", "Afghanistan", "AF", "all-rounder", 50, "all-rounder"],
+    ["Azmatullah Omarzai", "Afghanistan", "AF", "all-rounder", 50, "all-rounder"],
+    ["Dwaine Pretorius", "South Africa", "ZA", "all-rounder", 50, "all-rounder"],
+    ["Wayne Parnell", "South Africa", "ZA", "all-rounder", 50, "all-rounder"],
+    ["Daniel Sams", "Australia", "AU", "all-rounder", 50, "all-rounder"],
+    ["Dasun Shanaka", "Sri Lanka", "LK", "all-rounder", 50, "all-rounder"],
+    ["Dunith Wellalage", "Sri Lanka", "LK", "all-rounder", 50, "all-rounder"],
+    ["Sikandar Raza", "Zimbabwe", "ZW", "all-rounder", 50, "all-rounder"],
+
+    // ============= SET 6: UNCAPPED PLAYERS =============
+    ["Rinku Singh", "India", "IN", "batsman", 50, "uncapped"],
+    ["Shahrukh Khan", "India", "IN", "batsman", 75, "uncapped"],
+    ["Sai Sudharsan", "India", "IN", "batsman", 75, "uncapped"],
+    ["Sarfaraz Khan", "India", "IN", "batsman", 50, "uncapped"],
+    ["Rajat Patidar", "India", "IN", "batsman", 50, "uncapped"],
+    ["Shashank Singh", "India", "IN", "batsman", 50, "uncapped"],
+    ["Abdul Samad", "India", "IN", "batsman", 50, "uncapped"],
+    ["Prabhsimran Singh", "India", "IN", "wicket-keeper", 50, "uncapped"],
+    ["N Jagadeesan", "India", "IN", "wicket-keeper", 50, "uncapped"],
+    ["Abishek Porel", "India", "IN", "wicket-keeper", 50, "uncapped"],
+    ["Anuj Rawat", "India", "IN", "wicket-keeper", 30, "uncapped"],
+    ["Kumar Kushagra", "India", "IN", "wicket-keeper", 30, "uncapped"],
+    ["Luvnith Sisodia", "India", "IN", "wicket-keeper", 20, "uncapped"],
+    ["Avanish Rao Aravelly", "India", "IN", "wicket-keeper", 20, "uncapped"],
+    ["Yash Dayal", "India", "IN", "bowler", 30, "uncapped"],
+    ["Akash Deep", "India", "IN", "bowler", 30, "uncapped"],
+    ["Harshit Rana", "India", "IN", "bowler", 30, "uncapped"],
+    ["Kartik Tyagi", "India", "IN", "bowler", 40, "uncapped"],
+    ["Kamlesh Nagarkoti", "India", "IN", "bowler", 30, "uncapped"],
+    ["Mayank Markande", "India", "IN", "bowler", 40, "uncapped"],
+    ["Siddharth Kaul", "India", "IN", "bowler", 40, "uncapped"],
+    ["Basil Thampi", "India", "IN", "bowler", 30, "uncapped"],
+    ["Sandeep Warrier", "India", "IN", "bowler", 40, "uncapped"],
+    ["Amit Mishra", "India", "IN", "bowler", 40, "uncapped"],
+    ["Karn Sharma", "India", "IN", "bowler", 40, "uncapped"],
+    ["Pravin Dubey", "India", "IN", "bowler", 30, "uncapped"],
+    ["M Siddharth", "India", "IN", "bowler", 30, "uncapped"],
+    ["Vyshak Vijaykumar", "India", "IN", "bowler", 30, "uncapped"],
+    ["Suyash Sharma", "India", "IN", "bowler", 20, "uncapped"],
+    ["Himanshu Sharma", "India", "IN", "bowler", 20, "uncapped"],
+    ["Vidyadhar Patil", "India", "IN", "bowler", 20, "uncapped"],
+    ["Sumit Kumar", "India", "IN", "bowler", 20, "uncapped"],
+    ["Akash Singh", "India", "IN", "bowler", 30, "uncapped"],
+    ["Rasikh Salam", "India", "IN", "bowler", 30, "uncapped"],
+    ["Lalit Yadav", "India", "IN", "all-rounder", 40, "uncapped"],
+    ["Anukul Roy", "India", "IN", "all-rounder", 30, "uncapped"],
+    ["Prerak Mankad", "India", "IN", "all-rounder", 30, "uncapped"],
+    ["Nishant Sindhu", "India", "IN", "all-rounder", 30, "uncapped"],
+    ["Tanush Kotian", "India", "IN", "all-rounder", 30, "uncapped"],
+    ["Arjun Tendulkar", "India", "IN", "all-rounder", 30, "uncapped"],
+    ["Sameer Rizvi", "India", "IN", "batsman", 30, "uncapped"],
+    ["Ramandeep Singh", "India", "IN", "all-rounder", 30, "uncapped"],
+    ["Nehal Wadhera", "India", "IN", "batsman", 30, "uncapped"],
+    ["Angkrish Raghuvanshi", "India", "IN", "batsman", 30, "uncapped"],
+    ["Vivrant Sharma", "India", "IN", "all-rounder", 30, "uncapped"],
+    ["Swastik Chikara", "India", "IN", "batsman", 20, "uncapped"],
+    ["Naman Dhir", "India", "IN", "all-rounder", 20, "uncapped"],
+    ["Sanvir Singh", "India", "IN", "all-rounder", 20, "uncapped"],
+    ["Manoj Bhandage", "India", "IN", "all-rounder", 20, "uncapped"],
+    ["Keemo Paul", "West Indies", "WI", "all-rounder", 40, "uncapped"],
+    ["Dominic Drakes", "West Indies", "WI", "all-rounder", 30, "uncapped"],
+    ["Kesrick Williams", "West Indies", "WI", "bowler", 30, "uncapped"],
+    ["Nandre Burger", "South Africa", "ZA", "bowler", 40, "uncapped"],
+    ["Donovan Ferreira", "South Africa", "ZA", "all-rounder", 30, "uncapped"],
+    ["Lizaad Williams", "South Africa", "ZA", "bowler", 30, "uncapped"],
+    ["Kwena Maphaka", "South Africa", "ZA", "bowler", 50, "uncapped"],
+    ["Will Sutherland", "Australia", "AU", "all-rounder", 40, "uncapped"],
+    ["Adam Milne", "New Zealand", "NZ", "bowler", 40, "uncapped"],
+    ["Ish Sodhi", "New Zealand", "NZ", "bowler", 40, "uncapped"],
+
+    // ============= ADDITIONAL PLAYERS TO REACH 300 =============
+
+    // More Capped Batsmen
+    ["Ajinkya Rahane", "India", "IN", "batsman", 75, "batsman"],
+    ["Wriddhiman Saha", "India", "IN", "wicket-keeper", 50, "wicket-keeper"],
+    ["Robin Uthappa", "India", "IN", "batsman", 50, "batsman"],
+    ["Ambati Rayudu", "India", "IN", "batsman", 50, "batsman"],
+    ["Suresh Raina", "India", "IN", "batsman", 75, "batsman"],
+    ["Gautam Gambhir", "India", "IN", "batsman", 75, "batsman"],
+    ["Virender Sehwag", "India", "IN", "batsman", 75, "batsman"],
+    ["Chris Gayle", "West Indies", "WI", "batsman", 150, "batsman"],
+    ["AB de Villiers", "South Africa", "ZA", "batsman", 150, "batsman"],
+    ["Hashim Amla", "South Africa", "ZA", "batsman", 75, "batsman"],
+    ["Kumar Sangakkara", "Sri Lanka", "LK", "wicket-keeper", 75, "wicket-keeper"],
+    ["Mahela Jayawardene", "Sri Lanka", "LK", "batsman", 75, "batsman"],
+    ["Kevin Pietersen", "England", "GB", "batsman", 75, "batsman"],
+    ["Eoin Morgan", "England", "GB", "batsman", 75, "batsman"],
+    ["Aaron Finch", "Australia", "AU", "batsman", 100, "batsman"],
+    ["Shane Watson", "Australia", "AU", "all-rounder", 100, "all-rounder"],
+    ["Shaun Marsh", "Australia", "AU", "batsman", 50, "batsman"],
+    ["Martin Guptill", "New Zealand", "NZ", "batsman", 75, "batsman"],
+    ["Colin Munro", "New Zealand", "NZ", "batsman", 50, "batsman"],
+    ["Brendon McCullum", "New Zealand", "NZ", "wicket-keeper", 75, "wicket-keeper"],
+    ["Ross Taylor", "New Zealand", "NZ", "batsman", 75, "batsman"],
+    ["Chris Lynn", "Australia", "AU", "batsman", 75, "batsman"],
+    ["Dwayne Smith", "West Indies", "WI", "batsman", 50, "batsman"],
+    ["Kieron Pollard", "West Indies", "WI", "all-rounder", 150, "all-rounder"],
+    ["Dwayne Bravo", "West Indies", "WI", "all-rounder", 100, "all-rounder"],
+
+    // More Capped Bowlers
+    ["Harbhajan Singh", "India", "IN", "bowler", 75, "bowler"],
+    ["Zaheer Khan", "India", "IN", "bowler", 75, "bowler"],
+    ["Irfan Pathan", "India", "IN", "all-rounder", 50, "all-rounder"],
+    ["Yusuf Pathan", "India", "IN", "all-rounder", 50, "all-rounder"],
+    ["Pragyan Ojha", "India", "IN", "bowler", 40, "bowler"],
+    ["Ashish Nehra", "India", "IN", "bowler", 50, "bowler"],
+    ["Jaydev Unadkat", "India", "IN", "bowler", 75, "bowler"],
+    ["Dhawal Kulkarni", "India", "IN", "bowler", 40, "bowler"],
+    ["Ishant Sharma", "India", "IN", "bowler", 50, "bowler"],
+    ["Praveen Kumar", "India", "IN", "bowler", 40, "bowler"],
+    ["Vinay Kumar", "India", "IN", "bowler", 40, "bowler"],
+    ["Dale Steyn", "South Africa", "ZA", "bowler", 100, "bowler"],
+    ["Morne Morkel", "South Africa", "ZA", "bowler", 75, "bowler"],
+    ["Imran Tahir", "South Africa", "ZA", "bowler", 100, "bowler"],
+    ["Chris Morris", "South Africa", "ZA", "all-rounder", 100, "all-rounder"],
+    ["James Faulkner", "Australia", "AU", "all-rounder", 75, "all-rounder"],
+    ["Andrew Tye", "Australia", "AU", "bowler", 75, "bowler"],
+    ["Kane Richardson", "Australia", "AU", "bowler", 50, "bowler"],
+    ["Lasith Malinga", "Sri Lanka", "LK", "bowler", 100, "bowler"],
+    ["Nuwan Kulasekara", "Sri Lanka", "LK", "bowler", 40, "bowler"],
+    ["Angelo Mathews", "Sri Lanka", "LK", "all-rounder", 75, "all-rounder"],
+    ["Thisara Perera", "Sri Lanka", "LK", "all-rounder", 50, "all-rounder"],
+    ["Isuru Udana", "Sri Lanka", "LK", "all-rounder", 40, "all-rounder"],
+    ["Suresh Raina", "India", "IN", "batsman", 75, "batsman"],
+    ["James Anderson", "England", "GB", "bowler", 50, "bowler"],
+    ["Stuart Broad", "England", "GB", "bowler", 50, "bowler"],
+    ["Steven Finn", "England", "GB", "bowler", 40, "bowler"],
+    ["Tymal Mills", "England", "GB", "bowler", 50, "bowler"],
+    ["Ravi Bopara", "England", "GB", "all-rounder", 40, "all-rounder"],
+    ["Jade Dernbach", "England", "GB", "bowler", 30, "bowler"],
+
+    // More Uncapped Players
+    ["Yash Thakur", "India", "IN", "bowler", 30, "uncapped"],
+    ["Ravi Kumar", "India", "IN", "bowler", 30, "uncapped"],
+    ["Shreyas Gopal", "India", "IN", "bowler", 40, "uncapped"],
+    ["KC Cariappa", "India", "IN", "bowler", 30, "uncapped"],
+    ["Prashant Chopra", "India", "IN", "batsman", 20, "uncapped"],
+    ["Manan Vohra", "India", "IN", "batsman", 40, "uncapped"],
+    ["Karun Nair", "India", "IN", "batsman", 50, "uncapped"],
+    ["Hanuma Vihari", "India", "IN", "batsman", 40, "uncapped"],
+    ["Sheldon Jackson", "India", "IN", "wicket-keeper", 30, "uncapped"],
+    ["Anmolpreet Singh", "India", "IN", "batsman", 20, "uncapped"],
+    ["Upendra Yadav", "India", "IN", "wicket-keeper", 20, "uncapped"],
+    ["Vishnu Vinod", "India", "IN", "wicket-keeper", 20, "uncapped"],
+    ["Baba Aparajith", "India", "IN", "batsman", 20, "uncapped"],
+    ["Gurkeerat Singh Mann", "India", "IN", "all-rounder", 30, "uncapped"],
+    ["Jalaj Saxena", "India", "IN", "all-rounder", 30, "uncapped"],
+    ["Pawan Negi", "India", "IN", "all-rounder", 50, "uncapped"],
+    ["Anirudha Joshi", "India", "IN", "all-rounder", 20, "uncapped"],
+    ["Saurabh Kumar", "India", "IN", "bowler", 30, "uncapped"],
+    ["Varun Aaron", "India", "IN", "bowler", 50, "uncapped"],
+    ["Barinder Sran", "India", "IN", "bowler", 30, "uncapped"],
+    ["Nathu Singh", "India", "IN", "bowler", 20, "uncapped"],
+    ["T Natarajan", "India", "IN", "bowler", 75, "bowler"],
+    ["Khaleel Ahmed", "India", "IN", "bowler", 50, "bowler"],
+    ["Navdeep Saini", "India", "IN", "bowler", 50, "bowler"],
+    ["Simarjeet Singh", "India", "IN", "bowler", 30, "uncapped"],
+    ["Lukman Meriwala", "India", "IN", "bowler", 20, "uncapped"],
+    ["Ishan Porel", "India", "IN", "bowler", 30, "uncapped"],
+    ["Murugan Ashwin", "India", "IN", "bowler", 40, "uncapped"],
+    ["Shreevats Goswami", "India", "IN", "wicket-keeper", 20, "uncapped"],
+    ["Parthiv Patel", "India", "IN", "wicket-keeper", 50, "wicket-keeper"],
+    ["Naman Ojha", "India", "IN", "wicket-keeper", 30, "uncapped"],
+];
+
+// Shuffle array helper
+function shuffleArray<T>(array: T[]): T[] {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
+// Category order for auction
+const CATEGORY_ORDER: PlayerCategory[] = ["marquee", "batsman", "bowler", "wicket-keeper", "all-rounder", "uncapped"];
+
+// Group players by category and shuffle within each category
+function getOrderedPlayers(): Player[] {
+    const grouped: Record<PlayerCategory, PlayerData[]> = {
+        "marquee": [],
+        "batsman": [],
+        "bowler": [],
+        "wicket-keeper": [],
+        "all-rounder": [],
+        "uncapped": [],
+    };
+
+    // Group by category
+    CRICKETER_DATA.forEach(player => {
+        grouped[player[5]].push(player);
+    });
+
+    // Shuffle within each category and combine in order
+    const orderedData: PlayerData[] = [];
+    CATEGORY_ORDER.forEach(category => {
+        orderedData.push(...shuffleArray(grouped[category]));
+    });
+
+    // Convert to Player objects
+    return orderedData.map((data, index) => ({
+        id: `p${index + 1}`,
+        name: data[0],
+        country: data[1],
+        countryCode: data[2],
+        role: data[3],
+        basePrice: data[4],
+        category: data[5],
+        stats: {
+            matches: Math.floor(Math.random() * 200) + 20,
+            runs: data[3] === "bowler" ? Math.floor(Math.random() * 500) : Math.floor(Math.random() * 5000) + 500,
+            wickets: data[3] === "batsman" ? Math.floor(Math.random() * 20) : Math.floor(Math.random() * 150) + 20,
+        },
+    }));
+}
+
+// Export shuffled players
+export const SAMPLE_PLAYERS: Player[] = getOrderedPlayers();
+
+// Utility functions
+export const formatPrice = (priceLakhs: number): string => {
+    if (priceLakhs >= 100) {
+        const crores = priceLakhs / 100;
+        return `₹${crores.toFixed(crores % 1 === 0 ? 0 : 2)} Cr`;
+    }
+    return `₹${priceLakhs} L`;
+};
+
+export const formatPriceShort = (priceLakhs: number): string => {
+    if (priceLakhs >= 100) return `${(priceLakhs / 100).toFixed(1)}Cr`;
+    return `${priceLakhs}L`;
+};
+
+export const getBidIncrement = (currentBidLakhs: number): number => {
+    if (currentBidLakhs < 100) return 5;
+    if (currentBidLakhs < 200) return 10;
+    if (currentBidLakhs < 500) return 20;
+    return 25;
+};
+
+export const getRoleDisplay = (role: PlayerRole): string => {
+    const displays: Record<PlayerRole, string> = {
+        batsman: "Batsman",
+        bowler: "Bowler",
+        "all-rounder": "All-Rounder",
+        "wicket-keeper": "Wicket-Keeper",
+    };
+    return displays[role];
+};
+
+export const getCategoryDisplay = (category: PlayerCategory): string => {
+    const displays: Record<PlayerCategory, string> = {
+        marquee: "Marquee",
+        batsman: "Capped Batsman",
+        bowler: "Capped Bowler",
+        "all-rounder": "Capped All-Rounder",
+        "wicket-keeper": "Capped Wicket-Keeper",
+        uncapped: "Uncapped",
+    };
+    return displays[category];
+};
+
+export const getRoleBadgeColor = (role: PlayerRole): string => {
+    const colors: Record<PlayerRole, string> = {
+        batsman: "bg-blue-500/20 text-blue-400",
+        bowler: "bg-red-500/20 text-red-400",
+        "all-rounder": "bg-purple-500/20 text-purple-400",
+        "wicket-keeper": "bg-amber-500/20 text-amber-400",
+    };
+    return colors[role];
+};
+
+export const getCategoryBadgeColor = (category: PlayerCategory): string => {
+    const colors: Record<PlayerCategory, string> = {
+        marquee: "bg-gradient-to-r from-yellow-500/30 to-orange-500/30 text-yellow-300",
+        batsman: "bg-blue-500/20 text-blue-400",
+        bowler: "bg-red-500/20 text-red-400",
+        "all-rounder": "bg-purple-500/20 text-purple-400",
+        "wicket-keeper": "bg-amber-500/20 text-amber-400",
+        uncapped: "bg-green-500/20 text-green-400",
+    };
+    return colors[category];
+};

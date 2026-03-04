@@ -1,0 +1,298 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Custom Properties - Electric Stadium Night Theme */
+:root {
+  /* Base colors */
+  --color-bg-primary: #030712;
+  --color-bg-secondary: #0a0f1a;
+  --color-bg-card: #111827;
+  --color-bg-elevated: #1e2a3a;
+  --color-border: #2d3a4d;
+  
+  /* Neon accents */
+  --color-neon-gold: #ffd700;
+  --color-neon-pink: #ff1493;
+  --color-neon-cyan: #00d4ff;
+  --color-neon-green: #00ff88;
+  --color-neon-red: #ff3366;
+  
+  /* Text colors */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #9ca3af;
+  --color-text-muted: #6b7280;
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(17, 24, 39, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: 12px;
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Stadium Background Effect */
+.stadium-bg {
+  background: 
+    radial-gradient(ellipse at 50% 0%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 0% 50%, rgba(255, 20, 147, 0.05) 0%, transparent 40%),
+    radial-gradient(ellipse at 100% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 40%),
+    var(--color-bg-primary);
+}
+
+/* Glassmorphism Cards */
+@layer components {
+  .glass-card {
+    @apply relative overflow-hidden rounded-xl;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+  }
+  
+  .glass-card-strong {
+    @apply glass-card;
+    background: rgba(17, 24, 39, 0.85);
+  }
+  
+  /* Neon Glow Effects */
+  .neon-glow-gold {
+    box-shadow: 
+      0 0 20px rgba(255, 215, 0, 0.3),
+      0 0 40px rgba(255, 215, 0, 0.2),
+      0 0 60px rgba(255, 215, 0, 0.1);
+  }
+  
+  .neon-glow-cyan {
+    box-shadow: 
+      0 0 20px rgba(0, 212, 255, 0.3),
+      0 0 40px rgba(0, 212, 255, 0.2);
+  }
+  
+  .neon-glow-pink {
+    box-shadow: 
+      0 0 20px rgba(255, 20, 147, 0.3),
+      0 0 40px rgba(255, 20, 147, 0.2);
+  }
+  
+  /* Text Glow */
+  .text-glow-gold {
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  }
+  
+  .text-glow-cyan {
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+  }
+  
+  /* Bid Button Styles */
+  .bid-button {
+    @apply relative flex items-center justify-center rounded-full
+           font-display font-bold text-xl uppercase tracking-wider
+           transition-all duration-300 ease-out;
+    background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+    color: #030712;
+  }
+  
+  .bid-button:hover:not(:disabled) {
+    @apply scale-105;
+    box-shadow: 
+      0 0 30px rgba(255, 215, 0, 0.5),
+      0 0 60px rgba(255, 215, 0, 0.3),
+      0 0 90px rgba(255, 215, 0, 0.2);
+  }
+  
+  .bid-button:active:not(:disabled) {
+    @apply scale-95;
+  }
+  
+  .bid-button:disabled {
+    @apply opacity-50 cursor-not-allowed;
+    background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);
+    color: #666;
+  }
+  
+  /* Timer Circle */
+  .timer-circle {
+    @apply relative flex items-center justify-center;
+    background: conic-gradient(
+      from 0deg,
+      var(--color-neon-cyan) calc(var(--progress) * 360deg),
+      rgba(45, 58, 77, 0.5) calc(var(--progress) * 360deg)
+    );
+    border-radius: 50%;
+  }
+  
+  .timer-circle::before {
+    content: '';
+    @apply absolute rounded-full bg-stadium-900;
+    width: calc(100% - 12px);
+    height: calc(100% - 12px);
+  }
+  
+  /* Team Card Styles */
+  .team-card {
+    @apply glass-card p-4 flex items-center gap-3 transition-all duration-300;
+  }
+  
+  .team-card.dimmed {
+    @apply opacity-40;
+  }
+  
+  .team-card.current-holder {
+    @apply border-neon-gold/50;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+  }
+  
+  /* Activity Log Ticker */
+  .ticker-item {
+    @apply inline-flex items-center gap-2 px-4 py-2 mx-2 rounded-full
+           bg-stadium-800/50 text-sm whitespace-nowrap;
+  }
+  
+  /* Player Card */
+  .player-card {
+    @apply glass-card-strong p-6 text-center;
+    background: linear-gradient(
+      180deg,
+      rgba(17, 24, 39, 0.9) 0%,
+      rgba(10, 15, 26, 0.95) 100%
+    );
+  }
+  
+  /* Gradient Text */
+  .gradient-text-gold {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #ffd700 0%, #ff8c00 50%, #ffd700 100%);
+  }
+  
+  .gradient-text-cyan {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
+  }
+  
+  /* Sidebar Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(45, 58, 77, 0.3);
+    border-radius: 3px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.3);
+    border-radius: 3px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 212, 255, 0.5);
+  }
+  
+  /* Role Badge */
+  .role-badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide;
+  }
+  
+  .role-badge.batsman {
+    @apply bg-blue-500/20 text-blue-400 border border-blue-500/30;
+  }
+  
+  .role-badge.bowler {
+    @apply bg-green-500/20 text-green-400 border border-green-500/30;
+  }
+  
+  .role-badge.all-rounder {
+    @apply bg-purple-500/20 text-purple-400 border border-purple-500/30;
+  }
+  
+  .role-badge.wicket-keeper {
+    @apply bg-orange-500/20 text-orange-400 border border-orange-500/30;
+  }
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Sold Overlay */
+.sold-overlay {
+  @apply fixed inset-0 z-50 flex items-center justify-center;
+  background: rgba(3, 7, 18, 0.95);
+  backdrop-filter: blur(8px);
+}
+
+.sold-text {
+  @apply font-display font-black uppercase tracking-wider;
+  font-size: clamp(4rem, 15vw, 10rem);
+}
+
+/* Confetti Particle */
+.confetti-particle {
+  @apply fixed w-3 h-3 rounded-sm;
+  animation: confetti 3s ease-out forwards;
+}
+
+/* Responsive Utility */
+@media (max-width: 1024px) {
+  .auction-layout {
+    @apply grid-cols-1;
+  }
+  
+  .hide-mobile {
+    @apply hidden;
+  }
+}
+
+/* Selection */
+::selection {
+  background: rgba(0, 212, 255, 0.3);
+  color: white;
+}
+
+/* Focus States */
+:focus-visible {
+  outline: 2px solid var(--color-neon-cyan);
+  outline-offset: 2px;
+}
