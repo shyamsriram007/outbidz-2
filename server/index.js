@@ -812,6 +812,93 @@ app.post("/api/room/:roomId/force-end", (req, res) => {
     }
 });
 
+// Skip current category/set (host only)
+app.post("/api/room/:roomId/skip-category", (req, res) => {
+    const room = rooms.get(req.params.roomId);
+    if (!room) {
+        return res.status(404).json({ error: "Room not found" });
+    }
+
+    if (room.status !== "active") {
+        return res.status(400).json({ error: "Auction is not active" });
+    }
+
+    // Stop current timer
+    if (room.timerInterval) {
+        clearInterval(room.timerInterval);
+        room.timerInterval = null;
+    }
+
+    const currentPlayer = room.players[room.currentPlayerIndex];
+    const currentCategory = currentPlayer?.category;
+
+    if (!currentCategory) {
+        return res.status(400).json({ error: "No current category" });
+    }
+
+    // Collect remaining players in this category as unsold (round 1 only)
+    let skippedCount = 0;
+    while (room.currentPlayerIndex < room.players.length &&
+        room.players[room.currentPlayerIndex].category === currentCategory) {
+        if (room.auctionRound === 1) {
+            room.unsoldPlayers.push(room.players[room.currentPlayerIndex]);
+        }
+        room.currentPlayerIndex++;
+        skippedCount++;
+    }
+
+    // Emit category skipped event
+    io.to(req.params.roomId).emit("category-skipped", {
+        skippedCategory: currentCategory,
+        skippedCount,
+    });
+
+    // Check if auction is over
+    if (room.currentPlayerIndex >= room.players.length) {
+        if (room.auctionRound === 1 && room.unsoldPlayers.length > 0) {
+            startRound2(req.params.roomId);
+            return res.json({ success: true, message: `Skipped ${skippedCount} ${currentCategory} players. Moving to Round 2.` });
+        }
+        room.status = "finished";
+        const teamRatings = calculateTeamRatings(room);
+        io.to(req.params.roomId).emit("auction-complete", {
+            teams: getRoomState(req.params.roomId).teams,
+            teamRatings
+        });
+        return res.json({ success: true, message: `Skipped ${skippedCount} players. Auction complete.` });
+    }
+
+    // Move to next category
+    const nextPlayer = room.players[room.currentPlayerIndex];
+    shuffleRemainingPlayersInCategory(room, nextPlayer.category, room.currentPlayerIndex);
+    const actualNextPlayer = room.players[room.currentPlayerIndex];
+
+    room.currentBid = actualNextPlayer.basePrice;
+    room.currentHolderId = null;
+    room.currentHolderTeamId = null;
+    room.timerSeconds = 15;
+    room.recentBids = [];
+
+    io.to(req.params.roomId).emit("category-change", {
+        previousCategory: currentCategory,
+        newCategory: actualNextPlayer.category
+    });
+
+    io.to(req.params.roomId).emit("next-player", {
+        player: actualNextPlayer,
+        playerIndex: room.currentPlayerIndex,
+        totalPlayers: room.players.length,
+    });
+
+    startTimer(req.params.roomId);
+
+    res.json({
+        success: true,
+        message: `Skipped ${skippedCount} ${currentCategory} players. Now in ${actualNextPlayer.category} set.`,
+        newCategory: actualNextPlayer.category,
+    });
+});
+
 // Get team ratings for a room
 app.get("/api/room/:roomId/ratings", (req, res) => {
     const room = rooms.get(req.params.roomId);

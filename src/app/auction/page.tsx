@@ -251,6 +251,17 @@ function AuctionPageContent() {
         }
     }, [roomIdParam, router]);
 
+    const handleSkipCategory = useCallback(async () => {
+        if (!roomIdParam) return;
+        try {
+            await fetch(`${SERVER_URL}/api/room/${roomIdParam}/skip-category`, {
+                method: "POST",
+            });
+        } catch (err) {
+            console.error("Failed to skip set:", err);
+        }
+    }, [roomIdParam]);
+
     // Loading state
     if (!roomState) {
         return (
@@ -479,13 +490,22 @@ function AuctionPageContent() {
                         </div>
                         {/* Host Only: Force End Auction Button */}
                         {isHost && (
-                            <button
-                                onClick={handleForceEndAuction}
-                                className="px-3 py-1 text-xs bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 rounded transition-all"
-                                title={`End ${(roomState as any).auctionRound === 1 ? '1st Round' : '2nd Round'} (Host Only)`}
-                            >
-                                {(roomState as any).auctionRound === 1 ? 'End 1st Round' : 'End Auction'}
-                            </button>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={handleSkipCategory}
+                                    className="px-3 py-1 text-xs bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-400 rounded transition-all"
+                                    title="Skip remaining players in this set (Host Only)"
+                                >
+                                    Skip Set ⏭
+                                </button>
+                                <button
+                                    onClick={handleForceEndAuction}
+                                    className="px-3 py-1 text-xs bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 rounded transition-all"
+                                    title={`End ${roomState.auctionRound === 1 ? '1st Round' : '2nd Round'} (Host Only)`}
+                                >
+                                    {roomState.auctionRound === 1 ? 'End 1st Round' : 'End Auction'}
+                                </button>
+                            </div>
                         )}
                     </div>
                 </div>
