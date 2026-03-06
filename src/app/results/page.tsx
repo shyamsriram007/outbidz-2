@@ -349,12 +349,13 @@ function ResultsPageContent() {
                                                 ({squad.length} players · {formatPrice(totalSpent)} spent · {formatPrice(teamState.purse)} remaining)
                                             </span>
                                         </div>
-                                        <button
+                                        <span
                                             onClick={() => toggleTeam(teamState.id)}
-                                            className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors cursor-pointer"
+                                            className="text-gray-400 hover:text-white text-lg cursor-pointer transition-transform inline-block"
+                                            style={{ transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)" }}
                                         >
-                                            [{isExpanded ? "hide" : "show"}]
-                                        </button>
+                                            ▶
+                                        </span>
                                     </div>
 
                                     {/* Squad table */}
