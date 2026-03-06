@@ -596,33 +596,40 @@ function calculateTeamRatings(room) {
         });
     }
 
-    // Sort by overall rating descending
-    teamRatings.sort((a, b) => b.overallRating - a.overallRating);
+    // Sort: non-disqualified first by rating desc, then disqualified at the bottom
+    teamRatings.sort((a, b) => {
+        if (a.disqualified && !b.disqualified) return 1;
+        if (!a.disqualified && b.disqualified) return -1;
+        return b.overallRating - a.overallRating;
+    });
 
     return teamRatings;
 }
 
 function calculateSingleTeamRating(squad, remainingPurse, initialPurse) {
-    if (squad.length === 0) {
+    // Disqualified: fewer than 18 players
+    if (squad.length < 18) {
+        // Still calculate breakdown for display, but mark as disqualified
+        let batsmen = 0, bowlers = 0, allRounders = 0, wicketKeepers = 0;
+        let overseas = 0, marqueeCount = 0, totalSpent = 0;
+        squad.forEach(item => {
+            totalSpent += item.price;
+            if (item.player.role === "batsman") batsmen++;
+            else if (item.player.role === "bowler") bowlers++;
+            else if (item.player.role === "all-rounder") allRounders++;
+            else if (item.player.role === "wicket-keeper") wicketKeepers++;
+            if (item.player.countryCode !== "IN") overseas++;
+            if (item.player.category === "marquee") marqueeCount++;
+        });
         return {
             overallRating: 0,
-            metrics: {
-                squadStrength: 0,
-                balance: 0,
-                starPower: 0,
-                depthScore: 0,
-                valueEfficiency: 0,
-                overseasQuality: 0
-            },
+            disqualified: true,
+            disqualifyReason: `Only ${squad.length} players (minimum 18 required)`,
+            metrics: { squadStrength: 0, balance: 0, starPower: 0, depthScore: 0, valueEfficiency: 0, overseasQuality: 0 },
             breakdown: {
-                batsmen: 0,
-                bowlers: 0,
-                allRounders: 0,
-                wicketKeepers: 0,
-                overseas: 0,
-                marquee: 0,
-                totalSpent: 0,
-                avgPlayerPrice: 0
+                batsmen, bowlers, allRounders, wicketKeepers, overseas,
+                marquee: marqueeCount, totalSpent,
+                avgPlayerPrice: squad.length > 0 ? Math.round(totalSpent / squad.length) : 0
             }
         };
     }
@@ -713,6 +720,7 @@ function calculateSingleTeamRating(squad, remainingPurse, initialPurse) {
 
     return {
         overallRating: Math.round(overallRating * 10) / 10,
+        disqualified: false,
         metrics: {
             squadStrength: Math.round(squadStrength * 10) / 10,
             balance: Math.round(balance * 10) / 10,

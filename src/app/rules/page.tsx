@@ -66,6 +66,16 @@ export default function RulesPage() {
             ],
         },
         {
+            emoji: "👥",
+            title: "Squad Size Requirements",
+            items: [
+                "Each team must have a minimum of 18 players to qualify for rating.",
+                "Teams with fewer than 18 players are DISQUALIFIED and receive no rating.",
+                "The maximum squad size is 25 players — you cannot bid once your squad is full.",
+                "Plan your budget to ensure you can fill at least 18 slots!",
+            ],
+        },
+        {
             emoji: "🌍",
             title: "Overseas Player Limit",
             items: [
@@ -78,6 +88,7 @@ export default function RulesPage() {
             title: "Scoring & Ratings",
             items: [
                 "After the auction ends, each team is rated on a scale of 1–10.",
+                "Teams with fewer than 18 players are disqualified (DQ) and receive a rating of 0.",
                 "Ratings are based on: squad balance (batting, bowling, all-rounders), star power (marquee picks), squad depth (total players), budget efficiency, and overseas utilization.",
                 "The team with the highest overall rating wins the Best Auction Performance award!",
             ],

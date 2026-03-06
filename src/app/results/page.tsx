@@ -10,6 +10,8 @@ import { SERVER_URL } from "@/lib/socket";
 interface TeamRating {
     teamId: string;
     overallRating: number;
+    disqualified: boolean;
+    disqualifyReason?: string;
     metrics: {
         squadStrength: number;
         balance: number;
@@ -210,7 +212,7 @@ function ResultsPageContent() {
                         >
                             {/* Rank Badge */}
                             <div className="absolute top-4 right-4 text-3xl">
-                                {getMedalEmoji(index)}
+                                {rating.disqualified ? "❌" : getMedalEmoji(index)}
                             </div>
 
                             <div className="p-6">
@@ -227,26 +229,37 @@ function ResultsPageContent() {
                                         <p className="text-gray-400">{team.abbr}</p>
                                     </div>
                                     <div className="text-right">
-                                        <div className={`text-5xl font-bold ${getRatingColor(rating.overallRating)}`}>
-                                            {rating.overallRating.toFixed(1)}
-                                        </div>
-                                        <div className="text-gray-500 text-sm">/ 10</div>
+                                        {rating.disqualified ? (
+                                            <>
+                                                <div className="text-4xl font-bold text-red-500">DQ</div>
+                                                <div className="text-red-400 text-xs">{rating.disqualifyReason}</div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className={`text-5xl font-bold ${getRatingColor(rating.overallRating)}`}>
+                                                    {rating.overallRating.toFixed(1)}
+                                                </div>
+                                                <div className="text-gray-500 text-sm">/ 10</div>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
 
-                                {/* Metrics Grid */}
-                                <div className="grid grid-cols-6 gap-3 mb-6">
-                                    {Object.entries(rating.metrics).map(([key, value]) => (
-                                        <div key={key} className="bg-black/20 rounded-lg p-3 text-center">
-                                            <div className={`text-lg font-bold ${getRatingColor(value)}`}>
-                                                {value.toFixed(1)}
+                                {/* Metrics Grid - only for qualified teams */}
+                                {!rating.disqualified && (
+                                    <div className="grid grid-cols-6 gap-3 mb-6">
+                                        {Object.entries(rating.metrics).map(([key, value]) => (
+                                            <div key={key} className="bg-black/20 rounded-lg p-3 text-center">
+                                                <div className={`text-lg font-bold ${getRatingColor(value)}`}>
+                                                    {value.toFixed(1)}
+                                                </div>
+                                                <div className="text-xs text-gray-500 capitalize">
+                                                    {key.replace(/([A-Z])/g, " $1").trim()}
+                                                </div>
                                             </div>
-                                            <div className="text-xs text-gray-500 capitalize">
-                                                {key.replace(/([A-Z])/g, " $1").trim()}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                                        ))}
+                                    </div>
+                                )}
 
                                 {/* Squad Breakdown */}
                                 <div className="flex items-center justify-between text-sm">
@@ -297,7 +310,7 @@ function ResultsPageContent() {
             </div>
 
             {/* Winner Celebration */}
-            {teamRatings.length > 0 && (
+            {teamRatings.length > 0 && !teamRatings[0]?.disqualified && (
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
