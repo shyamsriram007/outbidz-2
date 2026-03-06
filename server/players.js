@@ -353,6 +353,9 @@ function shuffleArray(array) {
 // Category order for auction
 const CATEGORY_ORDER = ["marquee", "batsman", "bowler", "wicket-keeper", "all-rounder", "uncapped"];
 
+// Real T20 career stats lookup
+const PLAYER_STATS = require('../src/data/player-stats.json');
+
 // Group players by category and shuffle within each category
 function getOrderedPlayers() {
     const grouped = {
@@ -375,21 +378,24 @@ function getOrderedPlayers() {
         orderedData.push(...shuffleArray(grouped[category]));
     });
 
-    // Convert to Player objects
-    return orderedData.map((data, index) => ({
-        id: `p${index + 1}`,
-        name: data[0],
-        country: data[1],
-        countryCode: data[2],
-        role: data[3],
-        basePrice: data[4],
-        category: data[5],
-        stats: {
-            matches: Math.floor(Math.random() * 200) + 20,
-            runs: data[3] === "bowler" ? Math.floor(Math.random() * 500) : Math.floor(Math.random() * 5000) + 500,
-            wickets: data[3] === "batsman" ? Math.floor(Math.random() * 20) : Math.floor(Math.random() * 150) + 20,
-        },
-    }));
+    // Convert to Player objects with real T20 career stats
+    return orderedData.map((data, index) => {
+        const statsArr = PLAYER_STATS[data[0]] || [0, 0, 0];
+        return {
+            id: `p${index + 1}`,
+            name: data[0],
+            country: data[1],
+            countryCode: data[2],
+            role: data[3],
+            basePrice: data[4],
+            category: data[5],
+            stats: {
+                matches: statsArr[0],
+                runs: statsArr[1],
+                wickets: statsArr[2],
+            },
+        };
+    });
 }
 
 // Export function to get freshly shuffled players (call this for each new room)
