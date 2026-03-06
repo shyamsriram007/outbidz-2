@@ -65,6 +65,8 @@ function createRoom(roomName, numTeams, initialPurse, hostId, hostName, hostTeam
         timerSeconds: 15,
         timerInterval: null,
         recentBids: [],
+        auctionRound: 1,
+        unsoldPlayers: [],
         teams: new Map(),
         users: new Map(),
     };
@@ -142,6 +144,8 @@ function getRoomState(roomId) {
         currentHolderTeamId: room.currentHolderTeamId,
         timerSeconds: room.timerSeconds,
         recentBids: room.recentBids.slice(0, 5),
+        auctionRound: room.auctionRound || 1,
+        unsoldCount: (room.unsoldPlayers || []).length,
         users: Array.from(room.users.values()),
         teams: Array.from(room.teams.entries()).map(([id, team]) => ({
             id,
@@ -219,7 +223,10 @@ function handleTimerEnd(roomId) {
             updatedTeams: getRoomState(roomId).teams,
         });
     } else {
-        // Player unsold
+        // Player unsold - track for round 2
+        if (room.auctionRound === 1) {
+            room.unsoldPlayers.push(currentPlayer);
+        }
         io.to(roomId).emit("player-unsold", { player: currentPlayer });
     }
 
@@ -239,7 +246,12 @@ function moveToNextPlayer(roomId) {
     room.currentPlayerIndex++;
 
     if (room.currentPlayerIndex >= room.players.length) {
-        // Auction complete
+        if (room.auctionRound === 1 && room.unsoldPlayers.length > 0) {
+            // Round 1 complete - start Round 2 with unsold players
+            startRound2(roomId);
+            return;
+        }
+        // Auction fully complete
         room.status = "finished";
         const teamRatings = calculateTeamRatings(room);
         io.to(roomId).emit("auction-complete", {
@@ -279,6 +291,39 @@ function moveToNextPlayer(roomId) {
     });
 
     startTimer(roomId);
+}
+
+function startRound2(roomId) {
+    const room = rooms.get(roomId);
+    if (!room) return;
+
+    // Emit round 1 complete
+    io.to(roomId).emit("round-complete", {
+        round: 1,
+        unsoldCount: room.unsoldPlayers.length,
+        message: `Round 1 complete! ${room.unsoldPlayers.length} unsold player${room.unsoldPlayers.length === 1 ? '' : 's'} entering Round 2.`
+    });
+
+    // Set up round 2 with unsold players
+    setTimeout(() => {
+        room.auctionRound = 2;
+        room.players = room.unsoldPlayers;
+        room.unsoldPlayers = [];
+        room.currentPlayerIndex = 0;
+        room.currentBid = room.players[0].basePrice;
+        room.currentHolderId = null;
+        room.currentHolderTeamId = null;
+        room.timerSeconds = 15;
+        room.recentBids = [];
+
+        io.to(roomId).emit("round-started", {
+            round: 2,
+            totalPlayers: room.players.length,
+            player: room.players[0],
+        });
+
+        startTimer(roomId);
+    }, 4000);
 }
 
 // Helper function to shuffle remaining players in a category
@@ -734,21 +779,29 @@ app.post("/api/room/:roomId/force-end", (req, res) => {
         room.timerInterval = null;
     }
 
-    room.status = "finished";
-
-    // Calculate team ratings
-    const teamRatings = calculateTeamRatings(room);
-
-    io.to(req.params.roomId).emit("auction-complete", {
-        teams: getRoomState(req.params.roomId).teams,
-        teamRatings
-    });
-
-    res.json({
-        success: true,
-        message: "Auction ended",
-        teamRatings
-    });
+    if (room.auctionRound === 1 && room.unsoldPlayers.length > 0) {
+        // End round 1, move to round 2 with unsold players
+        startRound2(req.params.roomId);
+        res.json({
+            success: true,
+            message: "Round 1 ended - starting Round 2 with unsold players",
+            round: 2,
+            unsoldCount: room.unsoldPlayers.length,
+        });
+    } else {
+        // End auction completely
+        room.status = "finished";
+        const teamRatings = calculateTeamRatings(room);
+        io.to(req.params.roomId).emit("auction-complete", {
+            teams: getRoomState(req.params.roomId).teams,
+            teamRatings
+        });
+        res.json({
+            success: true,
+            message: "Auction ended",
+            teamRatings
+        });
+    }
 });
 
 // Get team ratings for a room

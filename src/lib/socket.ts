@@ -51,6 +51,8 @@ export interface RoomState {
     currentHolderTeamId: string | null;
     timerSeconds: number;
     recentBids: BidEntry[];
+    auctionRound: number;
+    unsoldCount: number;
     users: User[];
     teams: TeamState[];
 }

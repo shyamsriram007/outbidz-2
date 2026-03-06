@@ -60,6 +60,7 @@ function AuctionPageContent() {
     // Connection and error state
     const [isConnected, setIsConnected] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [roundMessage, setRoundMessage] = useState<string | null>(null);
 
     // Socket event handlers
     useEffect(() => {
@@ -166,6 +167,35 @@ function AuctionPageContent() {
             router.push(`/lobby?roomId=${data.roomId}`);
         });
 
+        // Listen for round transitions
+        function onRoundComplete(data: { round: number; unsoldCount: number; message: string }) {
+            setRoundMessage(data.message);
+        }
+
+        function onRoundStarted(data: { round: number; totalPlayers: number; player: any }) {
+            setRoundMessage(null);
+            setShowSoldOverlay(false);
+            setSoldInfo(null);
+            setRoomState((prev) => {
+                if (!prev) return prev;
+                return {
+                    ...prev,
+                    auctionRound: data.round,
+                    currentPlayer: data.player,
+                    currentPlayerIndex: 0,
+                    totalPlayers: data.totalPlayers,
+                    currentBid: data.player.basePrice,
+                    currentHolderId: null,
+                    currentHolderTeamId: null,
+                    timerSeconds: 15,
+                    recentBids: [],
+                };
+            });
+        }
+
+        socket.on("round-complete", onRoundComplete);
+        socket.on("round-started", onRoundStarted);
+
         // Get initial room state
         socket.emit("get-room-state", (result: { success: boolean; roomState?: RoomState }) => {
             if (result.success && result.roomState) {
@@ -183,6 +213,8 @@ function AuctionPageContent() {
             socket.off("next-player", onNextPlayer);
             socket.off("auction-complete", onAuctionComplete);
             socket.off("auction-restart");
+            socket.off("round-complete", onRoundComplete);
+            socket.off("round-started", onRoundStarted);
         };
     }, []);
 
@@ -209,11 +241,13 @@ function AuctionPageContent() {
             const response = await fetch(`${SERVER_URL}/api/room/${roomIdParam}/force-end`, {
                 method: "POST",
             });
-            if (response.ok) {
+            const data = await response.json();
+            if (response.ok && data.round !== 2) {
+                // Only redirect if auction is fully over (not transitioning to round 2)
                 router.push(`/results?roomId=${roomIdParam}`);
             }
         } catch (err) {
-            console.error("Failed to force end auction:", err);
+            console.error("Failed to end round:", err);
         }
     }, [roomIdParam, router]);
 
@@ -356,6 +390,26 @@ function AuctionPageContent() {
                 />
             )}
 
+            {/* Round Transition Overlay */}
+            {roundMessage && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="fixed inset-0 z-40 bg-black/70 flex items-center justify-center"
+                >
+                    <motion.div
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="glass-card-strong p-8 max-w-md text-center"
+                    >
+                        <div className="text-5xl mb-4">🔄</div>
+                        <h2 className="text-2xl font-bold text-white mb-3">Round 1 Complete</h2>
+                        <p className="text-gray-300">{roundMessage}</p>
+                        <p className="text-sm text-gray-500 mt-3">Starting Round 2 shortly...</p>
+                    </motion.div>
+                </motion.div>
+            )}
+
             {/* Error Toast */}
             {error && (
                 <motion.div
@@ -384,6 +438,11 @@ function AuctionPageContent() {
                             <span className="w-2 h-2 rounded-full bg-neon-green animate-pulse"></span>
                             Live
                         </span>
+                        {roomState.auctionRound === 2 && (
+                            <span className="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs font-semibold rounded uppercase">
+                                Round 2 — Unsold
+                            </span>
+                        )}
                         <span className="text-xs text-gray-500 font-mono">
                             Room: {roomState.id}
                         </span>
@@ -423,9 +482,9 @@ function AuctionPageContent() {
                             <button
                                 onClick={handleForceEndAuction}
                                 className="px-3 py-1 text-xs bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 rounded transition-all"
-                                title="End Auction (Host Only)"
+                                title={`End ${(roomState as any).auctionRound === 1 ? '1st Round' : '2nd Round'} (Host Only)`}
                             >
-                                End Auction
+                                {(roomState as any).auctionRound === 1 ? 'End 1st Round' : 'End Auction'}
                             </button>
                         )}
                     </div>
