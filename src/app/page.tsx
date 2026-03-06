@@ -393,6 +393,12 @@ export default function Home() {
                     <p>1. One person creates a room and shares the Room ID</p>
                     <p>2. Friends join using the Room ID and pick their team</p>
                     <p>3. Host starts the auction when everyone is ready!</p>
+                    <button
+                        onClick={() => router.push("/rules")}
+                        className="mt-3 inline-flex items-center gap-1.5 px-4 py-1.5 bg-stadium-700/40 hover:bg-stadium-600/50 border border-stadium-500/30 text-gray-300 rounded-full text-xs font-medium transition-all hover:text-white"
+                    >
+                        📜 Rules & Regulations
+                    </button>
                 </motion.div>
             </motion.div>
         </main>
