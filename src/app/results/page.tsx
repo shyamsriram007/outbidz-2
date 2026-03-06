@@ -46,7 +46,27 @@ function ResultsPageContent() {
     const [teamRatings, setTeamRatings] = useState<TeamRating[]>([]);
     const [teams, setTeams] = useState<TeamState[]>([]);
     const [loading, setLoading] = useState(true);
+    const [expandedTeamId, setExpandedTeamId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+
+    const getRoleColor = (role: string) => {
+        if (role === "batsman") return "text-blue-400";
+        if (role === "bowler") return "text-red-400";
+        if (role === "all-rounder") return "text-purple-400";
+        if (role === "wicket-keeper") return "text-amber-400";
+        return "text-gray-400";
+    };
+
+    const getRoleLabel = (role: string) => {
+        const labels: Record<string, string> = {
+            batsman: "BAT",
+            bowler: "BOWL",
+            "all-rounder": "AR",
+            "wicket-keeper": "WK",
+        };
+        return labels[role] || role;
+    };
+
     const [isHost, setIsHost] = useState(false); // Client-side only to avoid hydration mismatch
 
     // Initialize isHost on client side only
@@ -287,7 +307,100 @@ function ResultsPageContent() {
                 </motion.div>
             )}
 
-            {/* Action Buttons */}
+            {/* View All Squads */}
+            {teams.length > 0 && (
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7 }}
+                    className="max-w-5xl mx-auto mt-12"
+                >
+                    <h2 className="text-2xl font-bold text-white text-center mb-6">📋 All Squads</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {teams.map((teamState) => {
+                            const team = getTeamById(teamState.id);
+                            if (!team) return null;
+                            const isExpanded = expandedTeamId === teamState.id;
+                            const squad = teamState.squad || [];
+
+                            return (
+                                <motion.div
+                                    key={teamState.id}
+                                    layout
+                                    className="rounded-xl border overflow-hidden"
+                                    style={{ borderColor: `${team.color}40` }}
+                                >
+                                    {/* Team Header (clickable) */}
+                                    <button
+                                        onClick={() => setExpandedTeamId(isExpanded ? null : teamState.id)}
+                                        className="w-full flex items-center gap-3 p-4 hover:bg-white/5 transition-all cursor-pointer"
+                                        style={{ backgroundColor: `${team.color}10` }}
+                                    >
+                                        <div
+                                            className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold text-white shrink-0"
+                                            style={{ backgroundColor: team.color }}
+                                        >
+                                            {team.abbr}
+                                        </div>
+                                        <div className="flex-1 text-left">
+                                            <p className="font-semibold text-white text-sm">{team.name}</p>
+                                            <p className="text-xs text-gray-400">
+                                                {squad.length} players • {formatPrice(squad.reduce((sum: number, p: any) => sum + p.price, 0))} spent • {formatPrice(teamState.purse)} left
+                                            </p>
+                                        </div>
+                                        <span className={`text-gray-400 text-lg transition-transform ${isExpanded ? "rotate-180" : ""}`}>
+                                            ▾
+                                        </span>
+                                    </button>
+
+                                    {/* Expanded Squad List */}
+                                    {isExpanded && (
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="border-t px-4 py-3 space-y-1"
+                                            style={{ borderColor: `${team.color}20` }}
+                                        >
+                                            {squad.length === 0 ? (
+                                                <p className="text-gray-500 text-sm text-center py-4">No players bought</p>
+                                            ) : (
+                                                <>
+                                                    {/* Column headers */}
+                                                    <div className="flex items-center text-[10px] text-gray-500 uppercase tracking-wider pb-1 px-1">
+                                                        <span className="w-8">#</span>
+                                                        <span className="flex-1">Player</span>
+                                                        <span className="w-12 text-center">Role</span>
+                                                        <span className="w-20 text-right">Price</span>
+                                                    </div>
+                                                    {squad.map((item: any, idx: number) => (
+                                                        <div
+                                                            key={idx}
+                                                            className="flex items-center gap-1 py-1.5 px-1 rounded hover:bg-white/5 text-sm"
+                                                        >
+                                                            <span className="w-8 text-gray-500 text-xs">{idx + 1}</span>
+                                                            <div className="flex-1 min-w-0">
+                                                                <span className="text-white truncate block">{item.player.name}</span>
+                                                                <span className="text-gray-500 text-[11px]">{item.player.country}</span>
+                                                            </div>
+                                                            <span className={`w-12 text-center text-xs font-semibold ${getRoleColor(item.player.role)}`}>
+                                                                {getRoleLabel(item.player.role)}
+                                                            </span>
+                                                            <span className="w-20 text-right text-neon-gold text-xs font-semibold">
+                                                                {formatPrice(item.price)}
+                                                            </span>
+                                                        </div>
+                                                    ))}
+                                                </>
+                                            )}
+                                        </motion.div>
+                                    )}
+                                </motion.div>
+                            );
+                        })}
+                    </div>
+                </motion.div>
+            )}
+
             <div className="flex justify-center gap-4 mt-8">
                 <button
                     onClick={() => router.push("/")}

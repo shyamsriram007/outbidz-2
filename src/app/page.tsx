@@ -241,7 +241,7 @@ export default function Home() {
                                         onChange={(e) => setNumTeams(Number(e.target.value))}
                                         className="w-full px-4 py-3 bg-stadium-800/50 border border-stadium-600 rounded-lg text-white focus:border-neon-gold focus:ring-1 focus:ring-neon-gold transition-all"
                                     >
-                                        {[2, 4, 6, 8, 10].map((n) => (
+                                        {[2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
                                             <option key={n} value={n}>
                                                 {n} Teams
                                             </option>
