@@ -465,6 +465,41 @@ io.on("connection", (socket) => {
         callback({ success: true, oderId, roomState: getRoomState(roomId) });
     });
 
+    // Rejoin room after disconnect/reload
+    socket.on("rejoin-room", ({ roomId, oderId }, callback) => {
+        if (!roomId || !oderId) {
+            return callback({ success: false, error: "Missing roomId or oderId" });
+        }
+
+        const room = rooms.get(roomId);
+        if (!room) {
+            return callback({ success: false, error: "Room no longer exists" });
+        }
+
+        const user = room.users.get(oderId);
+        if (!user) {
+            return callback({ success: false, error: "User not found in room" });
+        }
+
+        // Re-associate new socket with existing user
+        user.socketId = socket.id;
+        user.isConnected = true;
+
+        socket.join(roomId);
+        socket.data = { oderId, roomId, teamId: user.teamId };
+
+        // Notify others
+        io.to(roomId).emit("user-reconnected", {
+            oderId,
+            userName: user.name,
+            teamId: user.teamId,
+            roomState: getRoomState(roomId),
+        });
+
+        console.log(`${user.name} (${user.teamId}) reconnected to room ${roomId}`);
+        callback({ success: true, roomState: getRoomState(roomId) });
+    });
+
     // Toggle ready status
     socket.on("toggle-ready", (callback) => {
         const { oderId, roomId } = socket.data || {};

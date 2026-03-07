@@ -76,6 +76,7 @@ export default function Home() {
                 if (result.success && result.roomId) {
                     // Store user info in sessionStorage
                     sessionStorage.setItem("userId", result.oderId || "");
+                    sessionStorage.setItem("oderId", result.oderId || "");
                     sessionStorage.setItem("roomId", result.roomId);
                     sessionStorage.setItem("teamId", createSelectedTeam);
                     sessionStorage.setItem("userName", createUserName);

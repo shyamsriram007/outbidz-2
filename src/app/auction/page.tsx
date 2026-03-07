@@ -218,12 +218,29 @@ function AuctionPageContent() {
         socket.on("round-complete", onRoundComplete);
         socket.on("round-started", onRoundStarted);
 
-        // Get initial room state
-        socket.emit("get-room-state", (result: { success: boolean; roomState?: RoomState }) => {
-            if (result.success && result.roomState) {
-                setRoomState(result.roomState);
-            }
-        });
+        // Auto-rejoin on connect using stored session data
+        const storedOderId = sessionStorage.getItem("oderId") || sessionStorage.getItem("userId");
+        const storedRoomId = roomIdParam;
+
+        if (storedOderId && storedRoomId) {
+            socket.emit("rejoin-room", { roomId: storedRoomId, oderId: storedOderId }, (result: any) => {
+                if (result.success && result.roomState) {
+                    setRoomState(result.roomState);
+                } else {
+                    socket.emit("get-room-state", (result2: { success: boolean; roomState?: RoomState }) => {
+                        if (result2.success && result2.roomState) {
+                            setRoomState(result2.roomState);
+                        }
+                    });
+                }
+            });
+        } else {
+            socket.emit("get-room-state", (result: { success: boolean; roomState?: RoomState }) => {
+                if (result.success && result.roomState) {
+                    setRoomState(result.roomState);
+                }
+            });
+        }
 
         return () => {
             socket.off("connect", onConnect);
