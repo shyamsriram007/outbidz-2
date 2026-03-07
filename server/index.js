@@ -394,7 +394,7 @@ function placeBid(roomId, oderId, teamId) {
     room.currentBid = nextBid;
     room.currentHolderId = oderId;
     room.currentHolderTeamId = teamId;
-    room.timerSeconds = 10; // Reset timer on bid
+    room.timerSeconds = 20; // Reset timer on bid
 
     // Add to recent bids
     room.recentBids.unshift({
@@ -567,7 +567,7 @@ io.on("connection", (socket) => {
         room.recentBids = room.recentBids.filter(b => b.teamId !== teamId);
 
         // Reset timer
-        room.timerSeconds = 10;
+        room.timerSeconds = 20;
 
         // Broadcast withdrawal
         io.to(roomId).emit("bid-withdrawn", {
