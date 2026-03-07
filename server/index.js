@@ -42,10 +42,12 @@ function generateRoomId() {
 }
 
 function getBidIncrement(currentBid) {
-    if (currentBid < 100) return 5;
-    if (currentBid < 200) return 10;
-    if (currentBid < 500) return 20;
-    return 25;
+    // currentBid is in lakhs
+    if (currentBid < 100) return 5;       // ₹20L – ₹1Cr: increments of ₹5L
+    if (currentBid < 500) return 25;      // ₹1Cr – ₹5Cr: increments of ₹25L
+    if (currentBid < 1000) return 50;     // ₹5Cr – ₹10Cr: increments of ₹50L
+    if (currentBid < 1500) return 75;     // ₹10Cr – ₹15Cr: increments of ₹75L
+    return 100;                            // Above ₹15Cr: increments of ₹1Cr
 }
 
 function createRoom(roomName, numTeams, initialPurse, hostId, hostName, hostTeamId) {

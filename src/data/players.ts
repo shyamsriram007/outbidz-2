@@ -430,10 +430,12 @@ export const formatPriceShort = (priceLakhs: number): string => {
 };
 
 export const getBidIncrement = (currentBidLakhs: number): number => {
-    if (currentBidLakhs < 100) return 5;
-    if (currentBidLakhs < 200) return 10;
-    if (currentBidLakhs < 500) return 20;
-    return 25;
+    // currentBidLakhs is in lakhs
+    if (currentBidLakhs < 100) return 5;       // ₹20L – ₹1Cr: increments of ₹5L
+    if (currentBidLakhs < 500) return 25;      // ₹1Cr – ₹5Cr: increments of ₹25L
+    if (currentBidLakhs < 1000) return 50;     // ₹5Cr – ₹10Cr: increments of ₹50L
+    if (currentBidLakhs < 1500) return 75;     // ₹10Cr – ₹15Cr: increments of ₹75L
+    return 100;                                 // Above ₹15Cr: increments of ₹1Cr
 };
 
 export const getRoleDisplay = (role: PlayerRole): string => {
