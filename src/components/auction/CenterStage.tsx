@@ -17,6 +17,7 @@ interface CenterStageProps {
     isTimerActive: boolean;
     canBid: boolean;
     isHolding: boolean;
+    isFirstBid: boolean;
     canWithdraw: boolean;
     recentBids: BidEntry[];
     onBid: () => void;
@@ -33,6 +34,7 @@ export default function CenterStage({
     isTimerActive,
     canBid,
     isHolding,
+    isFirstBid,
     canWithdraw,
     recentBids,
     onBid,
@@ -123,6 +125,7 @@ export default function CenterStage({
                         canBid={canBid}
                         onBid={onBid}
                         isHolding={isHolding}
+                        isFirstBid={isFirstBid}
                     />
 
                     {/* Withdraw Button */}

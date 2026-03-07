@@ -372,7 +372,8 @@ function AuctionPageContent() {
     // Calculate team statuses
     const getTeamStatuses = (): TeamStatus[] => {
         return roomState.teams.map((team) => {
-            const nextBid = roomState.currentBid + getBidIncrement(roomState.currentBid);
+            const isFirstBid = roomState.currentHolderId === null;
+            const nextBid = isFirstBid ? roomState.currentBid : roomState.currentBid + getBidIncrement(roomState.currentBid);
             return {
                 teamId: team.id,
                 purse: team.purse,
@@ -396,7 +397,8 @@ function AuctionPageContent() {
         : { teamId: myTeamId || "", purse: 0, squadSize: 0, overseasCount: 0 };
 
     const isHolding = roomState.currentHolderTeamId === myTeamId;
-    const nextBid = roomState.currentBid + getBidIncrement(roomState.currentBid);
+    const isFirstBid = roomState.currentHolderId === null;
+    const nextBid = isFirstBid ? roomState.currentBid : roomState.currentBid + getBidIncrement(roomState.currentBid);
     const canBid =
         myTeam &&
         myTeam.purse >= nextBid &&
@@ -432,6 +434,7 @@ function AuctionPageContent() {
                 isTimerActive={true}
                 canBid={canBid ?? false}
                 isHolding={isHolding}
+                isFirstBid={isFirstBid}
                 canWithdraw={isHolding && !hasWithdrawn}
                 recentBids={recentBids}
                 onBid={handleBid}

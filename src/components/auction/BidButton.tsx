@@ -8,6 +8,7 @@ interface BidButtonProps {
     canBid: boolean;
     onBid: () => void;
     isHolding: boolean;
+    isFirstBid?: boolean;
 }
 
 export default function BidButton({
@@ -15,9 +16,10 @@ export default function BidButton({
     canBid,
     onBid,
     isHolding,
+    isFirstBid = false,
 }: BidButtonProps) {
     const increment = getBidIncrement(currentBid);
-    const nextBid = currentBid + increment;
+    const nextBid = isFirstBid ? currentBid : currentBid + increment;
 
     return (
         <div className="flex flex-col items-center">
@@ -31,7 +33,7 @@ export default function BidButton({
                         className="mb-3 px-4 py-1.5 bg-neon-gold/10 border border-neon-gold/30 rounded-full"
                     >
                         <span className="text-sm text-neon-gold font-medium">
-                            Next bid: {formatPrice(nextBid)}
+                            {isFirstBid ? `Bid: ${formatPrice(nextBid)}` : `Next bid: ${formatPrice(nextBid)}`}
                         </span>
                     </motion.div>
                 )}
@@ -71,12 +73,21 @@ export default function BidButton({
                         </>
                     ) : (
                         <>
-                            <span className="text-sm opacity-70">RAISE</span>
-                            <span className="text-2xl font-black">BID</span>
-                            {canBid && (
-                                <span className="text-xs mt-1 opacity-70">
-                                    +{increment >= 100 ? `${increment / 100}Cr` : `${increment}L`}
-                                </span>
+                            {isFirstBid ? (
+                                <>
+                                    <span className="text-sm opacity-70">PLACE</span>
+                                    <span className="text-2xl font-black">BID</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span className="text-sm opacity-70">RAISE</span>
+                                    <span className="text-2xl font-black">BID</span>
+                                    {canBid && (
+                                        <span className="text-xs mt-1 opacity-70">
+                                            +{increment >= 100 ? `${increment / 100}Cr` : `${increment}L`}
+                                        </span>
+                                    )}
+                                </>
                             )}
                         </>
                     )}
