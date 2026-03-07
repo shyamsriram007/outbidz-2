@@ -130,6 +130,7 @@ function AuctionPageContent() {
         function onNextPlayer(data: { player: any; playerIndex: number; totalPlayers: number }) {
             setShowSoldOverlay(false);
             setSoldInfo(null);
+            setHasWithdrawn(false);
             setRoomState((prev) => {
                 if (!prev) return prev;
                 return {
@@ -605,7 +606,7 @@ function AuctionPageContent() {
                                     className="px-3 py-1 text-xs bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 rounded transition-all"
                                     title={`End ${roomState.auctionRound === 1 ? '1st Round' : '2nd Round'} (Host Only)`}
                                 >
-                                    {roomState.auctionRound === 1 ? 'End 1st Round' : 'End Auction'}
+                                    {roomState.auctionRound === 1 ? 'End 1st Round' : 'End 2nd Round'}
                                 </button>
                             </div>
                         )}

@@ -850,15 +850,35 @@ app.post("/api/room/:roomId/force-end", (req, res) => {
         room.timerInterval = null;
     }
 
-    if (room.auctionRound === 1 && room.unsoldPlayers.length > 0) {
-        // End round 1, move to round 2 with unsold players
-        startRound2(req.params.roomId);
-        res.json({
-            success: true,
-            message: "Round 1 ended - starting Round 2 with unsold players",
-            round: 2,
-            unsoldCount: room.unsoldPlayers.length,
-        });
+    if (room.auctionRound === 1) {
+        // Add all remaining unannounced players to unsold pool
+        for (let i = room.currentPlayerIndex; i < room.players.length; i++) {
+            room.unsoldPlayers.push(room.players[i]);
+        }
+
+        if (room.unsoldPlayers.length > 0) {
+            // End round 1, move to round 2 with all unsold + unannounced players
+            startRound2(req.params.roomId);
+            res.json({
+                success: true,
+                message: "Round 1 ended - starting Round 2 with unsold players",
+                round: 2,
+                unsoldCount: room.unsoldPlayers.length,
+            });
+        } else {
+            // No unsold players at all - end auction
+            room.status = "finished";
+            const teamRatings = calculateTeamRatings(room);
+            io.to(req.params.roomId).emit("auction-complete", {
+                teams: getRoomState(req.params.roomId).teams,
+                teamRatings
+            });
+            res.json({
+                success: true,
+                message: "Auction ended",
+                teamRatings
+            });
+        }
     } else {
         // End auction completely
         room.status = "finished";
