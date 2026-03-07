@@ -981,6 +981,48 @@ app.post("/api/room/:roomId/skip-category", (req, res) => {
         newCategory: actualNextPlayer.category,
     });
 });
+// Get remaining players grouped by category
+app.get("/api/room/:roomId/remaining-players", (req, res) => {
+    const room = rooms.get(req.params.roomId);
+    if (!room) {
+        return res.status(404).json({ error: "Room not found" });
+    }
+
+    if (room.status !== "active") {
+        return res.status(400).json({ error: "Auction not active" });
+    }
+
+    // Get remaining players (from current index + 1 onward, since current is already being auctioned)
+    const remaining = room.players.slice(room.currentPlayerIndex + 1);
+
+    // Group by category in order of appearance
+    const groups = [];
+    let currentCategory = null;
+    let currentGroup = null;
+
+    for (const player of remaining) {
+        if (player.category !== currentCategory) {
+            currentCategory = player.category;
+            currentGroup = {
+                category: currentCategory,
+                players: [],
+            };
+            groups.push(currentGroup);
+        }
+        currentGroup.players.push({
+            name: player.name,
+            role: player.role,
+            basePrice: player.basePrice,
+            countryCode: player.countryCode,
+        });
+    }
+
+    res.json({
+        success: true,
+        currentCategory: room.players[room.currentPlayerIndex]?.category,
+        groups,
+    });
+});
 
 // Get team ratings for a room
 app.get("/api/room/:roomId/ratings", (req, res) => {

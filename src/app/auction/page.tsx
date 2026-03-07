@@ -65,6 +65,8 @@ function AuctionPageContent() {
     const [roundMessage, setRoundMessage] = useState<string | null>(null);
     const [hasWithdrawn, setHasWithdrawn] = useState(false);
     const [viewingSquadTeamId, setViewingSquadTeamId] = useState<string | null>(null);
+    const [showSetPreview, setShowSetPreview] = useState(false);
+    const [setPreviewData, setSetPreviewData] = useState<any>(null);
 
     // Socket event handlers
     useEffect(() => {
@@ -492,6 +494,89 @@ function AuctionPageContent() {
                     </motion.div>
                 );
             })()}
+            {/* Set Preview Popup */}
+            {showSetPreview && setPreviewData && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4"
+                    onClick={() => setShowSetPreview(false)}
+                >
+                    <motion.div
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="bg-stadium-900 border border-stadium-600/40 rounded-xl max-w-md w-full max-h-[75vh] overflow-y-auto shadow-2xl"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        {/* Current set header */}
+                        {setPreviewData.groups.length > 0 && (() => {
+                            const getCategoryLabel = (cat: string) =>
+                                cat === "marquee" ? "MARQUEE SET" :
+                                    cat === "batsman" ? "BATSMEN" :
+                                        cat === "bowler" ? "BOWLERS" :
+                                            cat === "wicket-keeper" ? "WICKET-KEEPERS" :
+                                                cat === "all-rounder" ? "ALL ROUNDERS" : "UNCAPPED";
+
+                            const currentCat = setPreviewData.currentCategory;
+                            const currentGroup = setPreviewData.groups.find((g: any) => g.category === currentCat);
+                            const otherGroups = setPreviewData.groups.filter((g: any) => g !== currentGroup);
+
+                            return (
+                                <>
+                                    {/* Current set with player names */}
+                                    {currentGroup && (
+                                        <>
+                                            <div className="bg-stadium-700/50 px-4 py-3 text-center border-b border-stadium-600/30">
+                                                <span className="text-white font-bold text-sm uppercase tracking-wider">
+                                                    {getCategoryLabel(currentGroup.category)}
+                                                </span>
+                                                <span className="text-gray-400 text-xs ml-2">({currentGroup.players.length} remaining)</span>
+                                            </div>
+                                            <div className="divide-y divide-stadium-700/30">
+                                                {currentGroup.players.map((p: any, i: number) => (
+                                                    <div key={i} className="px-4 py-2.5 flex items-center justify-between hover:bg-stadium-800/30">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-white text-sm font-medium">{p.name}</span>
+                                                            {p.countryCode !== "IN" && (
+                                                                <span className="text-[10px] px-1 py-0.5 bg-blue-500/20 text-blue-400 rounded">{p.countryCode}</span>
+                                                            )}
+                                                        </div>
+                                                        <span className="text-gray-500 text-xs font-mono">{formatPrice(p.basePrice)}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </>
+                                    )}
+
+                                    {/* Subsequent sets as collapsed headers */}
+                                    {otherGroups.map((group: any, idx: number) => (
+                                        <div
+                                            key={idx}
+                                            className="bg-stadium-800/40 px-4 py-3 text-center border-t border-stadium-600/30"
+                                        >
+                                            <span className="text-gray-300 font-semibold text-sm uppercase tracking-wider">
+                                                {getCategoryLabel(group.category)}
+                                            </span>
+                                            <span className="text-gray-500 text-xs ml-2">({group.players.length})</span>
+                                        </div>
+                                    ))}
+                                </>
+                            );
+                        })()}
+
+                        {/* Close button */}
+                        <div className="p-3 border-t border-stadium-600/30 text-center">
+                            <button
+                                onClick={() => setShowSetPreview(false)}
+                                className="text-gray-500 hover:text-white text-xs transition-colors"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </motion.div>
+                </motion.div>
+            )}
 
             {/* Sold Overlay */}
             {soldInfo && (
@@ -563,9 +648,23 @@ function AuctionPageContent() {
                     </div>
 
                     <div className="flex items-center gap-6 text-sm">
-                        {/* Current Category Display */}
+                        {/* Current Category Button - Click to see set preview */}
                         {roomState.currentPlayer?.category && (
-                            <div className="px-3 py-1 rounded-full bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30">
+                            <button
+                                onClick={async () => {
+                                    try {
+                                        const res = await fetch(`${SERVER_URL}/api/room/${roomIdParam}/remaining-players`);
+                                        const data = await res.json();
+                                        if (data.success) {
+                                            setSetPreviewData(data);
+                                            setShowSetPreview(true);
+                                        }
+                                    } catch (err) {
+                                        console.error("Failed to fetch set preview:", err);
+                                    }
+                                }}
+                                className="px-3 py-1 rounded-full bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 hover:from-yellow-500/30 hover:to-orange-500/30 transition-all cursor-pointer flex items-center gap-1.5"
+                            >
                                 <span className="text-yellow-400 font-semibold text-xs uppercase tracking-wide">
                                     {roomState.currentPlayer.category === "marquee" ? "Marquee Set" :
                                         roomState.currentPlayer.category === "batsman" ? "Capped Batsmen" :
@@ -574,7 +673,8 @@ function AuctionPageContent() {
                                                     roomState.currentPlayer.category === "all-rounder" ? "Capped All-Rounders" :
                                                         "Uncapped Players"}
                                 </span>
-                            </div>
+                                <span className="text-yellow-500/60 text-xs">▼</span>
+                            </button>
                         )}
 
                         <div className="text-gray-400">
