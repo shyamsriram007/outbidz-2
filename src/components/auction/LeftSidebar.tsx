@@ -16,9 +16,10 @@ interface LeftSidebarProps {
     teams: TeamStatus[];
     currentBid: number;
     myTeamId: string;
+    onTeamClick?: (teamId: string) => void;
 }
 
-export default function LeftSidebar({ teams, currentBid, myTeamId }: LeftSidebarProps) {
+export default function LeftSidebar({ teams, currentBid, myTeamId, onTeamClick }: LeftSidebarProps) {
     // Sort teams - current holder first, then by remaining purse
     const sortedTeams = [...teams]
         .filter((t) => t.teamId !== myTeamId)
@@ -53,8 +54,9 @@ export default function LeftSidebar({ teams, currentBid, myTeamId }: LeftSidebar
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.05 }}
-                            className={`team-card ${!teamStatus.canAffordBid ? "dimmed" : ""
+                            className={`team-card cursor-pointer hover:ring-1 hover:ring-white/20 ${!teamStatus.canAffordBid ? "dimmed" : ""
                                 } ${teamStatus.isCurrentHolder ? "current-holder" : ""}`}
+                            onClick={() => onTeamClick?.(teamStatus.teamId)}
                         >
                             {/* Team Logo/Badge */}
                             <div

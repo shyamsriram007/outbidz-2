@@ -12,11 +12,13 @@ import {
     getSocket,
     connectSocket,
     placeBid as socketPlaceBid,
+    withdrawBid as socketWithdrawBid,
     type RoomState,
     type TeamState,
     type BidEntry,
     SERVER_URL,
 } from "@/lib/socket";
+import { getTeamById } from "@/data/teams";
 
 interface TeamStatus {
     teamId: string;
@@ -61,6 +63,8 @@ function AuctionPageContent() {
     const [isConnected, setIsConnected] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [roundMessage, setRoundMessage] = useState<string | null>(null);
+    const [hasWithdrawn, setHasWithdrawn] = useState(false);
+    const [viewingSquadTeamId, setViewingSquadTeamId] = useState<string | null>(null);
 
     // Socket event handlers
     useEffect(() => {
@@ -136,7 +140,7 @@ function AuctionPageContent() {
                     currentBid: data.player.basePrice,
                     currentHolderId: null,
                     currentHolderTeamId: null,
-                    timerSeconds: 15,
+                    timerSeconds: 25,
                     recentBids: [],
                 };
             });
@@ -153,6 +157,20 @@ function AuctionPageContent() {
             }, 1000);
         }
 
+        function onBidWithdrawn(data: { withdrawnByTeamId: string; newBid: number; newHolderTeamId: string | null; newHolderId: string | null; timerSeconds: number; recentBids: BidEntry[] }) {
+            setRoomState((prev) => {
+                if (!prev) return prev;
+                return {
+                    ...prev,
+                    currentBid: data.newBid,
+                    currentHolderId: data.newHolderId,
+                    currentHolderTeamId: data.newHolderTeamId,
+                    timerSeconds: data.timerSeconds,
+                    recentBids: data.recentBids,
+                };
+            });
+        }
+
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
         socket.on("bid-placed", onBidPlaced);
@@ -161,6 +179,7 @@ function AuctionPageContent() {
         socket.on("player-unsold", onPlayerUnsold);
         socket.on("next-player", onNextPlayer);
         socket.on("auction-complete", onAuctionComplete);
+        socket.on("bid-withdrawn", onBidWithdrawn);
 
         // Listen for auction restart from host
         socket.on("auction-restart", (data: { roomId: string }) => {
@@ -187,7 +206,7 @@ function AuctionPageContent() {
                     currentBid: data.player.basePrice,
                     currentHolderId: null,
                     currentHolderTeamId: null,
-                    timerSeconds: 15,
+                    timerSeconds: 25,
                     recentBids: [],
                 };
             });
@@ -215,6 +234,7 @@ function AuctionPageContent() {
             socket.off("auction-restart");
             socket.off("round-complete", onRoundComplete);
             socket.off("round-started", onRoundStarted);
+            socket.off("bid-withdrawn", onBidWithdrawn);
         };
     }, []);
 
@@ -224,6 +244,18 @@ function AuctionPageContent() {
             if (!result.success) {
                 setError(result.error || "Failed to place bid");
                 setTimeout(() => setError(null), 3000);
+            }
+        });
+    }, []);
+
+    // Handle bid withdrawal
+    const handleWithdraw = useCallback(() => {
+        socketWithdrawBid((result) => {
+            if (!result.success) {
+                setError(result.error || "Failed to withdraw bid");
+                setTimeout(() => setError(null), 3000);
+            } else {
+                setHasWithdrawn(true);
             }
         });
     }, []);
@@ -367,6 +399,7 @@ function AuctionPageContent() {
                 teams={getTeamStatuses()}
                 currentBid={roomState.currentBid}
                 myTeamId={myTeamId || ""}
+                onTeamClick={(teamId: string) => setViewingSquadTeamId(teamId)}
             />
 
             {/* Center Stage */}
@@ -375,12 +408,14 @@ function AuctionPageContent() {
                 currentBid={roomState.currentBid}
                 currentHolderTeamId={roomState.currentHolderTeamId}
                 timerSeconds={roomState.timerSeconds}
-                maxTimerSeconds={15}
+                maxTimerSeconds={25}
                 isTimerActive={true}
                 canBid={canBid ?? false}
                 isHolding={isHolding}
+                canWithdraw={isHolding && !hasWithdrawn}
                 recentBids={recentBids}
                 onBid={handleBid}
+                onWithdraw={handleWithdraw}
                 onTimeout={() => { }}
             />
 
@@ -389,6 +424,73 @@ function AuctionPageContent() {
                 myStats={myStats}
                 squad={myTeam?.squad || []}
             />
+
+            {/* Squad Popup Overlay */}
+            {viewingSquadTeamId && (() => {
+                const viewTeam = roomState.teams.find(t => t.id === viewingSquadTeamId);
+                const viewTeamInfo = getTeamById(viewingSquadTeamId);
+                if (!viewTeam || !viewTeamInfo) return null;
+                return (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4"
+                        onClick={() => setViewingSquadTeamId(null)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9 }}
+                            animate={{ scale: 1 }}
+                            className="glass-card-strong rounded-xl p-6 max-w-lg w-full max-h-[70vh] overflow-y-auto"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-3">
+                                    <div
+                                        className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold text-white"
+                                        style={{ backgroundColor: viewTeamInfo.color }}
+                                    >
+                                        {viewTeamInfo.abbr}
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-bold text-white">{viewTeamInfo.name}</h3>
+                                        <p className="text-xs text-gray-400">{viewTeam.squadSize} players • ₹{(viewTeam.purse / 100).toFixed(1)}Cr remaining</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setViewingSquadTeamId(null)}
+                                    className="text-gray-400 hover:text-white text-xl"
+                                >✕</button>
+                            </div>
+                            {viewTeam.squad.length === 0 ? (
+                                <p className="text-gray-500 text-center py-4">No players bought yet</p>
+                            ) : (
+                                <table className="w-full text-sm">
+                                    <thead>
+                                        <tr className="text-gray-500 text-xs uppercase border-b border-stadium-600/30">
+                                            <th className="text-left py-2">Player</th>
+                                            <th className="text-left py-2">Role</th>
+                                            <th className="text-right py-2">Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {viewTeam.squad.map((item: any, i: number) => (
+                                            <tr key={i} className="border-b border-stadium-700/20">
+                                                <td className="py-2 text-white flex items-center gap-2">
+                                                    <span className="text-xs text-gray-500">{item.player.countryCode}</span>
+                                                    {item.player.name}
+                                                </td>
+                                                <td className="py-2 text-gray-400 capitalize text-xs">{item.player.role}</td>
+                                                <td className="py-2 text-neon-gold text-right font-mono">{formatPrice(item.price)}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                        </motion.div>
+                    </motion.div>
+                );
+            })()}
 
             {/* Sold Overlay */}
             {soldInfo && (

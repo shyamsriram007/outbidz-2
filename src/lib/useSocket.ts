@@ -122,7 +122,7 @@ export function useSocket(): UseSocketReturn {
                     currentBid: data.player.basePrice,
                     currentHolderId: null,
                     currentHolderTeamId: null,
-                    timerSeconds: 15,
+                    timerSeconds: 25,
                     recentBids: [],
                 };
             });

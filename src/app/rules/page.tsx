@@ -39,9 +39,10 @@ export default function RulesPage() {
             title: "Auction Mechanics",
             items: [
                 "Players are presented one at a time with a base price. Categories appear in order: Marquee → Batsmen → Bowlers → Wicket-keepers → All-rounders → Uncapped.",
-                "Each player has a 15-second countdown timer. Place a bid before time runs out.",
+                "Each player has a 25-second countdown timer. Place a bid before time runs out. After a bid, the timer resets to 10 seconds.",
                 "Each bid raises the price by a fixed increment based on the current amount.",
                 "If the timer expires with a bid, the highest bidder wins the player. If no one bids, the player goes unsold.",
+                "You may withdraw your bid ONCE per player using the Withdraw button — use it wisely! After withdrawing, the bid reverts to the previous bidder.",
             ],
         },
         {

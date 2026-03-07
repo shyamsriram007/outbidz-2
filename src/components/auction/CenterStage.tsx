@@ -17,8 +17,10 @@ interface CenterStageProps {
     isTimerActive: boolean;
     canBid: boolean;
     isHolding: boolean;
+    canWithdraw: boolean;
     recentBids: BidEntry[];
     onBid: () => void;
+    onWithdraw: () => void;
     onTimeout: () => void;
 }
 
@@ -31,8 +33,10 @@ export default function CenterStage({
     isTimerActive,
     canBid,
     isHolding,
+    canWithdraw,
     recentBids,
     onBid,
+    onWithdraw,
     onTimeout,
 }: CenterStageProps) {
     const holderTeam = currentHolderTeamId ? getTeamById(currentHolderTeamId) : null;
@@ -120,6 +124,18 @@ export default function CenterStage({
                         onBid={onBid}
                         isHolding={isHolding}
                     />
+
+                    {/* Withdraw Button */}
+                    {canWithdraw && (
+                        <motion.button
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            onClick={onWithdraw}
+                            className="px-4 py-2 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/50 text-orange-400 rounded-lg text-sm font-semibold transition-all"
+                        >
+                            ↩ Withdraw
+                        </motion.button>
+                    )}
                 </div>
             </div>
 

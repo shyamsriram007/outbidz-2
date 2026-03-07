@@ -130,6 +130,13 @@ export function placeBid(
     s?.emit("place-bid", callback);
 }
 
+export function withdrawBid(
+    callback: (result: { success: boolean; error?: string }) => void
+): void {
+    const s = getSocket();
+    s?.emit("withdraw-bid", callback);
+}
+
 export function sendChatMessage(message: string): void {
     const s = getSocket();
     s?.emit("chat-message", { message });

@@ -62,7 +62,7 @@ function createRoom(roomName, numTeams, initialPurse, hostId, hostName, hostTeam
         currentBid: 0,
         currentHolderId: null,
         currentHolderTeamId: null,
-        timerSeconds: 15,
+        timerSeconds: 25,
         timerInterval: null,
         recentBids: [],
         auctionRound: 1,
@@ -167,8 +167,9 @@ function startAuction(roomId) {
     room.currentBid = room.players[0].basePrice;
     room.currentHolderId = null;
     room.currentHolderTeamId = null;
-    room.timerSeconds = 15;
+    room.timerSeconds = 25;
     room.recentBids = [];
+    room.bidWithdrawals = new Set();
 
     startTimer(roomId);
     return true;
@@ -281,8 +282,9 @@ function moveToNextPlayer(roomId) {
     room.currentBid = actualNextPlayer.basePrice;
     room.currentHolderId = null;
     room.currentHolderTeamId = null;
-    room.timerSeconds = 15;
+    room.timerSeconds = 25;
     room.recentBids = [];
+    room.bidWithdrawals = new Set();
 
     io.to(roomId).emit("next-player", {
         player: actualNextPlayer,
@@ -313,8 +315,9 @@ function startRound2(roomId) {
         room.currentBid = room.players[0].basePrice;
         room.currentHolderId = null;
         room.currentHolderTeamId = null;
-        room.timerSeconds = 15;
+        room.timerSeconds = 25;
         room.recentBids = [];
+        room.bidWithdrawals = new Set();
 
         io.to(roomId).emit("round-started", {
             round: 2,
@@ -391,7 +394,7 @@ function placeBid(roomId, oderId, teamId) {
     room.currentBid = nextBid;
     room.currentHolderId = oderId;
     room.currentHolderTeamId = teamId;
-    room.timerSeconds = 10; // Reset timer
+    room.timerSeconds = 10; // Reset timer on bid
 
     // Add to recent bids
     room.recentBids.unshift({
@@ -517,6 +520,66 @@ io.on("connection", (socket) => {
 
         const result = placeBid(roomId, oderId, teamId);
         callback(result);
+    });
+
+    // Withdraw bid (once per player per team)
+    socket.on("withdraw-bid", (callback) => {
+        const { oderId, roomId, teamId } = socket.data || {};
+        if (!oderId || !roomId || !teamId) {
+            return callback({ success: false, error: "Not in a room" });
+        }
+
+        const room = rooms.get(roomId);
+        if (!room) return callback({ success: false, error: "Room not found" });
+        if (room.status !== "active") return callback({ success: false, error: "Auction not active" });
+
+        // Check if this team is the current highest bidder
+        if (room.currentHolderTeamId !== teamId) {
+            return callback({ success: false, error: "You are not the current highest bidder" });
+        }
+
+        // Check if this team has already withdrawn on this player
+        if (!room.bidWithdrawals) room.bidWithdrawals = new Set();
+        if (room.bidWithdrawals.has(teamId)) {
+            return callback({ success: false, error: "You can only withdraw once per player" });
+        }
+
+        // Mark as withdrawn
+        room.bidWithdrawals.add(teamId);
+
+        // Revert to previous bid or base price
+        const previousBids = room.recentBids.filter(b => b.teamId !== teamId);
+        if (previousBids.length > 0) {
+            // Revert to previous highest bid
+            const prevBid = previousBids[0];
+            room.currentBid = prevBid.amount;
+            room.currentHolderId = prevBid.oderId;
+            room.currentHolderTeamId = prevBid.teamId;
+        } else {
+            // No previous bids - revert to base price with no holder
+            const currentPlayer = room.players[room.currentPlayerIndex];
+            room.currentBid = currentPlayer.basePrice;
+            room.currentHolderId = null;
+            room.currentHolderTeamId = null;
+        }
+
+        // Remove this team's bids from recent bids
+        room.recentBids = room.recentBids.filter(b => b.teamId !== teamId);
+
+        // Reset timer
+        room.timerSeconds = 10;
+
+        // Broadcast withdrawal
+        io.to(roomId).emit("bid-withdrawn", {
+            withdrawnByTeamId: teamId,
+            newBid: room.currentBid,
+            newHolderTeamId: room.currentHolderTeamId,
+            newHolderId: room.currentHolderId,
+            timerSeconds: room.timerSeconds,
+            recentBids: room.recentBids.slice(0, 5),
+        });
+
+        callback({ success: true });
     });
 
     // Chat message
