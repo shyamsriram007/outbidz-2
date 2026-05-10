@@ -28,7 +28,7 @@ export default function Home() {
     // Create room form state
     const [roomName, setRoomName] = useState("");
     const [numTeams, setNumTeams] = useState(8);
-    const [initialPurse, setInitialPurse] = useState(100);
+    const [initialPurse, setInitialPurse] = useState(120);
     const [createUserName, setCreateUserName] = useState("");
     const [createSelectedTeam, setCreateSelectedTeam] = useState("");
 

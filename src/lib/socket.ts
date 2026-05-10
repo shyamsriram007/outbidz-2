@@ -41,7 +41,7 @@ export interface RoomState {
     id: string;
     name: string;
     numTeams: number;
-    status: "waiting" | "active" | "finished";
+    status: "waiting" | "active" | "finished" | "rtm_decision";
     hostId: string;
     currentPlayer: any | null;
     currentPlayerIndex: number;
@@ -55,6 +55,14 @@ export interface RoomState {
     unsoldCount: number;
     users: User[];
     teams: TeamState[];
+    retentionPhase?: boolean;
+    retentionComplete?: string[];
+    rtmState?: "prompt" | "hike" | "match" | null;
+    rtmPlayer?: any;
+    rtmOriginalTeam?: string | null;
+    rtmWinningTeam?: string | null;
+    rtmPrice?: number;
+    rtmCards?: Record<string, number>;
 }
 
 export interface User {
@@ -72,6 +80,8 @@ export interface TeamState {
     squadSize: number;
     overseasCount: number;
     squad: { player: any; price: number }[];
+    retentions?: { player: any; cost: number; slot: number }[];
+    rtmCards?: number;
 }
 
 export interface BidEntry {
@@ -147,4 +157,63 @@ export function getRoomState(
 ): void {
     const s = getSocket();
     s?.emit("get-room-state", callback);
+}
+
+// Mega Auction Emitters
+export function startRetentionPhase(callback: (result: { success: boolean; error?: string }) => void): void {
+    const s = getSocket();
+    s?.emit("start-retention-phase", callback);
+}
+
+export function submitRetentions(
+    retentions: { player: any; cost: number; slot: number }[],
+    callback: (result: { success: boolean; error?: string }) => void
+): void {
+    const s = getSocket();
+    s?.emit("submit-retentions", { retentions }, callback);
+}
+
+export function exerciseRtm(
+    useRtm: boolean,
+    callback: (result: { success: boolean; error?: string }) => void
+): void {
+    const s = getSocket();
+    s?.emit("exercise-rtm", { useRtm }, callback);
+}
+
+export function rtmPriceHike(
+    amount: number,
+    callback: (result: { success: boolean; error?: string }) => void
+): void {
+    const s = getSocket();
+    s?.emit("rtm-price-hike", { amount }, callback);
+}
+
+export function rtmMatch(
+    match: boolean,
+    callback: (result: { success: boolean; error?: string }) => void
+): void {
+    const s = getSocket();
+    s?.emit("rtm-match", { match }, callback);
+}
+
+export function proposeTrade(
+    targetTeamId: string,
+    offerPlayers: string[],
+    offerAmount: number,
+    requestPlayers: string[],
+    requestAmount: number,
+    callback: (result: { success: boolean; tradeId?: string; error?: string }) => void
+): void {
+    const s = getSocket();
+    s?.emit("propose-trade", { targetTeamId, offerPlayers, offerAmount, requestPlayers, requestAmount }, callback);
+}
+
+export function respondTrade(
+    tradeId: string,
+    accept: boolean,
+    callback: (result: { success: boolean; error?: string }) => void
+): void {
+    const s = getSocket();
+    s?.emit("respond-trade", { tradeId, accept }, callback);
 }

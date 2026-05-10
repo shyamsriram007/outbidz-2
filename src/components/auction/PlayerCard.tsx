@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { type Player, formatPrice, getRoleBadgeColor, getRoleDisplay } from "@/data/players";
+import { getTeamById } from "@/data/teams";
 import { getCountryFlag } from "@/lib/utils";
 
 interface PlayerCardProps {
@@ -45,11 +46,21 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                 {player.name}
             </h3>
 
-            {/* Role Badge */}
-            <div className="flex justify-center mb-4">
-                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getRoleBadgeColor(player.role)}`}>
+            {/* Badges */}
+            <div className="flex flex-wrap justify-center gap-2 mb-4">
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getRoleBadgeColor(player.role)}`}>
                     {getRoleDisplay(player.role)}
                 </span>
+                
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${player.isCapped ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' : 'bg-green-500/20 text-green-400 border border-green-500/50'}`}>
+                    {player.isCapped ? 'Capped' : 'Uncapped'}
+                </span>
+
+                {player.team2026 && (
+                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-white border border-white/20">
+                        Ex-{getTeamById(player.team2026)?.abbr || player.team2026.toUpperCase()}
+                    </span>
+                )}
             </div>
 
             {/* Stats Row */}

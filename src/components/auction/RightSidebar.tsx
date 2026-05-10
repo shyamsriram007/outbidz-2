@@ -20,9 +20,10 @@ interface BoughtPlayer {
 interface RightSidebarProps {
     myStats: MyStats;
     squad: BoughtPlayer[];
+    onOpenTrade?: () => void;
 }
 
-export default function RightSidebar({ myStats, squad }: RightSidebarProps) {
+export default function RightSidebar({ myStats, squad, onOpenTrade }: RightSidebarProps) {
     const team = getTeamById(myStats.teamId);
 
     // Group squad by role
@@ -93,6 +94,16 @@ export default function RightSidebar({ myStats, squad }: RightSidebarProps) {
                         <div className="text-[10px] text-gray-500 uppercase">Overseas</div>
                     </div>
                 </div>
+
+                {/* Trade Button */}
+                {onOpenTrade && (
+                    <button 
+                        onClick={onOpenTrade}
+                        className="mt-4 w-full py-2 bg-primary/20 text-primary border border-primary/50 hover:bg-primary/30 rounded-lg text-sm font-bold tracking-wider uppercase transition-all"
+                    >
+                        🔄 Trade Center
+                    </button>
+                )}
             </div>
 
             {/* Squad List */}

@@ -95,6 +95,33 @@ export default function RulesPage() {
             ],
         },
         {
+            emoji: "🛡️",
+            title: "Retention Phase",
+            items: [
+                "Before the auction begins, teams can retain up to 6 players from their 2026 squad.",
+                "Limits: Max 5 capped players, max 2 uncapped players, and max 3 overseas players.",
+                "Purse deductions: ₹18Cr (1st capped), ₹14Cr (2nd), ₹11Cr (3rd), ₹18Cr (4th), ₹14Cr (5th). Uncapped players cost ₹4Cr each.",
+                "Any unused retention slots out of 6 become Right to Match (RTM) cards for the auction.",
+            ],
+        },
+        {
+            emoji: "🃏",
+            title: "Right to Match (RTM)",
+            items: [
+                "If a player is auctioned and their original 2026 team has RTM cards left, the original team can match the highest bid to buy them back.",
+                "The highest bidder can optionally hike the price once.",
+                "The original team must match this final hiked price or let the player go.",
+            ],
+        },
+        {
+            emoji: "🤝",
+            title: "Pre-Auction Trades",
+            items: [
+                "Teams can trade players and purse cash with each other before the auction.",
+                "Propose a trade in the Trade Center and wait for the other team to accept or reject.",
+            ],
+        },
+        {
             emoji: "💡",
             title: "Tips & Strategy",
             items: [
@@ -102,7 +129,7 @@ export default function RulesPage() {
                 "Ensure squad balance: you need batsmen, bowlers, wicket-keepers, and all-rounders.",
                 "Uncapped Indian players are often bargains — they can fill your squad cheaply.",
                 "Watch your overseas count — don't waste picks on players you can't use.",
-                "Let rivals overpay: sometimes the best move is not bidding.",
+                "Use RTM cards strategically to steal back your best players after letting others bid.",
             ],
         },
     ];

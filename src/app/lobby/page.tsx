@@ -8,10 +8,12 @@ import {
     connectSocket,
     toggleReady,
     startAuction as socketStartAuction,
+    startRetentionPhase,
     sendChatMessage,
     type RoomState,
     type User
 } from "@/lib/socket";
+import RetentionPhase from "@/components/RetentionPhase";
 
 const IPL_TEAMS = [
     { id: "csk", name: "Chennai Super Kings", color: "#ffc107" },
@@ -192,6 +194,23 @@ function LobbyPageContent() {
         );
     }
 
+    if (roomState.retentionPhase && myTeamId) {
+        return (
+            <div className="min-h-screen flex flex-col p-6 max-w-7xl mx-auto stadium-bg">
+                <motion.header
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-8 text-center"
+                >
+                    <h1 className="font-display text-3xl font-bold text-white mb-2">
+                        {roomState.name} - Retention Phase
+                    </h1>
+                </motion.header>
+                <RetentionPhase roomState={roomState} myTeamId={myTeamId} />
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen flex stadium-bg">
             {/* Main Content */}
@@ -333,17 +352,33 @@ function LobbyPageContent() {
 
                     {/* Start Button (for host) */}
                     {isHost && (
-                        <>
+                        <div className="flex flex-col gap-4 items-center">
                             <button
-                                onClick={handleStartAuction}
+                                onClick={() => {
+                                    startRetentionPhase((res) => {
+                                        if(!res.success) setError(res.error || "Failed");
+                                    });
+                                }}
                                 disabled={!canStart || isLoading}
-                                className={`px-8 py-4 rounded-xl font-display font-bold text-xl uppercase tracking-wider transition-all ${canStart
+                                className={`px-8 py-4 rounded-xl font-display font-bold text-xl uppercase tracking-wider transition-all w-full max-w-md ${canStart
                                     ? "bg-gradient-to-r from-neon-gold to-amber-500 text-stadium-950 hover:shadow-lg hover:shadow-neon-gold/30 hover:scale-105"
                                     : "bg-gray-700 text-gray-500 cursor-not-allowed"
                                     }`}
                             >
-                                {isLoading ? "Starting..." : canStart ? "🏏 Start Auction" : "Waiting for players..."}
+                                {isLoading ? "Starting..." : canStart ? "📝 Start Retention Phase" : "Waiting for players..."}
                             </button>
+                            
+                            <button
+                                onClick={handleStartAuction}
+                                disabled={!canStart || isLoading}
+                                className={`px-6 py-2 rounded-xl font-bold text-sm uppercase transition-all border w-full max-w-md ${canStart
+                                    ? "border-gray-500 text-gray-300 hover:bg-white/5"
+                                    : "border-gray-700 text-gray-700 cursor-not-allowed"
+                                    }`}
+                            >
+                                Skip to Auction
+                            </button>
+                            
                             {!canStart && (
                                 <p className="text-gray-500 text-sm">
                                     {roomState.users.length < 2
@@ -351,7 +386,7 @@ function LobbyPageContent() {
                                         : "All players must be ready"}
                                 </p>
                             )}
-                        </>
+                        </div>
                     )}
                 </motion.div>
             </div>
