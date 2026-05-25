@@ -139,39 +139,6 @@ export function useSocket(): UseSocketReturn {
             });
         }
 
-        // Mega Auction Events
-        function onRetentionPhaseStarted(data: { roomState: RoomState }) {
-            setRoomState(data.roomState);
-        }
-
-        function onRetentionSubmitted(data: { roomState: RoomState }) {
-            setRoomState(data.roomState);
-        }
-
-        function onRetentionPhaseCompleted(data: { roomState: RoomState }) {
-            setRoomState(data.roomState);
-        }
-
-        function onRtmPrompt(data: { roomState: RoomState }) {
-            setRoomState(data.roomState);
-        }
-
-        function onRtmHikePrompt(data: { roomState: RoomState }) {
-            setRoomState(data.roomState);
-        }
-
-        function onRtmMatchPrompt(data: { roomState: RoomState }) {
-            setRoomState(data.roomState);
-        }
-
-        function onTradeProposed(data: { roomState: RoomState }) {
-            setRoomState(data.roomState);
-        }
-
-        function onTradeUpdated(data: { roomState: RoomState }) {
-            setRoomState(data.roomState);
-        }
-
         // Subscribe to events
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
@@ -187,14 +154,6 @@ export function useSocket(): UseSocketReturn {
         socket.on("player-unsold", onPlayerUnsold);
         socket.on("next-player", onNextPlayer);
         socket.on("auction-complete", onAuctionComplete);
-        socket.on("retention-phase-started", onRetentionPhaseStarted);
-        socket.on("retention-submitted", onRetentionSubmitted);
-        socket.on("retention-phase-completed", onRetentionPhaseCompleted);
-        socket.on("rtm-prompt", onRtmPrompt);
-        socket.on("rtm-hike-prompt", onRtmHikePrompt);
-        socket.on("rtm-match-prompt", onRtmMatchPrompt);
-        socket.on("trade-proposed", onTradeProposed);
-        socket.on("trade-updated", onTradeUpdated);
 
         // Cleanup
         return () => {
@@ -212,14 +171,6 @@ export function useSocket(): UseSocketReturn {
             socket.off("player-unsold", onPlayerUnsold);
             socket.off("next-player", onNextPlayer);
             socket.off("auction-complete", onAuctionComplete);
-            socket.off("retention-phase-started", onRetentionPhaseStarted);
-            socket.off("retention-submitted", onRetentionSubmitted);
-            socket.off("retention-phase-completed", onRetentionPhaseCompleted);
-            socket.off("rtm-prompt", onRtmPrompt);
-            socket.off("rtm-hike-prompt", onRtmHikePrompt);
-            socket.off("rtm-match-prompt", onRtmMatchPrompt);
-            socket.off("trade-proposed", onTradeProposed);
-            socket.off("trade-updated", onTradeUpdated);
         };
     }, []);
 

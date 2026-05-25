@@ -10,7 +10,6 @@ interface TeamStatus {
     overseasCount: number;
     isCurrentHolder: boolean;
     canAffordBid: boolean;
-    rtmCards: number;
 }
 
 interface LeftSidebarProps {
@@ -104,13 +103,6 @@ export default function LeftSidebar({ teams, currentBid, myTeamId, onTeamClick }
                                     <span className="text-xs text-gray-400">
                                         ({teamStatus.overseasCount}✈)
                                     </span>
-
-                                    {/* RTM Cards */}
-                                    {teamStatus.rtmCards > 0 && (
-                                        <span className="text-[10px] font-bold px-1 py-0.5 bg-primary/20 text-primary rounded border border-primary/30">
-                                            {teamStatus.rtmCards} RTM
-                                        </span>
-                                    )}
                                 </div>
                             </div>
 

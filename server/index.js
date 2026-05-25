@@ -58,7 +58,7 @@ function createRoom(roomName, numTeams, initialPurse, hostId, hostName, hostTeam
         numTeams,
         initialPurse: initialPurse * 100, // Convert Cr to Lakhs
         hostId,
-        status: "waiting", // waiting, active, finished
+        status: "waiting", // waiting, active, trading, finished
         players: getShuffledPlayers(), // Fresh randomized players for each room
         currentPlayerIndex: 0,
         currentBid: 0,
@@ -71,18 +71,6 @@ function createRoom(roomName, numTeams, initialPurse, hostId, hostName, hostTeam
         unsoldPlayers: [],
         teams: new Map(),
         users: new Map(),
-        // Mega Auction State
-        retentions: new Map(),      // teamId -> array of retained players
-        rtmCards: new Map(),        // teamId -> number
-        retentionPhase: false,
-        retentionComplete: new Set(),
-        rtmState: null,             // null | "prompt" | "hike" | "match"
-        rtmPlayer: null,
-        rtmOriginalTeam: null,
-        rtmWinningTeam: null,
-        rtmPrice: 0,
-        trades: [],
-        tradeWindow: "pre-auction",
     };
 
     // Add host as first user
@@ -160,14 +148,6 @@ function getRoomState(roomId) {
         recentBids: room.recentBids.slice(0, 5),
         auctionRound: room.auctionRound || 1,
         unsoldCount: (room.unsoldPlayers || []).length,
-        retentionPhase: room.retentionPhase,
-        retentionComplete: Array.from(room.retentionComplete),
-        rtmState: room.rtmState,
-        rtmPlayer: room.rtmPlayer,
-        rtmOriginalTeam: room.rtmOriginalTeam,
-        rtmWinningTeam: room.rtmWinningTeam,
-        rtmPrice: room.rtmPrice,
-        rtmCards: Object.fromEntries(room.rtmCards),
         users: Array.from(room.users.values()),
         teams: Array.from(room.teams.entries()).map(([id, team]) => ({
             id,
@@ -176,9 +156,8 @@ function getRoomState(roomId) {
             squadSize: team.squad.length,
             overseasCount: team.overseasCount,
             squad: team.squad,
-            retentions: room.retentions.get(id) || [],
-            rtmCards: room.rtmCards.get(id) || 0,
         })),
+        tradeHistory: room.tradeHistory || [],
     };
 }
 
@@ -224,101 +203,41 @@ function stopTimer(roomId) {
     room.timerInterval = null;
 }
 
-function sellPlayer(roomId, teamId, price) {
-    const room = rooms.get(roomId);
-    if (!room) return;
-    const currentPlayer = room.players[room.currentPlayerIndex];
-    
-    // Deduct from purse
-    const team = room.teams.get(teamId);
-    if (team) {
-        team.purse -= price;
-        team.squad.push({ player: currentPlayer, price: price });
-        if (currentPlayer.countryCode !== "IN") {
-            team.overseasCount++;
-        }
-        
-        // Deduct RTM card if bought via RTM
-        if (teamId === room.rtmOriginalTeam && room.rtmState !== null) {
-            const currentCards = room.rtmCards.get(teamId) || 0;
-            room.rtmCards.set(teamId, Math.max(0, currentCards - 1));
-        }
-    }
-
-    io.to(roomId).emit("player-sold", {
-        player: currentPlayer,
-        teamId: teamId,
-        price: price,
-        updatedTeams: getRoomState(roomId).teams,
-    });
-    
-    // Reset RTM state
-    room.status = "active";
-    room.rtmState = null;
-    room.rtmPlayer = null;
-    room.rtmOriginalTeam = null;
-    room.rtmWinningTeam = null;
-
-    setTimeout(() => {
-        moveToNextPlayer(roomId);
-    }, 3500);
-}
-
 function handleTimerEnd(roomId) {
     const room = rooms.get(roomId);
     if (!room) return;
 
-    if (room.status === "rtm_decision") {
-        if (room.rtmState === "prompt") sellPlayer(roomId, room.rtmWinningTeam, room.rtmPrice);
-        else if (room.rtmState === "hike") sellPlayer(roomId, room.rtmOriginalTeam, room.rtmPrice);
-        else if (room.rtmState === "match") sellPlayer(roomId, room.rtmWinningTeam, room.rtmPrice);
-        return;
-    }
-
     const currentPlayer = room.players[room.currentPlayerIndex];
 
     if (room.currentHolderTeamId) {
-        const originalTeamId = currentPlayer.team2026;
-        const cardsLeft = room.rtmCards.get(originalTeamId) || 0;
-        
-        if (originalTeamId && originalTeamId !== room.currentHolderTeamId && cardsLeft > 0) {
-            // Check if original team can still fit this player (e.g. overseas limit)
-            const origTeam = room.teams.get(originalTeamId);
-            const isOverseas = currentPlayer.countryCode !== "IN";
-            if (origTeam && (!isOverseas || origTeam.overseasCount < 8)) {
-                // Enter RTM prompt phase
-                room.status = "rtm_decision";
-                room.rtmState = "prompt";
-                room.rtmPlayer = currentPlayer;
-                room.rtmOriginalTeam = originalTeamId;
-                room.rtmWinningTeam = room.currentHolderTeamId;
-                room.rtmPrice = room.currentBid;
-                room.timerSeconds = 15;
-                
-                io.to(roomId).emit("rtm-prompt", {
-                    player: currentPlayer,
-                    originalTeamId,
-                    winningTeamId: room.currentHolderTeamId,
-                    price: room.currentBid,
-                    roomState: getRoomState(roomId)
-                });
-                startTimer(roomId);
-                return;
+        // Player sold - deduct from purse
+        const team = room.teams.get(room.currentHolderTeamId);
+        if (team) {
+            team.purse -= room.currentBid;
+            team.squad.push({ player: currentPlayer, price: room.currentBid });
+            if (currentPlayer.countryCode !== "IN") {
+                team.overseasCount++;
             }
         }
 
-        // Sell normally
-        sellPlayer(roomId, room.currentHolderTeamId, room.currentBid);
+        io.to(roomId).emit("player-sold", {
+            player: currentPlayer,
+            teamId: room.currentHolderTeamId,
+            price: room.currentBid,
+            updatedTeams: getRoomState(roomId).teams,
+        });
     } else {
         // Player unsold - track for round 2
         if (room.auctionRound === 1) {
             room.unsoldPlayers.push(currentPlayer);
         }
         io.to(roomId).emit("player-unsold", { player: currentPlayer });
-        setTimeout(() => {
-            moveToNextPlayer(roomId);
-        }, 3500);
     }
+
+    // Move to next player after delay
+    setTimeout(() => {
+        moveToNextPlayer(roomId);
+    }, 3500);
 }
 
 function moveToNextPlayer(roomId) {
@@ -336,10 +255,11 @@ function moveToNextPlayer(roomId) {
             startRound2(roomId);
             return;
         }
-        // Auction fully complete
-        room.status = "finished";
+        // Auction fully complete - move to trading
+        room.status = "trading";
+        room.tradeHistory = [];
         const teamRatings = calculateTeamRatings(room);
-        io.to(roomId).emit("auction-complete", {
+        io.to(roomId).emit("trade-window-started", {
             teams: getRoomState(roomId).teams,
             teamRatings
         });
@@ -605,115 +525,6 @@ io.on("connection", (socket) => {
         callback({ success: true, isReady: user.isReady });
     });
 
-    // Start Retention Phase (host only)
-    socket.on("start-retention-phase", (callback) => {
-        const { oderId, roomId } = socket.data || {};
-        if (!oderId || !roomId) return callback({ success: false, error: "Not in a room" });
-
-        const room = rooms.get(roomId);
-        if (!room) return callback({ success: false, error: "Room not found" });
-        if (room.hostId !== oderId) return callback({ success: false, error: "Not the host" });
-
-        room.retentionPhase = true;
-        
-        io.to(roomId).emit("retention-phase-started", { roomState: getRoomState(roomId) });
-        callback({ success: true });
-    });
-
-    // Submit retentions for a team
-    socket.on("submit-retentions", ({ retentions }, callback) => {
-        const { oderId, roomId, teamId } = socket.data || {};
-        if (!oderId || !roomId || !teamId) return callback({ success: false, error: "Not in a room" });
-
-        const room = rooms.get(roomId);
-        if (!room) return callback({ success: false, error: "Room not found" });
-        if (!room.retentionPhase) return callback({ success: false, error: "Not in retention phase" });
-
-        room.retentions.set(teamId, retentions);
-        room.retentionComplete.add(teamId);
-
-        // Check if everyone is done
-        const allDone = room.users.size > 0 && Array.from(room.users.values()).every(u => room.retentionComplete.has(u.teamId));
-
-        io.to(roomId).emit("retention-submitted", { 
-            teamId, 
-            isAllDone: allDone,
-            roomState: getRoomState(roomId) 
-        });
-        
-        if (allDone) {
-            // Apply deductions and calculate RTMs
-            for (const [tid, teamRetentions] of room.retentions.entries()) {
-                const team = room.teams.get(tid);
-                let totalCost = 0;
-                teamRetentions.forEach(r => {
-                    totalCost += r.cost * 100; // cost is in Cr, convert to Lakhs
-                    team.squad.push({ player: r.player, price: r.cost * 100 });
-                    if (r.player.countryCode !== "IN") team.overseasCount++;
-                });
-                team.purse -= totalCost;
-                room.rtmCards.set(tid, 6 - teamRetentions.length);
-            }
-            room.retentionPhase = false;
-            io.to(roomId).emit("retention-phase-completed", { roomState: getRoomState(roomId) });
-        }
-
-        callback({ success: true });
-    });
-
-    // RTM Events
-    socket.on("exercise-rtm", ({ useRtm }, callback) => {
-        const { oderId, roomId, teamId } = socket.data || {};
-        const room = rooms.get(roomId);
-        if (!room || room.status !== "rtm_decision" || room.rtmOriginalTeam !== teamId) return callback({ success: false });
-
-        if (useRtm) {
-            // Move to hike phase
-            room.rtmState = "hike";
-            room.timerSeconds = 15;
-            io.to(roomId).emit("rtm-hike-prompt", { roomState: getRoomState(roomId) });
-        } else {
-            // Declined RTM -> sold to winning team
-            stopTimer(roomId);
-            sellPlayer(roomId, room.rtmWinningTeam, room.rtmPrice);
-        }
-        callback({ success: true });
-    });
-
-    socket.on("rtm-price-hike", ({ amount }, callback) => {
-        const { oderId, roomId, teamId } = socket.data || {};
-        const room = rooms.get(roomId);
-        if (!room || room.status !== "rtm_decision" || room.rtmWinningTeam !== teamId) return callback({ success: false });
-
-        if (amount && amount > room.rtmPrice) {
-            // Hiked -> move to match phase
-            room.rtmPrice = amount;
-            room.rtmState = "match";
-            room.timerSeconds = 15;
-            io.to(roomId).emit("rtm-match-prompt", { price: amount, roomState: getRoomState(roomId) });
-        } else {
-            // Declined to hike -> sold to original team at original price
-            stopTimer(roomId);
-            sellPlayer(roomId, room.rtmOriginalTeam, room.rtmPrice);
-        }
-        callback({ success: true });
-    });
-
-    socket.on("rtm-match", ({ match }, callback) => {
-        const { oderId, roomId, teamId } = socket.data || {};
-        const room = rooms.get(roomId);
-        if (!room || room.status !== "rtm_decision" || room.rtmOriginalTeam !== teamId) return callback({ success: false });
-
-        stopTimer(roomId);
-
-        if (match) {
-            sellPlayer(roomId, room.rtmOriginalTeam, room.rtmPrice);
-        } else {
-            sellPlayer(roomId, room.rtmWinningTeam, room.rtmPrice);
-        }
-        callback({ success: true });
-    });
-
     // Start auction (host only)
     socket.on("start-auction", (callback) => {
         const { oderId, roomId } = socket.data || {};
@@ -748,89 +559,6 @@ io.on("connection", (socket) => {
 
         const result = placeBid(roomId, oderId, teamId);
         callback(result);
-    });
-
-    // Trade System
-    socket.on("propose-trade", ({ targetTeamId, offerPlayers, offerAmount, requestPlayers, requestAmount }, callback) => {
-        const { oderId, roomId, teamId } = socket.data || {};
-        if (!oderId || !roomId || !teamId) return callback({ success: false, error: "Not in a room" });
-
-        const room = rooms.get(roomId);
-        if (!room) return callback({ success: false, error: "Room not found" });
-
-        const tradeId = `trade-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-        const trade = {
-            id: tradeId,
-            fromTeamId: teamId,
-            toTeamId: targetTeamId,
-            offerPlayers: offerPlayers || [],
-            offerAmount: offerAmount || 0,
-            requestPlayers: requestPlayers || [],
-            requestAmount: requestAmount || 0,
-            status: "pending"
-        };
-
-        room.trades.push(trade);
-
-        // Notify target team
-        io.to(roomId).emit("trade-proposed", { trade, roomState: getRoomState(roomId) });
-        callback({ success: true, tradeId });
-    });
-
-    socket.on("respond-trade", ({ tradeId, accept }, callback) => {
-        const { oderId, roomId, teamId } = socket.data || {};
-        if (!oderId || !roomId || !teamId) return callback({ success: false, error: "Not in a room" });
-
-        const room = rooms.get(roomId);
-        if (!room) return callback({ success: false, error: "Room not found" });
-
-        const trade = room.trades.find(t => t.id === tradeId);
-        if (!trade) return callback({ success: false, error: "Trade not found" });
-        if (trade.toTeamId !== teamId) return callback({ success: false, error: "Not authorized" });
-        if (trade.status !== "pending") return callback({ success: false, error: "Trade already processed" });
-
-        trade.status = accept ? "accepted" : "rejected";
-
-        if (accept) {
-            // Process the trade
-            const fromTeam = room.teams.get(trade.fromTeamId);
-            const toTeam = room.teams.get(trade.toTeamId);
-
-            if (!fromTeam || !toTeam) return callback({ success: false, error: "Team not found" });
-
-            // Validate budgets
-            if (fromTeam.purse + (trade.requestAmount * 100) - (trade.offerAmount * 100) < 0) {
-                trade.status = "failed";
-                return callback({ success: false, error: "Insufficient budget for proposing team" });
-            }
-            if (toTeam.purse + (trade.offerAmount * 100) - (trade.requestAmount * 100) < 0) {
-                trade.status = "failed";
-                return callback({ success: false, error: "Insufficient budget for your team" });
-            }
-
-            // Transfer money
-            fromTeam.purse += (trade.requestAmount * 100) - (trade.offerAmount * 100);
-            toTeam.purse += (trade.offerAmount * 100) - (trade.requestAmount * 100);
-
-            // Transfer players
-            const transferPlayer = (sourceTeam, targetTeam, playerId) => {
-                const pIndex = sourceTeam.squad.findIndex(s => s.player.id === playerId);
-                if (pIndex !== -1) {
-                    const p = sourceTeam.squad.splice(pIndex, 1)[0];
-                    if (p.player.countryCode !== "IN") {
-                        sourceTeam.overseasCount--;
-                        targetTeam.overseasCount++;
-                    }
-                    targetTeam.squad.push(p);
-                }
-            };
-
-            trade.offerPlayers.forEach(pid => transferPlayer(fromTeam, toTeam, pid));
-            trade.requestPlayers.forEach(pid => transferPlayer(toTeam, fromTeam, pid));
-        }
-
-        io.to(roomId).emit("trade-updated", { trade, roomState: getRoomState(roomId) });
-        callback({ success: true });
     });
 
     // Withdraw bid (once per player per team)
@@ -911,6 +639,93 @@ io.on("connection", (socket) => {
             message,
             timestamp: Date.now(),
         });
+    // ============================================================================
+    // TRADE SOCKET EVENTS
+    // ============================================================================
+
+    // Propose a trade: Team A offers one of their players for one of Team B's
+    socket.on("propose-trade", ({ targetTeamId, offeredPlayerName, requestedPlayerName }, callback) => {
+        const { oderId, roomId, teamId } = socket.data || {};
+        if (!oderId || !roomId) return callback({ success: false, error: "Not in a room" });
+
+        const room = rooms.get(roomId);
+        if (!room) return callback({ success: false, error: "Room not found" });
+        if (room.status !== "trading") return callback({ success: false, error: "Not in trade window" });
+        if (teamId === targetTeamId) return callback({ success: false, error: "Cannot trade with yourself" });
+
+        const myTeam = room.teams.get(teamId);
+        const targetTeam = room.teams.get(targetTeamId);
+        if (!myTeam || !targetTeam) return callback({ success: false, error: "Team not found" });
+
+        // Validate ownership
+        const offeredIdx = myTeam.squad.findIndex(s => s.player.name === offeredPlayerName);
+        const requestedIdx = targetTeam.squad.findIndex(s => s.player.name === requestedPlayerName);
+        if (offeredIdx === -1) return callback({ success: false, error: "You don't own that player" });
+        if (requestedIdx === -1) return callback({ success: false, error: "Target team doesn't own that player" });
+
+        const proposal = {
+            id: `trade-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
+            fromTeamId: teamId,
+            toTeamId: targetTeamId,
+            offeredPlayer: myTeam.squad[offeredIdx],
+            requestedPlayer: targetTeam.squad[requestedIdx],
+            status: "pending",
+            timestamp: Date.now(),
+        };
+
+        if (!room.pendingTrades) room.pendingTrades = [];
+        room.pendingTrades.push(proposal);
+
+        // Notify target team
+        io.to(roomId).emit("trade-proposed", { proposal, roomState: getRoomState(roomId) });
+        callback({ success: true, proposalId: proposal.id });
+    });
+
+    // Respond to a trade proposal (accept/reject)
+    socket.on("respond-trade", ({ proposalId, accept }, callback) => {
+        const { oderId, roomId, teamId } = socket.data || {};
+        if (!oderId || !roomId) return callback({ success: false, error: "Not in a room" });
+
+        const room = rooms.get(roomId);
+        if (!room) return callback({ success: false, error: "Room not found" });
+        if (room.status !== "trading") return callback({ success: false, error: "Not in trade window" });
+
+        const proposal = (room.pendingTrades || []).find(t => t.id === proposalId);
+        if (!proposal) return callback({ success: false, error: "Proposal not found" });
+        if (proposal.status !== "pending") return callback({ success: false, error: "Proposal already resolved" });
+        if (proposal.toTeamId !== teamId) return callback({ success: false, error: "Not your proposal to respond to" });
+
+        if (!accept) {
+            proposal.status = "rejected";
+            io.to(roomId).emit("trade-resolved", { proposal, roomState: getRoomState(roomId) });
+            return callback({ success: true });
+        }
+
+        // Accept — swap players
+        const fromTeam = room.teams.get(proposal.fromTeamId);
+        const toTeam = room.teams.get(proposal.toTeamId);
+        if (!fromTeam || !toTeam) return callback({ success: false, error: "Team not found" });
+
+        const offIdx = fromTeam.squad.findIndex(s => s.player.name === proposal.offeredPlayer.player.name);
+        const reqIdx = toTeam.squad.findIndex(s => s.player.name === proposal.requestedPlayer.player.name);
+        if (offIdx === -1 || reqIdx === -1) return callback({ success: false, error: "Player no longer on team" });
+
+        // Perform the swap
+        const offeredEntry = fromTeam.squad.splice(offIdx, 1)[0];
+        const requestedEntry = toTeam.squad.splice(reqIdx, 1)[0];
+        fromTeam.squad.push(requestedEntry);
+        toTeam.squad.push(offeredEntry);
+
+        // Update overseas counts
+        fromTeam.overseasCount = fromTeam.squad.filter(s => s.player.countryCode !== "IN").length;
+        toTeam.overseasCount = toTeam.squad.filter(s => s.player.countryCode !== "IN").length;
+
+        proposal.status = "accepted";
+        if (!room.tradeHistory) room.tradeHistory = [];
+        room.tradeHistory.push(proposal);
+
+        io.to(roomId).emit("trade-resolved", { proposal, roomState: getRoomState(roomId) });
+        callback({ success: true });
     });
 
     // Get room state
@@ -943,7 +758,7 @@ io.on("connection", (socket) => {
                         io.to(roomId).emit("room-closed", { reason: "Host left the room" });
                         stopTimer(roomId);
                         rooms.delete(roomId);
-                    } else if (room.status === "active") {
+                    } else if (room.status === "active" || room.status === "trading") {
                         // Mark user as disconnected but keep their team
                         user.socketId = null;
                         user.isConnected = false;
@@ -1177,30 +992,30 @@ app.post("/api/room/:roomId/force-end", (req, res) => {
                 unsoldCount: room.unsoldPlayers.length,
             });
         } else {
-            // No unsold players at all - end auction
-            room.status = "finished";
+            room.status = "trading";
+            room.tradeHistory = [];
             const teamRatings = calculateTeamRatings(room);
-            io.to(req.params.roomId).emit("auction-complete", {
+            io.to(req.params.roomId).emit("trade-window-started", {
                 teams: getRoomState(req.params.roomId).teams,
                 teamRatings
             });
             res.json({
                 success: true,
-                message: "Auction ended",
+                message: "Auction ended - trade window open",
                 teamRatings
             });
         }
     } else {
-        // End auction completely
-        room.status = "finished";
+        room.status = "trading";
+        room.tradeHistory = [];
         const teamRatings = calculateTeamRatings(room);
-        io.to(req.params.roomId).emit("auction-complete", {
+        io.to(req.params.roomId).emit("trade-window-started", {
             teams: getRoomState(req.params.roomId).teams,
             teamRatings
         });
         res.json({
             success: true,
-            message: "Auction ended",
+            message: "Auction ended - trade window open",
             teamRatings
         });
     }
@@ -1253,13 +1068,14 @@ app.post("/api/room/:roomId/skip-category", (req, res) => {
             startRound2(req.params.roomId);
             return res.json({ success: true, message: `Skipped ${skippedCount} ${currentCategory} players. Moving to Round 2.` });
         }
-        room.status = "finished";
+        room.status = "trading";
+        room.tradeHistory = [];
         const teamRatings = calculateTeamRatings(room);
-        io.to(req.params.roomId).emit("auction-complete", {
+        io.to(req.params.roomId).emit("trade-window-started", {
             teams: getRoomState(req.params.roomId).teams,
             teamRatings
         });
-        return res.json({ success: true, message: `Skipped ${skippedCount} players. Auction complete.` });
+        return res.json({ success: true, message: `Skipped ${skippedCount} players. Trade window open.` });
     }
 
     // Move to next category
@@ -1333,6 +1149,26 @@ app.get("/api/room/:roomId/remaining-players", (req, res) => {
         currentCategory: room.players[room.currentPlayerIndex]?.category,
         groups,
     });
+});
+
+// End trading window (host only) - finalize and go to results
+app.post("/api/room/:roomId/end-trading", (req, res) => {
+    const room = rooms.get(req.params.roomId);
+    if (!room) return res.status(404).json({ error: "Room not found" });
+    if (room.status !== "trading") return res.status(400).json({ error: "Not in trade window" });
+
+    room.status = "finished";
+    // Cancel any pending trades
+    if (room.pendingTrades) {
+        room.pendingTrades.forEach(t => { if (t.status === "pending") t.status = "cancelled"; });
+    }
+
+    const teamRatings = calculateTeamRatings(room);
+    io.to(req.params.roomId).emit("auction-complete", {
+        teams: getRoomState(req.params.roomId).teams,
+        teamRatings
+    });
+    res.json({ success: true, message: "Trading ended", teamRatings });
 });
 
 // Get team ratings for a room

@@ -7,8 +7,6 @@ import LeftSidebar from "@/components/auction/LeftSidebar";
 import CenterStage from "@/components/auction/CenterStage";
 import RightSidebar from "@/components/auction/RightSidebar";
 import SoldOverlay from "@/components/auction/SoldOverlay";
-import RTMOverlay from "@/components/RTMOverlay";
-import TradeModal from "@/components/TradeModal";
 import { getBidIncrement, formatPrice } from "@/data/players";
 import {
     getSocket,
@@ -29,7 +27,6 @@ interface TeamStatus {
     overseasCount: number;
     isCurrentHolder: boolean;
     canAffordBid: boolean;
-    rtmCards: number;
 }
 
 interface BoughtPlayer {
@@ -70,7 +67,6 @@ function AuctionPageContent() {
     const [viewingSquadTeamId, setViewingSquadTeamId] = useState<string | null>(null);
     const [showSetPreview, setShowSetPreview] = useState(false);
     const [setPreviewData, setSetPreviewData] = useState<any>(null);
-    const [showTradeModal, setShowTradeModal] = useState(false);
 
     // Socket event handlers
     useEffect(() => {
@@ -158,9 +154,18 @@ function AuctionPageContent() {
                 if (!prev) return prev;
                 return { ...prev, status: "finished", teams: data.teams };
             });
-            // Redirect to results page
             setTimeout(() => {
                 router.push(`/results?roomId=${roomIdParam}`);
+            }, 1000);
+        }
+
+        function onTradeWindowStarted(data: { teams: TeamState[] }) {
+            setRoomState((prev) => {
+                if (!prev) return prev;
+                return { ...prev, status: "trading", teams: data.teams };
+            });
+            setTimeout(() => {
+                router.push(`/trade?roomId=${roomIdParam}`);
             }, 1000);
         }
 
@@ -186,6 +191,7 @@ function AuctionPageContent() {
         socket.on("player-unsold", onPlayerUnsold);
         socket.on("next-player", onNextPlayer);
         socket.on("auction-complete", onAuctionComplete);
+        socket.on("trade-window-started", onTradeWindowStarted);
         socket.on("bid-withdrawn", onBidWithdrawn);
 
         // Listen for auction restart from host
@@ -255,6 +261,7 @@ function AuctionPageContent() {
             socket.off("player-unsold", onPlayerUnsold);
             socket.off("next-player", onNextPlayer);
             socket.off("auction-complete", onAuctionComplete);
+            socket.off("trade-window-started", onTradeWindowStarted);
             socket.off("auction-restart");
             socket.off("round-complete", onRoundComplete);
             socket.off("round-started", onRoundStarted);
@@ -385,7 +392,6 @@ function AuctionPageContent() {
                 overseasCount: team.overseasCount,
                 isCurrentHolder: roomState.currentHolderTeamId === team.id,
                 canAffordBid: team.purse >= nextBid,
-                rtmCards: team.rtmCards ?? 0,
             };
         });
     };
@@ -451,17 +457,7 @@ function AuctionPageContent() {
             <RightSidebar
                 myStats={myStats}
                 squad={myTeam?.squad || []}
-                onOpenTrade={() => setShowTradeModal(true)}
             />
-
-            {/* Trade Modal */}
-            {showTradeModal && roomState && myTeamId && (
-                <TradeModal
-                    roomState={roomState}
-                    myTeamId={myTeamId}
-                    onClose={() => setShowTradeModal(false)}
-                />
-            )}
 
             {/* Squad Popup Overlay */}
             {viewingSquadTeamId && (() => {
@@ -612,9 +608,6 @@ function AuctionPageContent() {
                     </motion.div>
                 </motion.div>
             )}
-
-            {/* RTM Overlay */}
-            <RTMOverlay roomState={roomState} myTeamId={myTeamId} />
 
             {/* Sold Overlay */}
             {soldInfo && (
