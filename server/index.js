@@ -645,8 +645,8 @@ io.on("connection", (socket) => {
     // TRADE SOCKET EVENTS
     // ============================================================================
 
-    // Propose a trade: Team A offers one of their players for one of Team B's
-    socket.on("propose-trade", ({ targetTeamId, offeredPlayerName, requestedPlayerName }, callback) => {
+    // Propose a trade: Team A offers N players for M of Team B's players
+    socket.on("propose-trade", ({ targetTeamId, offeredPlayerNames, requestedPlayerNames }, callback) => {
         const { oderId, roomId, teamId } = socket.data || {};
         if (!oderId || !roomId) return callback({ success: false, error: "Not in a room" });
 
@@ -655,22 +655,38 @@ io.on("connection", (socket) => {
         if (room.status !== "trading") return callback({ success: false, error: "Not in trade window" });
         if (teamId === targetTeamId) return callback({ success: false, error: "Cannot trade with yourself" });
 
+        // Support both old single-player format and new array format
+        const offered = Array.isArray(offeredPlayerNames) ? offeredPlayerNames : [offeredPlayerNames];
+        const requested = Array.isArray(requestedPlayerNames) ? requestedPlayerNames : [requestedPlayerNames];
+
+        if (offered.length === 0 || requested.length === 0) return callback({ success: false, error: "Must offer and request at least one player" });
+
         const myTeam = room.teams.get(teamId);
         const targetTeam = room.teams.get(targetTeamId);
         if (!myTeam || !targetTeam) return callback({ success: false, error: "Team not found" });
 
-        // Validate ownership
-        const offeredIdx = myTeam.squad.findIndex(s => s.player.name === offeredPlayerName);
-        const requestedIdx = targetTeam.squad.findIndex(s => s.player.name === requestedPlayerName);
-        if (offeredIdx === -1) return callback({ success: false, error: "You don't own that player" });
-        if (requestedIdx === -1) return callback({ success: false, error: "Target team doesn't own that player" });
+        // Validate all offered players exist on my team
+        const offeredEntries = [];
+        for (const name of offered) {
+            const entry = myTeam.squad.find(s => s.player.name === name);
+            if (!entry) return callback({ success: false, error: `You don't own ${name}` });
+            offeredEntries.push(entry);
+        }
+
+        // Validate all requested players exist on target team
+        const requestedEntries = [];
+        for (const name of requested) {
+            const entry = targetTeam.squad.find(s => s.player.name === name);
+            if (!entry) return callback({ success: false, error: `Target team doesn't own ${name}` });
+            requestedEntries.push(entry);
+        }
 
         const proposal = {
             id: `trade-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
             fromTeamId: teamId,
             toTeamId: targetTeamId,
-            offeredPlayer: myTeam.squad[offeredIdx],
-            requestedPlayer: targetTeam.squad[requestedIdx],
+            offeredPlayers: offeredEntries.map(e => ({ player: e.player, price: e.price })),
+            requestedPlayers: requestedEntries.map(e => ({ player: e.player, price: e.price })),
             status: "pending",
             timestamp: Date.now(),
         };
@@ -678,7 +694,6 @@ io.on("connection", (socket) => {
         if (!room.pendingTrades) room.pendingTrades = [];
         room.pendingTrades.push(proposal);
 
-        // Notify target team
         io.to(roomId).emit("trade-proposed", { proposal, roomState: getRoomState(roomId) });
         callback({ success: true, proposalId: proposal.id });
     });
@@ -703,20 +718,36 @@ io.on("connection", (socket) => {
             return callback({ success: true });
         }
 
-        // Accept — swap players
+        // Accept — swap all players
         const fromTeam = room.teams.get(proposal.fromTeamId);
         const toTeam = room.teams.get(proposal.toTeamId);
         if (!fromTeam || !toTeam) return callback({ success: false, error: "Team not found" });
 
-        const offIdx = fromTeam.squad.findIndex(s => s.player.name === proposal.offeredPlayer.player.name);
-        const reqIdx = toTeam.squad.findIndex(s => s.player.name === proposal.requestedPlayer.player.name);
-        if (offIdx === -1 || reqIdx === -1) return callback({ success: false, error: "Player no longer on team" });
+        // Verify all players still on their teams
+        for (const entry of proposal.offeredPlayers) {
+            if (!fromTeam.squad.find(s => s.player.name === entry.player.name)) {
+                return callback({ success: false, error: `${entry.player.name} no longer on team` });
+            }
+        }
+        for (const entry of proposal.requestedPlayers) {
+            if (!toTeam.squad.find(s => s.player.name === entry.player.name)) {
+                return callback({ success: false, error: `${entry.player.name} no longer on team` });
+            }
+        }
 
-        // Perform the swap
-        const offeredEntry = fromTeam.squad.splice(offIdx, 1)[0];
-        const requestedEntry = toTeam.squad.splice(reqIdx, 1)[0];
-        fromTeam.squad.push(requestedEntry);
-        toTeam.squad.push(offeredEntry);
+        // Remove offered players from sender, add to receiver
+        for (const entry of proposal.offeredPlayers) {
+            const idx = fromTeam.squad.findIndex(s => s.player.name === entry.player.name);
+            const removed = fromTeam.squad.splice(idx, 1)[0];
+            toTeam.squad.push(removed);
+        }
+
+        // Remove requested players from receiver, add to sender
+        for (const entry of proposal.requestedPlayers) {
+            const idx = toTeam.squad.findIndex(s => s.player.name === entry.player.name);
+            const removed = toTeam.squad.splice(idx, 1)[0];
+            fromTeam.squad.push(removed);
+        }
 
         // Update overseas counts
         fromTeam.overseasCount = fromTeam.squad.filter(s => s.player.countryCode !== "IN").length;
