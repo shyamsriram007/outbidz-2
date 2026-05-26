@@ -28,7 +28,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "csk",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 355,
+      "wickets": 0
+    }
   },
   {
     "id": "p2",
@@ -40,7 +44,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "csk",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 12,
+      "runs": 410,
+      "wickets": 0
+    }
   },
   {
     "id": "p3",
@@ -52,7 +60,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "csk",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 450,
+      "wickets": 0,
+      "matches": 14
+    }
   },
   {
     "id": "p4",
@@ -64,7 +76,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "csk",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 13,
+      "runs": 262,
+      "wickets": 13
+    }
   },
   {
     "id": "p5",
@@ -76,7 +92,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "csk",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 218,
+      "wickets": 10
+    }
   },
   {
     "id": "p6",
@@ -88,7 +108,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "csk",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 13,
+      "runs": 13,
+      "wickets": 19
+    }
   },
   {
     "id": "p7",
@@ -100,7 +124,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "csk",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 25,
+      "wickets": 9
+    }
   },
   {
     "id": "p8",
@@ -112,7 +140,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "csk",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 350,
+      "wickets": 0
+    }
   },
   {
     "id": "p9",
@@ -124,7 +156,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "csk",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 159,
+      "wickets": 0
+    }
   },
   {
     "id": "p10",
@@ -136,7 +172,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "csk",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 8,
+      "runs": 191,
+      "wickets": 0
+    }
   },
   {
     "id": "p11",
@@ -148,7 +188,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "csk",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 13,
+      "runs": 351,
+      "wickets": 0
+    }
   },
   {
     "id": "p12",
@@ -160,7 +204,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "csk",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 300,
+      "wickets": 0,
+      "matches": 10
+    }
   },
   {
     "id": "p13",
@@ -172,7 +220,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "csk",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 0,
+      "runs": 0,
+      "wickets": 0
+    }
   },
   {
     "id": "p14",
@@ -184,7 +236,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "csk",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 95,
+      "wickets": 3
+    }
   },
   {
     "id": "p15",
@@ -196,7 +252,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "csk",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 43,
+      "wickets": 4
+    }
   },
   {
     "id": "p16",
@@ -208,7 +268,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "csk",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 4,
+      "runs": 58,
+      "wickets": 1
+    }
   },
   {
     "id": "p17",
@@ -220,7 +284,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "csk",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 15,
+      "wickets": 3
+    }
   },
   {
     "id": "p18",
@@ -232,7 +300,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "csk",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 8,
+      "wickets": 21,
+      "matches": 14
+    }
   },
   {
     "id": "p19",
@@ -244,7 +316,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "csk",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 0,
+      "wickets": 5
+    }
   },
   {
     "id": "p20",
@@ -256,7 +332,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "csk",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 4,
+      "runs": 8,
+      "wickets": 2
+    }
   },
   {
     "id": "p21",
@@ -268,7 +348,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "csk",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 24,
+      "wickets": 3
+    }
   },
   {
     "id": "p22",
@@ -280,7 +364,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "csk",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 13,
+      "runs": 289,
+      "wickets": 5
+    }
   },
   {
     "id": "p23",
@@ -292,7 +380,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "csk",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 0,
+      "wickets": 2
+    }
   },
   {
     "id": "p24",
@@ -304,7 +396,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "csk",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 8,
+      "runs": 8,
+      "wickets": 3
+    }
   },
   {
     "id": "p25",
@@ -316,7 +412,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "csk",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 33,
+      "wickets": 16
+    }
   },
   {
     "id": "p26",
@@ -328,7 +428,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 169,
+      "wickets": 0
+    }
   },
   {
     "id": "p27",
@@ -340,7 +444,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 12,
+      "runs": 420,
+      "wickets": 0
+    }
   },
   {
     "id": "p28",
@@ -352,7 +460,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 50,
+      "wickets": 9
+    }
   },
   {
     "id": "p29",
@@ -364,7 +476,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 217,
+      "wickets": 3
+    }
   },
   {
     "id": "p30",
@@ -376,7 +492,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 14,
+      "runs": 183,
+      "wickets": 0
+    }
   },
   {
     "id": "p31",
@@ -388,7 +508,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 151,
+      "wickets": 1
+    }
   },
   {
     "id": "p32",
@@ -400,7 +524,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "mi",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 142,
+      "wickets": 0
+    }
   },
   {
     "id": "p33",
@@ -412,7 +540,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 117,
+      "wickets": 0
+    }
   },
   {
     "id": "p34",
@@ -424,7 +556,11 @@ export const PLAYERS: Player[] = [
     "category": "wicket-keeper",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 12,
+      "runs": 359,
+      "wickets": 0
+    }
   },
   {
     "id": "p35",
@@ -436,7 +572,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "mi",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 116,
+      "wickets": 0
+    }
   },
   {
     "id": "p36",
@@ -448,7 +588,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "mi",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 74,
+      "wickets": 0
+    }
   },
   {
     "id": "p37",
@@ -460,7 +604,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "mi",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 126,
+      "wickets": 4
+    }
   },
   {
     "id": "p38",
@@ -472,7 +620,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 256,
+      "wickets": 8
+    }
   },
   {
     "id": "p39",
@@ -484,7 +636,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "mi",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 4,
+      "runs": 59,
+      "wickets": 0
+    }
   },
   {
     "id": "p40",
@@ -496,7 +652,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "mi",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 4,
+      "runs": 64,
+      "wickets": 3
+    }
   },
   {
     "id": "p41",
@@ -508,7 +668,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 73,
+      "wickets": 1
+    }
   },
   {
     "id": "p42",
@@ -520,7 +684,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 210,
+      "wickets": 6
+    }
   },
   {
     "id": "p43",
@@ -532,7 +700,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 83,
+      "wickets": 5
+    }
   },
   {
     "id": "p44",
@@ -544,7 +716,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 162,
+      "wickets": 4
+    }
   },
   {
     "id": "p45",
@@ -556,7 +732,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "mi",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 1,
+      "runs": 43,
+      "wickets": 1
+    }
   },
   {
     "id": "p46",
@@ -568,7 +748,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "mi",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 157,
+      "wickets": 5
+    }
   },
   {
     "id": "p47",
@@ -580,7 +764,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 14,
+      "runs": 42,
+      "wickets": 17
+    }
   },
   {
     "id": "p48",
@@ -592,7 +780,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 0,
+      "wickets": 8
+    }
   },
   {
     "id": "p49",
@@ -604,7 +796,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "mi",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 0,
+      "wickets": 7
+    }
   },
   {
     "id": "p50",
@@ -616,7 +812,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "mi",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 2,
+      "runs": 0,
+      "wickets": 1
+    }
   },
   {
     "id": "p51",
@@ -628,7 +828,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "mi",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 1,
+      "runs": 5,
+      "wickets": 0
+    }
   },
   {
     "id": "p52",
@@ -640,7 +844,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "mi",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 4,
+      "runs": 0,
+      "wickets": 6
+    }
   },
   {
     "id": "p53",
@@ -652,7 +860,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 2,
+      "runs": 10,
+      "wickets": 0
+    }
   },
   {
     "id": "p54",
@@ -664,7 +876,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "mi",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 12,
+      "runs": 24,
+      "wickets": 17
+    }
   },
   {
     "id": "p55",
@@ -676,7 +892,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 557,
+      "wickets": 0,
+      "matches": 14
+    }
   },
   {
     "id": "p56",
@@ -688,7 +908,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 14,
+      "runs": 460,
+      "wickets": 0
+    }
   },
   {
     "id": "p57",
@@ -700,7 +924,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 13,
+      "runs": 208,
+      "wickets": 0
+    }
   },
   {
     "id": "p58",
@@ -712,7 +940,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 155,
+      "wickets": 0
+    }
   },
   {
     "id": "p59",
@@ -724,7 +956,11 @@ export const PLAYERS: Player[] = [
     "category": "wicket-keeper",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 147,
+      "wickets": 0
+    }
   },
   {
     "id": "p60",
@@ -736,7 +972,11 @@ export const PLAYERS: Player[] = [
     "category": "wicket-keeper",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 9,
+      "runs": 290,
+      "wickets": 0
+    }
   },
   {
     "id": "p61",
@@ -748,7 +988,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 12,
+      "runs": 158,
+      "wickets": 11
+    }
   },
   {
     "id": "p62",
@@ -760,7 +1004,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rcb",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 52,
+      "wickets": 4
+    }
   },
   {
     "id": "p63",
@@ -772,7 +1020,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 93,
+      "wickets": 2
+    }
   },
   {
     "id": "p64",
@@ -784,7 +1036,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 13,
+      "runs": 208,
+      "wickets": 8
+    }
   },
   {
     "id": "p65",
@@ -796,7 +1052,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 109,
+      "wickets": 4
+    }
   },
   {
     "id": "p66",
@@ -808,7 +1068,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 8,
+      "runs": 91,
+      "wickets": 2
+    }
   },
   {
     "id": "p67",
@@ -820,7 +1084,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rcb",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 31,
+      "wickets": 1
+    }
   },
   {
     "id": "p68",
@@ -832,7 +1100,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rcb",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 0,
+      "wickets": 6
+    }
   },
   {
     "id": "p69",
@@ -844,7 +1116,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rcb",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 1,
+      "runs": 3,
+      "wickets": 3
+    }
   },
   {
     "id": "p70",
@@ -856,7 +1132,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rcb",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 116,
+      "wickets": 0
+    }
   },
   {
     "id": "p71",
@@ -868,7 +1148,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rcb",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 127,
+      "wickets": 8
+    }
   },
   {
     "id": "p72",
@@ -880,7 +1164,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 22,
+      "wickets": 11
+    }
   },
   {
     "id": "p73",
@@ -892,7 +1180,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 9,
+      "runs": 27,
+      "wickets": 10
+    }
   },
   {
     "id": "p74",
@@ -904,7 +1196,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rcb",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 14,
+      "wickets": 7
+    }
   },
   {
     "id": "p75",
@@ -916,7 +1212,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 12,
+      "wickets": 24,
+      "matches": 14
+    }
   },
   {
     "id": "p76",
@@ -928,7 +1228,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rcb",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 4,
+      "runs": 20,
+      "wickets": 4
+    }
   },
   {
     "id": "p77",
@@ -940,7 +1244,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 5,
+      "wickets": 5
+    }
   },
   {
     "id": "p78",
@@ -952,7 +1260,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 18,
+      "wickets": 6
+    }
   },
   {
     "id": "p79",
@@ -964,7 +1276,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "rcb",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 0,
+      "wickets": 7
+    }
   },
   {
     "id": "p80",
@@ -976,7 +1292,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 13,
+      "runs": 217,
+      "wickets": 0
+    }
   },
   {
     "id": "p81",
@@ -988,7 +1308,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 320,
+      "wickets": 15,
+      "matches": 13
+    }
   },
   {
     "id": "p82",
@@ -1000,7 +1324,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 22,
+      "wickets": 8
+    }
   },
   {
     "id": "p83",
@@ -1012,7 +1340,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 377,
+      "wickets": 0
+    }
   },
   {
     "id": "p84",
@@ -1024,7 +1356,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "kkr",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 37,
+      "wickets": 0
+    }
   },
   {
     "id": "p85",
@@ -1036,7 +1372,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 143,
+      "wickets": 0
+    }
   },
   {
     "id": "p86",
@@ -1048,7 +1388,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 162,
+      "wickets": 0
+    }
   },
   {
     "id": "p87",
@@ -1060,7 +1404,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "kkr",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 1,
+      "runs": 64,
+      "wickets": 0
+    }
   },
   {
     "id": "p88",
@@ -1072,7 +1420,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 124,
+      "wickets": 0
+    }
   },
   {
     "id": "p89",
@@ -1084,7 +1436,11 @@ export const PLAYERS: Player[] = [
     "category": "wicket-keeper",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 9,
+      "runs": 237,
+      "wickets": 0
+    }
   },
   {
     "id": "p90",
@@ -1096,7 +1452,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 166,
+      "wickets": 0
+    }
   },
   {
     "id": "p91",
@@ -1108,7 +1468,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "kkr",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 0,
+      "runs": 0,
+      "wickets": 0
+    }
   },
   {
     "id": "p92",
@@ -1120,7 +1484,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 12,
+      "runs": 136,
+      "wickets": 8
+    }
   },
   {
     "id": "p93",
@@ -1132,7 +1500,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "kkr",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 92,
+      "wickets": 3
+    }
   },
   {
     "id": "p94",
@@ -1144,7 +1516,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "kkr",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 1,
+      "runs": 38,
+      "wickets": 2
+    }
   },
   {
     "id": "p95",
@@ -1156,7 +1532,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 12,
+      "runs": 175,
+      "wickets": 11
+    }
   },
   {
     "id": "p96",
@@ -1168,7 +1548,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 2,
+      "runs": 23,
+      "wickets": 3
+    }
   },
   {
     "id": "p97",
@@ -1180,7 +1564,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 30,
+      "wickets": 9
+    }
   },
   {
     "id": "p98",
@@ -1192,7 +1580,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 8,
+      "runs": 0,
+      "wickets": 4
+    }
   },
   {
     "id": "p99",
@@ -1204,7 +1596,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 22,
+      "wickets": 9
+    }
   },
   {
     "id": "p100",
@@ -1216,7 +1612,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 2,
+      "wickets": 18,
+      "matches": 13
+    }
   },
   {
     "id": "p101",
@@ -1228,7 +1628,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "kkr",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 6,
+      "wickets": 4
+    }
   },
   {
     "id": "p102",
@@ -1240,7 +1644,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "kkr",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 21,
+      "wickets": 10
+    }
   },
   {
     "id": "p103",
@@ -1252,7 +1660,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 9,
+      "runs": 27,
+      "wickets": 8
+    }
   },
   {
     "id": "p104",
@@ -1264,7 +1676,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "kkr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 30,
+      "wickets": 10
+    }
   },
   {
     "id": "p105",
@@ -1276,7 +1692,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 593,
+      "wickets": 0,
+      "matches": 14
+    }
   },
   {
     "id": "p106",
@@ -1288,7 +1708,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 14,
+      "runs": 297,
+      "wickets": 11
+    }
   },
   {
     "id": "p107",
@@ -1300,7 +1724,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 20,
+      "wickets": 7
+    }
   },
   {
     "id": "p108",
@@ -1312,7 +1740,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 12,
+      "runs": 48,
+      "wickets": 9
+    }
   },
   {
     "id": "p109",
@@ -1324,7 +1756,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 192,
+      "wickets": 0
+    }
   },
   {
     "id": "p110",
@@ -1336,7 +1772,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 390,
+      "wickets": 0
+    }
   },
   {
     "id": "p111",
@@ -1348,7 +1788,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 268,
+      "wickets": 0
+    }
   },
   {
     "id": "p112",
@@ -1360,7 +1804,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 176,
+      "wickets": 0
+    }
   },
   {
     "id": "p113",
@@ -1372,7 +1820,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "dc",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 25,
+      "wickets": 0
+    }
   },
   {
     "id": "p114",
@@ -1384,7 +1836,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 338,
+      "wickets": 0
+    }
   },
   {
     "id": "p115",
@@ -1396,7 +1852,11 @@ export const PLAYERS: Player[] = [
     "category": "wicket-keeper",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 9,
+      "runs": 293,
+      "wickets": 0
+    }
   },
   {
     "id": "p116",
@@ -1408,7 +1868,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 78,
+      "wickets": 0
+    }
   },
   {
     "id": "p117",
@@ -1420,7 +1884,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "dc",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 2,
+      "runs": 42,
+      "wickets": 3
+    }
   },
   {
     "id": "p118",
@@ -1432,7 +1900,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "dc",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 2,
+      "runs": 20,
+      "wickets": 3
+    }
   },
   {
     "id": "p119",
@@ -1444,7 +1916,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "dc",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 2,
+      "runs": 67,
+      "wickets": 2
+    }
   },
   {
     "id": "p120",
@@ -1456,7 +1932,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "dc",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 2,
+      "runs": 21,
+      "wickets": 0
+    }
   },
   {
     "id": "p121",
@@ -1468,7 +1948,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "dc",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 128,
+      "wickets": 5
+    }
   },
   {
     "id": "p122",
@@ -1480,7 +1964,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "dc",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 1,
+      "runs": 33,
+      "wickets": 0
+    }
   },
   {
     "id": "p123",
@@ -1492,7 +1980,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 106,
+      "wickets": 0
+    }
   },
   {
     "id": "p124",
@@ -1504,7 +1996,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 13,
+      "runs": 13,
+      "wickets": 15
+    }
   },
   {
     "id": "p125",
@@ -1516,7 +2012,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 12,
+      "runs": 0,
+      "wickets": 19
+    }
   },
   {
     "id": "p126",
@@ -1528,7 +2028,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 13,
+      "runs": 52,
+      "wickets": 12
+    }
   },
   {
     "id": "p127",
@@ -1540,7 +2044,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "dc",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 28,
+      "wickets": 7
+    }
   },
   {
     "id": "p128",
@@ -1552,7 +2060,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 40,
+      "wickets": 11
+    }
   },
   {
     "id": "p129",
@@ -1564,7 +2076,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "dc",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 13,
+      "runs": 26,
+      "wickets": 16
+    }
   },
   {
     "id": "p130",
@@ -1576,7 +2092,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 342,
+      "wickets": 0
+    }
   },
   {
     "id": "p131",
@@ -1588,7 +2108,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 13,
+      "runs": 13,
+      "wickets": 18
+    }
   },
   {
     "id": "p132",
@@ -1600,7 +2124,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 14,
+      "runs": 339,
+      "wickets": 13
+    }
   },
   {
     "id": "p133",
@@ -1612,7 +2140,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 12,
+      "runs": 36,
+      "wickets": 15
+    }
   },
   {
     "id": "p134",
@@ -1624,7 +2156,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 23,
+      "wickets": 0
+    }
   },
   {
     "id": "p135",
@@ -1636,7 +2172,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "pbks",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 118,
+      "wickets": 0
+    }
   },
   {
     "id": "p136",
@@ -1648,7 +2188,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "pbks",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 1,
+      "runs": 31,
+      "wickets": 0
+    }
   },
   {
     "id": "p137",
@@ -1660,7 +2204,11 @@ export const PLAYERS: Player[] = [
     "category": "wicket-keeper",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 510,
+      "wickets": 0,
+      "matches": 14
+    }
   },
   {
     "id": "p138",
@@ -1672,7 +2220,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 2,
+      "runs": 67,
+      "wickets": 0
+    }
   },
   {
     "id": "p139",
@@ -1684,7 +2236,11 @@ export const PLAYERS: Player[] = [
     "category": "wicket-keeper",
     "team2026": "pbks",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 237,
+      "wickets": 0
+    }
   },
   {
     "id": "p140",
@@ -1696,7 +2252,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "pbks",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 2,
+      "runs": 72,
+      "wickets": 1
+    }
   },
   {
     "id": "p141",
@@ -1708,7 +2268,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 128,
+      "wickets": 8
+    }
   },
   {
     "id": "p142",
@@ -1720,7 +2284,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 247,
+      "wickets": 13
+    }
   },
   {
     "id": "p143",
@@ -1732,7 +2300,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 9,
+      "runs": 187,
+      "wickets": 4
+    }
   },
   {
     "id": "p144",
@@ -1744,7 +2316,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 210,
+      "wickets": 13
+    }
   },
   {
     "id": "p145",
@@ -1756,7 +2332,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "pbks",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 168,
+      "wickets": 6
+    }
   },
   {
     "id": "p146",
@@ -1768,7 +2348,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 83,
+      "wickets": 0
+    }
   },
   {
     "id": "p147",
@@ -1780,7 +2364,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 67,
+      "wickets": 3
+    }
   },
   {
     "id": "p148",
@@ -1792,7 +2380,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 9,
+      "runs": 9,
+      "wickets": 8
+    }
   },
   {
     "id": "p149",
@@ -1804,7 +2396,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 2,
+      "runs": 8,
+      "wickets": 3
+    }
   },
   {
     "id": "p150",
@@ -1816,7 +2412,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 9,
+      "runs": 27,
+      "wickets": 8
+    }
   },
   {
     "id": "p151",
@@ -1828,7 +2428,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 50,
+      "wickets": 7
+    }
   },
   {
     "id": "p152",
@@ -1840,7 +2444,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "pbks",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 4,
+      "runs": 8,
+      "wickets": 4
+    }
   },
   {
     "id": "p153",
@@ -1852,7 +2460,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "pbks",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 15,
+      "wickets": 1
+    }
   },
   {
     "id": "p154",
@@ -1864,7 +2476,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "pbks",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 55,
+      "wickets": 12
+    }
   },
   {
     "id": "p155",
@@ -1876,7 +2492,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 13,
+      "runs": 329,
+      "wickets": 0
+    }
   },
   {
     "id": "p156",
@@ -1888,7 +2508,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 14,
+      "runs": 186,
+      "wickets": 14
+    }
   },
   {
     "id": "p157",
@@ -1900,7 +2524,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 15,
+      "wickets": 21,
+      "matches": 14
+    }
   },
   {
     "id": "p158",
@@ -1912,7 +2540,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 218,
+      "wickets": 9
+    }
   },
   {
     "id": "p159",
@@ -1924,7 +2556,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 53,
+      "wickets": 0
+    }
   },
   {
     "id": "p160",
@@ -1936,7 +2572,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rr",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 115,
+      "wickets": 0
+    }
   },
   {
     "id": "p161",
@@ -1948,7 +2588,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rr",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 583,
+      "wickets": 0,
+      "matches": 14
+    }
   },
   {
     "id": "p162",
@@ -1960,7 +2604,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rr",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 158,
+      "wickets": 0
+    }
   },
   {
     "id": "p163",
@@ -1972,7 +2620,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 221,
+      "wickets": 11
+    }
   },
   {
     "id": "p164",
@@ -1984,7 +2636,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rr",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 117,
+      "wickets": 1
+    }
   },
   {
     "id": "p165",
@@ -1996,7 +2652,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 9,
+      "runs": 163,
+      "wickets": 6
+    }
   },
   {
     "id": "p166",
@@ -2008,7 +2668,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rr",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 131,
+      "wickets": 2
+    }
   },
   {
     "id": "p167",
@@ -2020,7 +2684,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rr",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 4,
+      "runs": 40,
+      "wickets": 2
+    }
   },
   {
     "id": "p168",
@@ -2032,7 +2700,11 @@ export const PLAYERS: Player[] = [
     "category": "wicket-keeper",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 13,
+      "runs": 256,
+      "wickets": 0
+    }
   },
   {
     "id": "p169",
@@ -2044,7 +2716,11 @@ export const PLAYERS: Player[] = [
     "category": "wicket-keeper",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 205,
+      "wickets": 0
+    }
   },
   {
     "id": "p170",
@@ -2056,7 +2732,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 124,
+      "wickets": 3
+    }
   },
   {
     "id": "p171",
@@ -2068,7 +2748,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rr",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 101,
+      "wickets": 0
+    }
   },
   {
     "id": "p172",
@@ -2080,7 +2764,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 9,
+      "runs": 0,
+      "wickets": 8
+    }
   },
   {
     "id": "p173",
@@ -2092,7 +2780,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 10,
+      "wickets": 3
+    }
   },
   {
     "id": "p174",
@@ -2104,7 +2796,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 10,
+      "wickets": 4
+    }
   },
   {
     "id": "p175",
@@ -2116,7 +2812,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 0,
+      "wickets": 6
+    }
   },
   {
     "id": "p176",
@@ -2128,7 +2828,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 4,
+      "runs": 16,
+      "wickets": 5
+    }
   },
   {
     "id": "p177",
@@ -2140,7 +2844,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 50,
+      "wickets": 6
+    }
   },
   {
     "id": "p178",
@@ -2152,7 +2860,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "rr",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 9,
+      "runs": 18,
+      "wickets": 3
+    }
   },
   {
     "id": "p179",
@@ -2164,7 +2876,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rr",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 18,
+      "wickets": 6
+    }
   },
   {
     "id": "p180",
@@ -2176,7 +2892,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "rr",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 12,
+      "wickets": 6
+    }
   },
   {
     "id": "p181",
@@ -2188,7 +2908,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "srh",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 13,
+      "runs": 65,
+      "wickets": 6
+    }
   },
   {
     "id": "p182",
@@ -2200,7 +2924,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "srh",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 12,
+      "runs": 279,
+      "wickets": 0
+    }
   },
   {
     "id": "p183",
@@ -2212,7 +2940,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "srh",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 606,
+      "wickets": 0,
+      "matches": 14
+    }
   },
   {
     "id": "p184",
@@ -2224,7 +2956,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "srh",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 563,
+      "wickets": 2,
+      "matches": 14
+    }
   },
   {
     "id": "p185",
@@ -2236,7 +2972,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "srh",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 149,
+      "wickets": 8
+    }
   },
   {
     "id": "p186",
@@ -2248,7 +2988,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "srh",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 270,
+      "wickets": 9
+    }
   },
   {
     "id": "p187",
@@ -2260,7 +3004,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "srh",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 30,
+      "wickets": 8
+    }
   },
   {
     "id": "p188",
@@ -2272,7 +3020,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "srh",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 13,
+      "runs": 198,
+      "wickets": 3
+    }
   },
   {
     "id": "p189",
@@ -2284,7 +3036,11 @@ export const PLAYERS: Player[] = [
     "category": "wicket-keeper",
     "team2026": "srh",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 569,
+      "wickets": 0,
+      "matches": 14
+    }
   },
   {
     "id": "p190",
@@ -2296,7 +3052,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "srh",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 4,
+      "runs": 170,
+      "wickets": 0
+    }
   },
   {
     "id": "p191",
@@ -2308,7 +3068,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "srh",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 101,
+      "wickets": 0
+    }
   },
   {
     "id": "p192",
@@ -2320,7 +3084,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "srh",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 193,
+      "wickets": 0
+    }
   },
   {
     "id": "p193",
@@ -2332,7 +3100,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "srh",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 1,
+      "runs": 19,
+      "wickets": 0
+    }
   },
   {
     "id": "p194",
@@ -2344,7 +3116,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "srh",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 1,
+      "runs": 15,
+      "wickets": 0
+    }
   },
   {
     "id": "p195",
@@ -2356,7 +3132,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "srh",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 151,
+      "wickets": 2
+    }
   },
   {
     "id": "p196",
@@ -2368,7 +3148,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "srh",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 44,
+      "wickets": 3
+    }
   },
   {
     "id": "p197",
@@ -2380,7 +3164,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "srh",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 0,
+      "runs": 0,
+      "wickets": 0
+    }
   },
   {
     "id": "p198",
@@ -2392,7 +3180,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "srh",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 44,
+      "wickets": 6
+    }
   },
   {
     "id": "p199",
@@ -2404,7 +3196,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "srh",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 0,
+      "wickets": 11
+    }
   },
   {
     "id": "p200",
@@ -2416,7 +3212,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "srh",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 6,
+      "wickets": 3
+    }
   },
   {
     "id": "p201",
@@ -2428,7 +3228,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "srh",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 14,
+      "wickets": 6
+    }
   },
   {
     "id": "p202",
@@ -2440,7 +3244,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "srh",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 5,
+      "wickets": 19,
+      "matches": 14
+    }
   },
   {
     "id": "p203",
@@ -2452,7 +3260,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "srh",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 3,
+      "wickets": 3
+    }
   },
   {
     "id": "p204",
@@ -2464,7 +3276,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "srh",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 2,
+      "runs": 6,
+      "wickets": 2
+    }
   },
   {
     "id": "p205",
@@ -2476,7 +3292,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "srh",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 0,
+      "wickets": 7
+    }
   },
   {
     "id": "p206",
@@ -2488,7 +3308,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "lsg",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 278,
+      "wickets": 0
+    }
   },
   {
     "id": "p207",
@@ -2500,7 +3324,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "lsg",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 328,
+      "wickets": 0
+    }
   },
   {
     "id": "p208",
@@ -2512,7 +3340,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "lsg",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 563,
+      "wickets": 8,
+      "matches": 14
+    }
   },
   {
     "id": "p209",
@@ -2524,7 +3356,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "lsg",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 14,
+      "runs": 0,
+      "wickets": 7
+    }
   },
   {
     "id": "p210",
@@ -2536,7 +3372,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "lsg",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 9,
+      "runs": 287,
+      "wickets": 0
+    }
   },
   {
     "id": "p211",
@@ -2548,7 +3388,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "lsg",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 247,
+      "wickets": 0
+    }
   },
   {
     "id": "p212",
@@ -2560,7 +3404,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "lsg",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 2,
+      "runs": 61,
+      "wickets": 0
+    }
   },
   {
     "id": "p213",
@@ -2572,7 +3420,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "lsg",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 79,
+      "wickets": 0
+    }
   },
   {
     "id": "p214",
@@ -2584,7 +3436,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "lsg",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 92,
+      "wickets": 0
+    }
   },
   {
     "id": "p215",
@@ -2596,7 +3452,11 @@ export const PLAYERS: Player[] = [
     "category": "wicket-keeper",
     "team2026": "lsg",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 310,
+      "wickets": 0
+    }
   },
   {
     "id": "p216",
@@ -2608,7 +3468,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "lsg",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 0,
+      "runs": 0,
+      "wickets": 0
+    }
   },
   {
     "id": "p217",
@@ -2620,7 +3484,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "lsg",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 2,
+      "runs": 59,
+      "wickets": 0
+    }
   },
   {
     "id": "p218",
@@ -2632,7 +3500,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "lsg",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 4,
+      "runs": 92,
+      "wickets": 3
+    }
   },
   {
     "id": "p219",
@@ -2644,7 +3516,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "lsg",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 0,
+      "runs": 0,
+      "wickets": 0
+    }
   },
   {
     "id": "p220",
@@ -2656,7 +3532,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "lsg",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 12,
+      "runs": 255,
+      "wickets": 9
+    }
   },
   {
     "id": "p221",
@@ -2668,7 +3548,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "lsg",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 33,
+      "wickets": 18
+    }
   },
   {
     "id": "p222",
@@ -2680,7 +3564,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "lsg",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 12,
+      "runs": 12,
+      "wickets": 10
+    }
   },
   {
     "id": "p223",
@@ -2692,7 +3580,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "lsg",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 14,
+      "wickets": 7
+    }
   },
   {
     "id": "p224",
@@ -2704,7 +3596,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "lsg",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 33,
+      "wickets": 13
+    }
   },
   {
     "id": "p225",
@@ -2716,7 +3612,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "lsg",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 9,
+      "runs": 0,
+      "wickets": 3
+    }
   },
   {
     "id": "p226",
@@ -2728,7 +3628,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "lsg",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 0,
+      "runs": 0,
+      "wickets": 0
+    }
   },
   {
     "id": "p227",
@@ -2740,7 +3644,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "lsg",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 20,
+      "wickets": 4
+    }
   },
   {
     "id": "p228",
@@ -2752,7 +3660,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "lsg",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 3,
+      "runs": 9,
+      "wickets": 0
+    }
   },
   {
     "id": "p229",
@@ -2764,7 +3676,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "lsg",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 0,
+      "wickets": 16,
+      "matches": 14
+    }
   },
   {
     "id": "p230",
@@ -2776,7 +3692,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "lsg",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 2,
+      "runs": 8,
+      "wickets": 4
+    }
   },
   {
     "id": "p231",
@@ -2788,7 +3708,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 616,
+      "wickets": 0,
+      "matches": 14
+    }
   },
   {
     "id": "p232",
@@ -2800,7 +3724,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 120,
+      "wickets": 19,
+      "matches": 14
+    }
   },
   {
     "id": "p233",
@@ -2812,7 +3740,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 2,
+      "wickets": 24,
+      "matches": 14
+    }
   },
   {
     "id": "p234",
@@ -2824,7 +3756,11 @@ export const PLAYERS: Player[] = [
     "category": "marquee",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 13,
+      "runs": 406,
+      "wickets": 0
+    }
   },
   {
     "id": "p235",
@@ -2836,7 +3772,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 638,
+      "wickets": 0,
+      "matches": 14
+    }
   },
   {
     "id": "p236",
@@ -2848,7 +3788,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 312,
+      "wickets": 0
+    }
   },
   {
     "id": "p237",
@@ -2860,7 +3804,11 @@ export const PLAYERS: Player[] = [
     "category": "batsman",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 10,
+      "runs": 224,
+      "wickets": 0
+    }
   },
   {
     "id": "p238",
@@ -2872,7 +3820,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "gt",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 147,
+      "wickets": 0
+    }
   },
   {
     "id": "p239",
@@ -2884,7 +3836,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 73,
+      "wickets": 4
+    }
   },
   {
     "id": "p240",
@@ -2896,7 +3852,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 91,
+      "wickets": 6
+    }
   },
   {
     "id": "p241",
@@ -2908,7 +3868,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 9,
+      "runs": 96,
+      "wickets": 8
+    }
   },
   {
     "id": "p242",
@@ -2920,7 +3884,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "gt",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 5,
+      "runs": 84,
+      "wickets": 2
+    }
   },
   {
     "id": "p243",
@@ -2932,7 +3900,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 24,
+      "wickets": 5
+    }
   },
   {
     "id": "p244",
@@ -2944,7 +3916,11 @@ export const PLAYERS: Player[] = [
     "category": "all-rounder",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 6,
+      "runs": 149,
+      "wickets": 4
+    }
   },
   {
     "id": "p245",
@@ -2956,7 +3932,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "gt",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 101,
+      "wickets": 7
+    }
   },
   {
     "id": "p246",
@@ -2968,7 +3948,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "gt",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 0,
+      "runs": 0,
+      "wickets": 0
+    }
   },
   {
     "id": "p247",
@@ -2980,7 +3964,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "gt",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 1,
+      "runs": 0,
+      "wickets": 0
+    }
   },
   {
     "id": "p248",
@@ -2992,7 +3980,11 @@ export const PLAYERS: Player[] = [
     "category": "wicket-keeper",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 7,
+      "runs": 158,
+      "wickets": 0
+    }
   },
   {
     "id": "p249",
@@ -3004,7 +3996,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "runs": 10,
+      "wickets": 17,
+      "matches": 14
+    }
   },
   {
     "id": "p250",
@@ -3016,7 +4012,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 11,
+      "runs": 33,
+      "wickets": 9
+    }
   },
   {
     "id": "p251",
@@ -3028,7 +4028,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 9,
+      "runs": 27,
+      "wickets": 7
+    }
   },
   {
     "id": "p252",
@@ -3040,7 +4044,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "gt",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 0,
+      "runs": 0,
+      "wickets": 0
+    }
   },
   {
     "id": "p253",
@@ -3052,7 +4060,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "gt",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 1,
+      "runs": 4,
+      "wickets": 0
+    }
   },
   {
     "id": "p254",
@@ -3064,7 +4076,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "gt",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 1,
+      "runs": 2,
+      "wickets": 1
+    }
   },
   {
     "id": "p255",
@@ -3076,7 +4092,11 @@ export const PLAYERS: Player[] = [
     "category": "bowler",
     "team2026": "gt",
     "isCapped": true,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 9,
+      "runs": 18,
+      "wickets": 10
+    }
   },
   {
     "id": "p256",
@@ -3088,7 +4108,11 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "gt",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
+    "stats": {
+      "matches": 4,
+      "runs": 12,
+      "wickets": 5
+    }
   },
   {
     "id": "p257",
@@ -3100,58 +4124,10 @@ export const PLAYERS: Player[] = [
     "category": "uncapped",
     "team2026": "gt",
     "isCapped": false,
-    "stats": { "matches": 0, "runs": 0, "wickets": 0 }
-  },
-];
-
-export type PlayerRole = "batsman" | "bowler" | "all-rounder" | "wicket-keeper";
-export type PlayerCategory = "marquee" | "batsman" | "bowler" | "wicket-keeper" | "all-rounder" | "uncapped";
-
-export const formatPrice = (priceLakhs: number): string => {
-    if (priceLakhs >= 100) {
-        const crores = priceLakhs / 100;
-        return crores % 1 === 0 ? `₹${crores} Cr` : `₹${crores.toFixed(2)} Cr`;
+    "stats": {
+      "matches": 6,
+      "runs": 18,
+      "wickets": 6
     }
-    return `₹${priceLakhs} L`;
-};
-
-export const getBidIncrement = (currentBidLakhs: number): number => {
-    // currentBidLakhs is in lakhs
-    if (currentBidLakhs < 100) return 5;       // ₹20L – ₹1Cr: increments of ₹5L
-    if (currentBidLakhs < 500) return 25;      // ₹1Cr – ₹5Cr: increments of ₹25L
-    if (currentBidLakhs < 1000) return 50;     // ₹5Cr – ₹10Cr: increments of ₹50L
-    if (currentBidLakhs < 1500) return 75;     // ₹10Cr – ₹15Cr: increments of ₹75L
-    return 100;                                 // Above ₹15Cr: increments of ₹1Cr
-};
-
-export const getRoleDisplay = (role: PlayerRole): string => {
-    const displays: Record<PlayerRole, string> = {
-        batsman: "Batsman",
-        bowler: "Bowler",
-        "all-rounder": "All-Rounder",
-        "wicket-keeper": "Wicket-Keeper",
-    };
-    return displays[role];
-};
-
-export const getCategoryDisplay = (category: PlayerCategory): string => {
-    const displays: Record<PlayerCategory, string> = {
-        marquee: "Marquee",
-        batsman: "Capped Batsmen",
-        bowler: "Capped Bowlers",
-        "wicket-keeper": "Capped Wicket-Keepers",
-        "all-rounder": "Capped All-Rounders",
-        uncapped: "Uncapped",
-    };
-    return displays[category];
-};
-
-export const getRoleBadgeColor = (role: string): string => {
-    const colors: Record<string, string> = {
-        batsman: "bg-blue-500/20 text-blue-400",
-        bowler: "bg-red-500/20 text-red-400",
-        "all-rounder": "bg-purple-500/20 text-purple-400",
-        "wicket-keeper": "bg-green-500/20 text-green-400",
-    };
-    return colors[role] || "bg-gray-500/20 text-gray-400";
-};
+  }
+];

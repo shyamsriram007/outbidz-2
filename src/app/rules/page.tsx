@@ -100,7 +100,8 @@ export default function RulesPage() {
             items: [
                 "After squad selection, each team's Playing XII is rated on a scale of 1–10.",
                 "Teams with fewer than 12 players or those who don't submit their Playing XII are disqualified (DQ) and receive a rating of 0.",
-                "Ratings consider: squad balance (batting, bowling, all-rounders), star power (marquee picks), squad depth, budget efficiency, and overseas utilization.",
+                "Ratings are primarily driven by 2026 IPL Form: The aggregate runs (Batting Form) and wickets (Bowling Form) of your Playing XII make up 60% of your rating.",
+                "The remaining 40% considers: Star Performers (having top 2026 players), Squad Balance (right mix of roles), Value Efficiency, and Overseas Quality.",
                 "The team with the highest overall rating wins the Best Auction Performance award!",
             ],
         },

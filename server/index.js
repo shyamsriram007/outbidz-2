@@ -1023,7 +1023,7 @@ function calculateSingleTeamRating(squad, remainingPurse, initialPurse) {
             overallRating: 0,
             disqualified: true,
             disqualifyReason: `Only ${squad.length} players (minimum 12 required)`,
-            metrics: { squadStrength: 0, balance: 0, starPower: 0, depthScore: 0, valueEfficiency: 0, overseasQuality: 0 },
+            metrics: { battingForm: 0, bowlingForm: 0, starPerformers: 0, balance: 0, valueEfficiency: 0, overseasQuality: 0 },
             breakdown: {
                 batsmen, bowlers, allRounders, wicketKeepers, overseas,
                 marquee: marqueeCount, totalSpent,
@@ -1036,7 +1036,11 @@ function calculateSingleTeamRating(squad, remainingPurse, initialPurse) {
     let batsmen = 0, bowlers = 0, allRounders = 0, wicketKeepers = 0;
     let overseas = 0, marqueeCount = 0;
     let totalSpent = 0;
-    let starPlayerCount = 0; // Players bought for 100L+
+    
+    // 2026 Stats aggregation
+    let totalRuns = 0;
+    let totalWickets = 0;
+    let topPerformersCount = 0;
 
     squad.forEach(item => {
         const player = item.player;
@@ -1052,9 +1056,19 @@ function calculateSingleTeamRating(squad, remainingPurse, initialPurse) {
         // Count overseas
         if (player.countryCode !== "IN") overseas++;
 
-        // Count marquee/star players
+        // Count marquee players
         if (player.category === "marquee") marqueeCount++;
-        if (price >= 100) starPlayerCount++;
+        
+        // Aggregate 2026 Stats
+        const runs = player.stats?.runs || 0;
+        const wickets = player.stats?.wickets || 0;
+        totalRuns += runs;
+        totalWickets += wickets;
+        
+        // Check for top performers (>400 runs or >15 wickets)
+        if (runs >= 400 || wickets >= 15) {
+            topPerformersCount++;
+        }
     });
 
     const squadSize = squad.length;
@@ -1062,12 +1076,19 @@ function calculateSingleTeamRating(squad, remainingPurse, initialPurse) {
 
     // ============= RATING METRICS (each out of 10) =============
 
-    // 1. SQUAD STRENGTH (0-10): Based on total value and star players
-    const spentRatio = totalSpent / initialPurse;
-    const starBonus = Math.min(starPlayerCount * 0.5, 2); // Max 2 points from stars
-    const squadStrength = Math.min(10, (spentRatio * 6) + starBonus + (marqueeCount * 0.3));
+    // 1. BATTING FORM (0-10): Aggregate runs scored by the XII in 2026
+    // Benchmark: 2500 runs combined is excellent (10 points)
+    const battingForm = Math.min(10, (totalRuns / 2500) * 10);
 
-    // 2. BALANCE (0-10): Ideal team has mix of roles
+    // 2. BOWLING FORM (0-10): Aggregate wickets taken by the XII in 2026
+    // Benchmark: 80 wickets combined is excellent (10 points)
+    const bowlingForm = Math.min(10, (totalWickets / 80) * 10);
+
+    // 3. STAR PERFORMERS (0-10): Number of top performers
+    // Benchmark: 3 top performers gets ~10 points
+    const starPerformers = Math.min(10, topPerformersCount * 3.33);
+
+    // 4. BALANCE (0-10): Ideal team has mix of roles
     // Ideal: 4+ batsmen, 5+ bowlers, 2+ all-rounders, 2+ wicketkeepers
     const batsmenScore = Math.min(batsmen / 4, 1) * 2.5;
     const bowlerScore = Math.min(bowlers / 5, 1) * 2.5;
@@ -1075,43 +1096,33 @@ function calculateSingleTeamRating(squad, remainingPurse, initialPurse) {
     const wkScore = Math.min(wicketKeepers / 2, 1) * 2.5;
     const balance = batsmenScore + bowlerScore + arScore + wkScore;
 
-    // 3. STAR POWER (0-10): Marquee and high-value players
-    const marqueeRating = Math.min(marqueeCount * 2, 6);
-    const expensivePlayerRating = Math.min(starPlayerCount * 0.8, 4);
-    const starPower = marqueeRating + expensivePlayerRating;
+    // 5. VALUE EFFICIENCY (0-10): Getting good form at good prices
+    // Form efficiency (Runs + Wickets*20) per crore
+    // A benchmark "good" efficiency might be 30 runs or 1.5 wickets per crore
+    const totalFormPoints = totalRuns + (totalWickets * 20);
+    const formPerCrore = totalSpent > 0 ? (totalFormPoints / totalSpent) : 0;
+    const valueEfficiency = Math.min(10, formPerCrore / 4); // Divide by 4 to scale to 0-10
 
-    // 4. DEPTH SCORE (0-10): Squad size and backup options
-    const sizeScore = Math.min(squadSize / 12, 1) * 6; // 12 is ideal playing XII
-    const backupBatsmen = Math.max(0, batsmen - 4) * 0.5;
-    const backupBowlers = Math.max(0, bowlers - 5) * 0.5;
-    const depthScore = Math.min(10, sizeScore + backupBatsmen + backupBowlers);
-
-    // 5. VALUE EFFICIENCY (0-10): Getting good players at good prices
-    const purseUtilization = (totalSpent / initialPurse);
-    const avgPriceScore = avgPrice > 50 ? Math.min((avgPrice - 30) / 70, 1) * 4 : (avgPrice / 50) * 2;
-    const valueEfficiency = Math.min(10, (purseUtilization * 5) + avgPriceScore + (squadSize > 12 ? 1 : 0));
-
-    // 6. OVERSEAS QUALITY (0-10): Quality of overseas picks
-    const overseasRatio = overseas / Math.max(squadSize, 1);
+    // 6. OVERSEAS QUALITY (0-10): Number of overseas
     const overseasBalance = (overseas >= 3 && overseas <= 8) ? 4 : Math.max(0, 4 - Math.abs(overseas - 5));
     const overseasQuality = Math.min(10, overseasBalance + (overseas * 0.7));
 
     // ============= OVERALL RATING =============
     // Weighted average of all metrics
     const weights = {
-        squadStrength: 0.25,
-        balance: 0.20,
-        starPower: 0.20,
-        depthScore: 0.15,
-        valueEfficiency: 0.10,
-        overseasQuality: 0.10
+        battingForm: 0.30,
+        bowlingForm: 0.30,
+        starPerformers: 0.15,
+        balance: 0.15,
+        valueEfficiency: 0.05,
+        overseasQuality: 0.05
     };
 
     const overallRating = (
-        squadStrength * weights.squadStrength +
+        battingForm * weights.battingForm +
+        bowlingForm * weights.bowlingForm +
+        starPerformers * weights.starPerformers +
         balance * weights.balance +
-        starPower * weights.starPower +
-        depthScore * weights.depthScore +
         valueEfficiency * weights.valueEfficiency +
         overseasQuality * weights.overseasQuality
     );
@@ -1120,10 +1131,10 @@ function calculateSingleTeamRating(squad, remainingPurse, initialPurse) {
         overallRating: Math.round(overallRating * 10) / 10,
         disqualified: false,
         metrics: {
-            squadStrength: Math.round(squadStrength * 10) / 10,
+            battingForm: Math.round(battingForm * 10) / 10,
+            bowlingForm: Math.round(bowlingForm * 10) / 10,
+            starPerformers: Math.round(starPerformers * 10) / 10,
             balance: Math.round(balance * 10) / 10,
-            starPower: Math.round(starPower * 10) / 10,
-            depthScore: Math.round(depthScore * 10) / 10,
             valueEfficiency: Math.round(valueEfficiency * 10) / 10,
             overseasQuality: Math.round(overseasQuality * 10) / 10
         },
