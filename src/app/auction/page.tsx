@@ -413,7 +413,7 @@ function AuctionPageContent() {
     const canBid =
         myTeam &&
         myTeam.purse >= nextBid &&
-        myTeam.squadSize < 25 &&
+        myTeam.squadSize < 18 &&
         (currentPlayer.countryCode === "IN" || myTeam.overseasCount < 8) &&
         !isHolding;
 

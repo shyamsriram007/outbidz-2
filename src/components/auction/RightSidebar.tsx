@@ -79,7 +79,7 @@ export default function RightSidebar({ myStats, squad }: RightSidebarProps) {
                     <div className="glass-card p-3 text-center">
                         <div className="text-lg font-bold text-white font-mono">
                             {myStats.squadSize}
-                            <span className="text-gray-500">/25</span>
+                            <span className="text-gray-500">/18</span>
                         </div>
                         <div className="text-[10px] text-gray-500 uppercase">Squad</div>
                     </div>

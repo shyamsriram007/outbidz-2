@@ -84,14 +84,19 @@ function TradePageContent() {
         function onAuctionComplete() {
             router.push(`/results?roomId=${roomIdParam}`);
         }
+        function onSquadSelectionStarted() {
+            router.push(`/squad-selection?roomId=${roomIdParam}`);
+        }
 
         socket.on("trade-proposed", onTradeProposed);
         socket.on("trade-resolved", onTradeResolved);
         socket.on("auction-complete", onAuctionComplete);
+        socket.on("squad-selection-started", onSquadSelectionStarted);
         return () => {
             socket.off("trade-proposed", onTradeProposed);
             socket.off("trade-resolved", onTradeResolved);
             socket.off("auction-complete", onAuctionComplete);
+            socket.off("squad-selection-started", onSquadSelectionStarted);
         };
     }, [roomIdParam, router]);
 

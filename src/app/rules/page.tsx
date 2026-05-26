@@ -70,10 +70,10 @@ export default function RulesPage() {
             emoji: "👥",
             title: "Squad Size Requirements",
             items: [
-                "Each team must have a minimum of 18 players to qualify for rating.",
-                "Teams with fewer than 18 players are DISQUALIFIED and receive no rating.",
-                "The maximum squad size is 25 players — you cannot bid once your squad is full.",
-                "Plan your budget to ensure you can fill at least 18 slots!",
+                "Each team must have a minimum of 12 players to qualify for rating.",
+                "Teams with fewer than 12 players are DISQUALIFIED and receive no rating.",
+                "The maximum squad size is 18 players — you cannot bid once your squad is full.",
+                "Plan your budget to ensure you can fill at least 12 slots!",
             ],
         },
         {
@@ -85,12 +85,22 @@ export default function RulesPage() {
             ],
         },
         {
+            emoji: "🎯",
+            title: "Playing XII Selection",
+            items: [
+                "After the trade window closes, each team selects their Playing XII from their full squad.",
+                "You must select exactly 12 players — the 12th player is your Impact Player.",
+                "Your team rating is based ONLY on the Playing XII, not the full squad.",
+                "Choose wisely — a balanced Playing XII with the right mix of roles scores higher!",
+            ],
+        },
+        {
             emoji: "⭐",
             title: "Scoring & Ratings",
             items: [
-                "After the auction ends, each team is rated on a scale of 1–10.",
-                "Teams with fewer than 18 players are disqualified (DQ) and receive a rating of 0.",
-                "Ratings are based on: squad balance (batting, bowling, all-rounders), star power (marquee picks), squad depth (total players), budget efficiency, and overseas utilization.",
+                "After squad selection, each team's Playing XII is rated on a scale of 1–10.",
+                "Teams with fewer than 12 players or those who don't submit their Playing XII are disqualified (DQ) and receive a rating of 0.",
+                "Ratings consider: squad balance (batting, bowling, all-rounders), star power (marquee picks), squad depth, budget efficiency, and overseas utilization.",
                 "The team with the highest overall rating wins the Best Auction Performance award!",
             ],
         },

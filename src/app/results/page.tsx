@@ -12,6 +12,7 @@ interface TeamRating {
     overallRating: number;
     disqualified: boolean;
     disqualifyReason?: string;
+    playingXII?: Array<{ player: any; price: number }>;
     metrics: {
         squadStrength: number;
         balance: number;
@@ -324,7 +325,7 @@ function ResultsPageContent() {
                 </motion.div>
             )}
 
-            {/* View All Squads - Wikipedia Style */}
+            {/* View All Squads - Playing XII + Bench */}
             {teams.length > 0 && (
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -340,6 +341,20 @@ function ResultsPageContent() {
                             const isExpanded = expandedTeams.has(teamState.id);
                             const squad = teamState.squad || [];
                             const totalSpent = squad.reduce((sum: number, p: any) => sum + p.price, 0);
+
+                            // Find Playing XII for this team from ratings data
+                            const ratingData = teamRatings.find(r => r.teamId === teamState.id);
+                            const playingXII = ratingData?.playingXII || [];
+                            const playingXIINames = new Set(playingXII.map((p: any) => p.player.name));
+                            const hasPlayingXII = playingXII.length > 0;
+
+                            // Split squad into Playing XII and Bench
+                            const inXII = hasPlayingXII
+                                ? playingXII
+                                : squad;
+                            const bench = hasPlayingXII
+                                ? squad.filter((s: any) => !playingXIINames.has(s.player.name))
+                                : [];
 
                             return (
                                 <div key={teamState.id}>
@@ -377,31 +392,79 @@ function ResultsPageContent() {
                                             {squad.length === 0 ? (
                                                 <p className="text-gray-500 text-sm py-4 pl-4 italic">No players purchased.</p>
                                             ) : (
-                                                <table className="w-full text-sm">
-                                                    <thead>
-                                                        <tr className="border-b border-gray-700/50">
-                                                            <th className="text-left py-2 px-3 text-gray-400 font-medium w-10">#</th>
-                                                            <th className="text-left py-2 px-3 text-gray-400 font-medium">Player</th>
-                                                            <th className="text-left py-2 px-3 text-gray-400 font-medium">Country</th>
-                                                            <th className="text-left py-2 px-3 text-gray-400 font-medium">Role</th>
-                                                            <th className="text-right py-2 px-3 text-gray-400 font-medium">Price</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {squad.map((item: any, idx: number) => (
-                                                            <tr
-                                                                key={idx}
-                                                                className={idx % 2 === 0 ? "bg-white/[0.02]" : "bg-white/[0.05]"}
-                                                            >
-                                                                <td className="py-1.5 px-3 text-gray-500">{idx + 1}</td>
-                                                                <td className="py-1.5 px-3 text-white font-medium">{item.player.name}</td>
-                                                                <td className="py-1.5 px-3 text-gray-400">{item.player.country}</td>
-                                                                <td className="py-1.5 px-3 text-gray-300">{getRoleLabel(item.player.role)}</td>
-                                                                <td className="py-1.5 px-3 text-right text-neon-gold font-semibold">{formatPrice(item.price)}</td>
+                                                <>
+                                                    {/* Playing XII */}
+                                                    {hasPlayingXII && (
+                                                        <div className="mb-1 mt-2 px-3">
+                                                            <span className="text-xs text-neon-cyan font-bold uppercase tracking-wider">Playing XII</span>
+                                                        </div>
+                                                    )}
+                                                    <table className="w-full text-sm">
+                                                        <thead>
+                                                            <tr className="border-b border-gray-700/50">
+                                                                <th className="text-left py-2 px-3 text-gray-400 font-medium w-10">#</th>
+                                                                <th className="text-left py-2 px-3 text-gray-400 font-medium">Player</th>
+                                                                <th className="text-left py-2 px-3 text-gray-400 font-medium">Country</th>
+                                                                <th className="text-left py-2 px-3 text-gray-400 font-medium">Role</th>
+                                                                <th className="text-right py-2 px-3 text-gray-400 font-medium">Price</th>
                                                             </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
+                                                        </thead>
+                                                        <tbody>
+                                                            {inXII.map((item: any, idx: number) => {
+                                                                const isImpactPlayer = hasPlayingXII && idx === 11;
+                                                                return (
+                                                                    <tr
+                                                                        key={idx}
+                                                                        className={`${isImpactPlayer
+                                                                            ? "bg-amber-500/10 border-l-2 border-l-neon-gold"
+                                                                            : hasPlayingXII
+                                                                                ? idx % 2 === 0 ? "bg-neon-cyan/[0.03] border-l-2 border-l-neon-cyan/30" : "bg-neon-cyan/[0.06] border-l-2 border-l-neon-cyan/30"
+                                                                                : idx % 2 === 0 ? "bg-white/[0.02]" : "bg-white/[0.05]"
+                                                                            }`}
+                                                                    >
+                                                                        <td className="py-1.5 px-3 text-gray-500">{idx + 1}</td>
+                                                                        <td className="py-1.5 px-3 text-white font-medium">
+                                                                            {item.player.name}
+                                                                            {isImpactPlayer && (
+                                                                                <span className="ml-2 px-1.5 py-0.5 bg-gradient-to-r from-neon-gold/20 to-amber-500/20 text-neon-gold text-[10px] font-bold rounded uppercase">
+                                                                                    ⭐ Impact
+                                                                                </span>
+                                                                            )}
+                                                                        </td>
+                                                                        <td className="py-1.5 px-3 text-gray-400">{item.player.country}</td>
+                                                                        <td className="py-1.5 px-3 text-gray-300">{getRoleLabel(item.player.role)}</td>
+                                                                        <td className="py-1.5 px-3 text-right text-neon-gold font-semibold">{formatPrice(item.price)}</td>
+                                                                    </tr>
+                                                                );
+                                                            })}
+                                                        </tbody>
+                                                    </table>
+
+                                                    {/* Bench */}
+                                                    {bench.length > 0 && (
+                                                        <>
+                                                            <div className="mt-4 mb-1 px-3">
+                                                                <span className="text-xs text-gray-500 font-bold uppercase tracking-wider">Bench</span>
+                                                            </div>
+                                                            <table className="w-full text-sm opacity-60">
+                                                                <tbody>
+                                                                    {bench.map((item: any, idx: number) => (
+                                                                        <tr
+                                                                            key={idx}
+                                                                            className={idx % 2 === 0 ? "bg-white/[0.02]" : "bg-white/[0.04]"}
+                                                                        >
+                                                                            <td className="py-1.5 px-3 text-gray-600 w-10">{inXII.length + idx + 1}</td>
+                                                                            <td className="py-1.5 px-3 text-gray-400 font-medium">{item.player.name}</td>
+                                                                            <td className="py-1.5 px-3 text-gray-500">{item.player.country}</td>
+                                                                            <td className="py-1.5 px-3 text-gray-500">{getRoleLabel(item.player.role)}</td>
+                                                                            <td className="py-1.5 px-3 text-right text-gray-500 font-semibold">{formatPrice(item.price)}</td>
+                                                                        </tr>
+                                                                    ))}
+                                                                </tbody>
+                                                            </table>
+                                                        </>
+                                                    )}
+                                                </>
                                             )}
                                         </div>
                                     )}

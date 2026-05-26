@@ -158,6 +158,8 @@ function getRoomState(roomId) {
             squad: team.squad,
         })),
         tradeHistory: room.tradeHistory || [],
+        playingXII: room.playingXII ? Object.fromEntries(room.playingXII) : {},
+        submittedTeams: room.submittedTeams ? Array.from(room.submittedTeams) : [],
     };
 }
 
@@ -385,8 +387,8 @@ function placeBid(roomId, oderId, teamId) {
     }
 
     // Validate squad limits
-    if (team.squad.length >= 25) {
-        return { success: false, error: "Squad full" };
+    if (team.squad.length >= 18) {
+        return { success: false, error: "Squad full (max 18)" };
     }
 
     const currentPlayer = room.players[room.currentPlayerIndex];
@@ -761,6 +763,66 @@ io.on("connection", (socket) => {
         callback({ success: true });
     });
 
+    // ============================================================================
+    // PLAYING XII SELECTION SOCKET EVENTS
+    // ============================================================================
+
+    // Submit Playing XII selection
+    socket.on("submit-playing-12", ({ playerNames }, callback) => {
+        const { oderId, roomId, teamId } = socket.data || {};
+        if (!oderId || !roomId || !teamId) return callback({ success: false, error: "Not in a room" });
+
+        const room = rooms.get(roomId);
+        if (!room) return callback({ success: false, error: "Room not found" });
+        if (room.status !== "squad-selection") return callback({ success: false, error: "Not in squad selection phase" });
+
+        // Validate exactly 12 players
+        if (!Array.isArray(playerNames) || playerNames.length !== 12) {
+            return callback({ success: false, error: "Must select exactly 12 players" });
+        }
+
+        const team = room.teams.get(teamId);
+        if (!team) return callback({ success: false, error: "Team not found" });
+
+        // Validate all players belong to the team
+        const squadNames = team.squad.map(s => s.player.name);
+        for (const name of playerNames) {
+            if (!squadNames.includes(name)) {
+                return callback({ success: false, error: `${name} is not in your squad` });
+            }
+        }
+
+        // Store the Playing XII
+        if (!room.playingXII) room.playingXII = new Map();
+        if (!room.submittedTeams) room.submittedTeams = new Set();
+
+        const playingXIIEntries = playerNames.map(name => {
+            return team.squad.find(s => s.player.name === name);
+        });
+
+        room.playingXII.set(teamId, playingXIIEntries);
+        room.submittedTeams.add(teamId);
+
+        // Notify all clients
+        io.to(roomId).emit("playing-12-submitted", {
+            teamId,
+            submittedTeams: Array.from(room.submittedTeams),
+        });
+
+        callback({ success: true });
+
+        // Check if all teams have submitted
+        if (room.submittedTeams.size >= room.teams.size) {
+            // Auto-finalize
+            room.status = "finished";
+            const teamRatings = calculateTeamRatingsWithPlayingXII(room);
+            io.to(roomId).emit("auction-complete", {
+                teams: getRoomState(roomId).teams,
+                teamRatings
+            });
+        }
+    });
+
     // Get room state
     socket.on("get-room-state", (callback) => {
         const { roomId } = socket.data || {};
@@ -828,9 +890,62 @@ function calculateTeamRatings(room) {
     return teamRatings;
 }
 
+function calculateTeamRatingsWithPlayingXII(room) {
+    const teamRatings = [];
+
+    for (const [teamId, team] of room.teams) {
+        // Use Playing XII if submitted, otherwise DQ the team
+        const playingXII = room.playingXII ? room.playingXII.get(teamId) : null;
+
+        if (playingXII && playingXII.length === 12) {
+            const rating = calculateSingleTeamRating(playingXII, team.purse, room.initialPurse);
+            teamRatings.push({
+                teamId,
+                ...rating,
+                playingXII: playingXII.map(e => ({ player: e.player, price: e.price })),
+            });
+        } else {
+            // Team didn't submit - DQ
+            let batsmen = 0, bowlers = 0, allRounders = 0, wicketKeepers = 0;
+            let overseas = 0, marqueeCount = 0, totalSpent = 0;
+            team.squad.forEach(item => {
+                totalSpent += item.price;
+                if (item.player.role === "batsman") batsmen++;
+                else if (item.player.role === "bowler") bowlers++;
+                else if (item.player.role === "all-rounder") allRounders++;
+                else if (item.player.role === "wicket-keeper") wicketKeepers++;
+                if (item.player.countryCode !== "IN") overseas++;
+                if (item.player.category === "marquee") marqueeCount++;
+            });
+            teamRatings.push({
+                teamId,
+                overallRating: 0,
+                disqualified: true,
+                disqualifyReason: "Playing XII not submitted",
+                metrics: { squadStrength: 0, balance: 0, starPower: 0, depthScore: 0, valueEfficiency: 0, overseasQuality: 0 },
+                breakdown: {
+                    batsmen, bowlers, allRounders, wicketKeepers, overseas,
+                    marquee: marqueeCount, totalSpent,
+                    avgPlayerPrice: team.squad.length > 0 ? Math.round(totalSpent / team.squad.length) : 0
+                },
+                playingXII: [],
+            });
+        }
+    }
+
+    // Sort: non-disqualified first by rating desc, then disqualified at the bottom
+    teamRatings.sort((a, b) => {
+        if (a.disqualified && !b.disqualified) return 1;
+        if (!a.disqualified && b.disqualified) return -1;
+        return b.overallRating - a.overallRating;
+    });
+
+    return teamRatings;
+}
+
 function calculateSingleTeamRating(squad, remainingPurse, initialPurse) {
     // Disqualified: fewer than 18 players
-    if (squad.length < 18) {
+    if (squad.length < 12) {
         // Still calculate breakdown for display, but mark as disqualified
         let batsmen = 0, bowlers = 0, allRounders = 0, wicketKeepers = 0;
         let overseas = 0, marqueeCount = 0, totalSpent = 0;
@@ -846,7 +961,7 @@ function calculateSingleTeamRating(squad, remainingPurse, initialPurse) {
         return {
             overallRating: 0,
             disqualified: true,
-            disqualifyReason: `Only ${squad.length} players (minimum 18 required)`,
+            disqualifyReason: `Only ${squad.length} players (minimum 12 required)`,
             metrics: { squadStrength: 0, balance: 0, starPower: 0, depthScore: 0, valueEfficiency: 0, overseasQuality: 0 },
             breakdown: {
                 batsmen, bowlers, allRounders, wicketKeepers, overseas,
@@ -905,7 +1020,7 @@ function calculateSingleTeamRating(squad, remainingPurse, initialPurse) {
     const starPower = marqueeRating + expensivePlayerRating;
 
     // 4. DEPTH SCORE (0-10): Squad size and backup options
-    const sizeScore = Math.min(squadSize / 18, 1) * 6; // 18 is ideal squad
+    const sizeScore = Math.min(squadSize / 12, 1) * 6; // 12 is ideal playing XII
     const backupBatsmen = Math.max(0, batsmen - 4) * 0.5;
     const backupBowlers = Math.max(0, bowlers - 5) * 0.5;
     const depthScore = Math.min(10, sizeScore + backupBatsmen + backupBowlers);
@@ -1184,24 +1299,43 @@ app.get("/api/room/:roomId/remaining-players", (req, res) => {
     });
 });
 
-// End trading window (host only) - finalize and go to results
+// End trading window (host only) - move to squad selection phase
 app.post("/api/room/:roomId/end-trading", (req, res) => {
     const room = rooms.get(req.params.roomId);
     if (!room) return res.status(404).json({ error: "Room not found" });
     if (room.status !== "trading") return res.status(400).json({ error: "Not in trade window" });
 
-    room.status = "finished";
+    room.status = "squad-selection";
     // Cancel any pending trades
     if (room.pendingTrades) {
         room.pendingTrades.forEach(t => { if (t.status === "pending") t.status = "cancelled"; });
     }
 
-    const teamRatings = calculateTeamRatings(room);
+    // Initialize playing XII storage
+    room.playingXII = new Map();
+    room.submittedTeams = new Set();
+
+    io.to(req.params.roomId).emit("squad-selection-started", {
+        roomState: getRoomState(req.params.roomId)
+    });
+    res.json({ success: true, message: "Squad selection phase started" });
+});
+
+// Finalize results (host only) - end squad selection and go to results
+app.post("/api/room/:roomId/finalize-results", (req, res) => {
+    const room = rooms.get(req.params.roomId);
+    if (!room) return res.status(404).json({ error: "Room not found" });
+    if (room.status !== "squad-selection") return res.status(400).json({ error: "Not in squad selection phase" });
+
+    room.status = "finished";
+
+    // Calculate ratings using Playing XII where available, full squad otherwise (DQ)
+    const teamRatings = calculateTeamRatingsWithPlayingXII(room);
     io.to(req.params.roomId).emit("auction-complete", {
         teams: getRoomState(req.params.roomId).teams,
         teamRatings
     });
-    res.json({ success: true, message: "Trading ended", teamRatings });
+    res.json({ success: true, message: "Results finalized", teamRatings });
 });
 
 // Get team ratings for a room
@@ -1211,7 +1345,9 @@ app.get("/api/room/:roomId/ratings", (req, res) => {
         return res.status(404).json({ error: "Room not found" });
     }
 
-    const teamRatings = calculateTeamRatings(room);
+    const teamRatings = (room.playingXII && room.playingXII.size > 0)
+        ? calculateTeamRatingsWithPlayingXII(room)
+        : calculateTeamRatings(room);
     res.json({ teamRatings });
 });
 

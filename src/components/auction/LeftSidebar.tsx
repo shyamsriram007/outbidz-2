@@ -96,7 +96,7 @@ export default function LeftSidebar({ teams, currentBid, myTeamId, onTeamClick }
 
                                     {/* Squad Size */}
                                     <span className="text-xs text-gray-400">
-                                        {teamStatus.squadSize}/25
+                                        {teamStatus.squadSize}/18
                                     </span>
 
                                     {/* Overseas */}
