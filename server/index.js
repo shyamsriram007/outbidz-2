@@ -242,6 +242,25 @@ function handleTimerEnd(roomId) {
     }, 3500);
 }
 
+// Check if any team can bid on a specific player
+function canAnyTeamBid(room, player) {
+    for (const [teamId, team] of room.teams) {
+        if (team.squad.length >= 18) continue; // Squad full
+        if (team.purse < player.basePrice) continue; // Can't afford
+        if (player.countryCode !== "IN" && team.overseasCount >= 8) continue; // Overseas limit
+        return true; // At least one team can bid
+    }
+    return false;
+}
+
+// Check if any team can bid on ANY of the remaining players
+function canAnyTeamBidOnAnyRemaining(room) {
+    for (let i = room.currentPlayerIndex; i < room.players.length; i++) {
+        if (canAnyTeamBid(room, room.players[i])) return true;
+    }
+    return false;
+}
+
 function moveToNextPlayer(roomId) {
     const room = rooms.get(roomId);
     if (!room) return;
@@ -251,13 +270,41 @@ function moveToNextPlayer(roomId) {
 
     room.currentPlayerIndex++;
 
+    // Check if all players exhausted
     if (room.currentPlayerIndex >= room.players.length) {
         if (room.auctionRound === 1 && room.unsoldPlayers.length > 0) {
-            // Round 1 complete - start Round 2 with unsold players
             startRound2(roomId);
             return;
         }
         // Auction fully complete - move to trading
+        room.status = "trading";
+        room.tradeHistory = [];
+        const teamRatings = calculateTeamRatings(room);
+        io.to(roomId).emit("trade-window-started", {
+            teams: getRoomState(roomId).teams,
+            teamRatings
+        });
+        return;
+    }
+
+    // Auto-end: check if ANY team can bid on ANY remaining player
+    if (!canAnyTeamBidOnAnyRemaining(room)) {
+        // No team can bid on anything — collect remaining as unsold and end
+        for (let i = room.currentPlayerIndex; i < room.players.length; i++) {
+            if (room.auctionRound === 1) {
+                room.unsoldPlayers.push(room.players[i]);
+            }
+        }
+        room.currentPlayerIndex = room.players.length;
+
+        io.to(roomId).emit("auction-auto-ended", {
+            reason: "No team can bid on any remaining players"
+        });
+
+        if (room.auctionRound === 1 && room.unsoldPlayers.length > 0) {
+            startRound2(roomId);
+            return;
+        }
         room.status = "trading";
         room.tradeHistory = [];
         const teamRatings = calculateTeamRatings(room);
@@ -284,6 +331,16 @@ function moveToNextPlayer(roomId) {
 
     // Get the (possibly shuffled) next player
     const actualNextPlayer = room.players[room.currentPlayerIndex];
+
+    // Skip players that no team can bid on (auto-unsold)
+    if (!canAnyTeamBid(room, actualNextPlayer)) {
+        if (room.auctionRound === 1) {
+            room.unsoldPlayers.push(actualNextPlayer);
+        }
+        io.to(roomId).emit("player-unsold", { player: actualNextPlayer, autoSkipped: true });
+        setTimeout(() => moveToNextPlayer(roomId), 1500);
+        return;
+    }
 
     room.currentBid = actualNextPlayer.basePrice;
     room.currentHolderId = null;
@@ -811,8 +868,12 @@ io.on("connection", (socket) => {
 
         callback({ success: true });
 
-        // Check if all teams have submitted
-        if (room.submittedTeams.size >= room.teams.size) {
+        // Check if all eligible teams have submitted (teams with < 12 players are auto-DQ'd)
+        let eligibleCount = 0;
+        for (const [tid, t] of room.teams) {
+            if (t.squad.length >= 12) eligibleCount++;
+        }
+        if (room.submittedTeams.size >= eligibleCount) {
             // Auto-finalize
             room.status = "finished";
             const teamRatings = calculateTeamRatingsWithPlayingXII(room);

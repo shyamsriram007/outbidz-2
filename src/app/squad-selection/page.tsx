@@ -120,6 +120,7 @@ function SquadSelectionContent() {
 
     const myTeam = teams.find(t => t.id === myTeamId);
     const mySquad = myTeam?.squad || [];
+    const isDisqualified = mySquad.length < 12;
 
     // Calculate selection breakdown
     const selectionBreakdown = selectedPlayers.reduce(
@@ -141,6 +142,10 @@ function SquadSelectionContent() {
         role === "batsman" ? "🏏" : role === "bowler" ? "🎯" : role === "all-rounder" ? "⚡" : role === "wicket-keeper" ? "🧤" : "🏏";
 
     const progressPercent = (selectedPlayers.length / 12) * 100;
+
+    // Count eligible teams (those with >= 12 players)
+    const eligibleTeams = teams.filter(t => (t.squad?.length || 0) >= 12);
+    const eligibleCount = eligibleTeams.length;
 
     if (loading) {
         return (
@@ -196,8 +201,31 @@ function SquadSelectionContent() {
             <div className="pt-20 px-4 pb-8 max-w-screen-2xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-                    {/* Left Column: Player Selection Grid */}
+                    {/* Left Column: Player Selection Grid or DQ Message */}
                     <div className="lg:col-span-2 space-y-4">
+                        {isDisqualified ? (
+                            /* DQ'd — not enough players */
+                            <div className="bg-stadium-900/80 border border-red-500/30 rounded-xl p-5">
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className="text-center py-16"
+                                >
+                                    <div className="text-7xl mb-6">❌</div>
+                                    <h3 className="text-2xl font-bold text-red-400 mb-3">Disqualified</h3>
+                                    <p className="text-gray-400 text-lg mb-2">
+                                        Your squad has only <span className="text-white font-bold">{mySquad.length}</span> player{mySquad.length === 1 ? "" : "s"}
+                                    </p>
+                                    <p className="text-gray-500">
+                                        You need at least <span className="text-red-400 font-semibold">12 players</span> to select a Playing XII.
+                                    </p>
+                                    <div className="mt-8 inline-block px-6 py-3 bg-red-500/10 border border-red-500/30 rounded-xl">
+                                        <p className="text-sm text-red-400 font-medium">Your team will receive a rating of 0.</p>
+                                        <p className="text-xs text-gray-500 mt-1">Waiting for other teams to finish selection...</p>
+                                    </div>
+                                </motion.div>
+                            </div>
+                        ) : (
                         <div className="bg-stadium-900/80 border border-stadium-600/30 rounded-xl p-5">
                             <div className="flex items-center justify-between mb-4">
                                 <h2 className="text-lg font-bold flex items-center gap-2">
@@ -320,11 +348,13 @@ function SquadSelectionContent() {
                                 </div>
                             )}
                         </div>
+                        )}
                     </div>
 
                     {/* Right Column: Summary & Status */}
                     <div className="space-y-4">
-                        {/* Selection Summary */}
+                        {/* Selection Summary — only show for eligible teams */}
+                        {!isDisqualified && (
                         <div className="bg-stadium-900/80 border border-stadium-600/30 rounded-xl p-5">
                             <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
                                 📊 Selection Summary
@@ -385,30 +415,39 @@ function SquadSelectionContent() {
                                 }
                             </motion.button>
                         </div>
+                        )}
 
                         {/* Team Submission Status */}
                         <div className="bg-stadium-900/80 border border-stadium-600/30 rounded-xl p-5">
                             <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
                                 📋 Team Status
                                 <span className="text-xs font-normal text-gray-500">
-                                    ({submittedTeams.size}/{teams.length} submitted)
+                                    ({submittedTeams.size}/{eligibleCount} eligible submitted)
                                 </span>
                             </h3>
                             <div className="space-y-2">
                                 {teams.map(team => {
                                     const teamInfo = getTeamById(team.id);
                                     const isSubmitted = submittedTeams.has(team.id);
+                                    const teamDQ = (team.squad?.length || 0) < 12;
                                     return (
                                         <div
                                             key={team.id}
                                             className={`flex items-center justify-between px-4 py-3 rounded-lg border transition-all ${isSubmitted
                                                 ? "bg-neon-green/10 border-neon-green/30"
-                                                : "bg-stadium-800/50 border-stadium-700/30"
+                                                : teamDQ
+                                                    ? "bg-red-500/10 border-red-500/20"
+                                                    : "bg-stadium-800/50 border-stadium-700/30"
                                                 }`}
                                         >
                                             <div className="flex items-center gap-3">
                                                 <span className="w-4 h-4 rounded-full" style={{ backgroundColor: teamInfo?.color }}></span>
                                                 <span className="font-semibold text-sm">{teamInfo?.name}</span>
+                                                {teamDQ && (
+                                                    <span className="text-[10px] px-1.5 py-0.5 bg-red-500/20 text-red-400 rounded font-bold">
+                                                        {team.squad?.length || 0} players
+                                                    </span>
+                                                )}
                                             </div>
                                             {isSubmitted ? (
                                                 <motion.span
@@ -418,6 +457,8 @@ function SquadSelectionContent() {
                                                 >
                                                     ✓ Submitted
                                                 </motion.span>
+                                            ) : teamDQ ? (
+                                                <span className="text-red-400 text-sm font-bold">❌ DQ</span>
                                             ) : (
                                                 <span className="text-gray-500 text-sm flex items-center gap-1.5">
                                                     <span className="w-2 h-2 rounded-full bg-yellow-500/60 animate-pulse"></span>
@@ -430,7 +471,8 @@ function SquadSelectionContent() {
                             </div>
                         </div>
 
-                        {/* Impact Player Info */}
+                        {/* Impact Player Info — only for eligible teams */}
+                        {!isDisqualified && (
                         <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/5 border border-neon-gold/20 rounded-xl p-4">
                             <div className="flex items-center gap-2 mb-2">
                                 <span className="text-xl">⭐</span>
@@ -440,6 +482,7 @@ function SquadSelectionContent() {
                                 The 12th player you select becomes your <span className="text-neon-gold font-semibold">Impact Player</span> — a tactical substitute who can change the game. Choose your 12th pick wisely!
                             </p>
                         </div>
+                        )}
                     </div>
                 </div>
             </div>
