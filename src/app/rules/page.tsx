@@ -90,6 +90,7 @@ export default function RulesPage() {
             items: [
                 "After the trade window closes, each team selects their Playing XII from their full squad.",
                 "You must select exactly 12 players — the 12th player is your Impact Player.",
+                "A maximum of 4 overseas players are allowed in your Playing XII.",
                 "Your team rating is based ONLY on the Playing XII, not the full squad.",
                 "Choose wisely — a balanced Playing XII with the right mix of roles scores higher!",
             ],

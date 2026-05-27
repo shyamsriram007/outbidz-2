@@ -306,8 +306,8 @@ function AuctionPageContent() {
             });
             const data = await response.json();
             if (response.ok && data.round !== 2) {
-                // Only redirect if auction is fully over (not transitioning to round 2)
-                router.push(`/results?roomId=${roomIdParam}`);
+                // Only wait for socket to redirect to trade
+                console.log("Auction forcefully ended by host, waiting for trade-window-started event...");
             }
         } catch (err) {
             console.error("Failed to end round:", err);

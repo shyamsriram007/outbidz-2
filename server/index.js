@@ -243,11 +243,11 @@ function handleTimerEnd(roomId) {
 }
 
 // Check if any team can bid on a specific player
-function canAnyTeamBid(room, player) {
+function canAnyTeamBid(room, player, ignoreOverseas = false) {
     for (const [teamId, team] of room.teams) {
         if (team.squad.length >= 18) continue; // Squad full
         if (team.purse < player.basePrice) continue; // Can't afford
-        if (player.countryCode !== "IN" && team.overseasCount >= 8) continue; // Overseas limit
+        if (!ignoreOverseas && player.countryCode !== "IN" && team.overseasCount >= 8) continue; // Overseas limit
         return true; // At least one team can bid
     }
     return false;
@@ -256,7 +256,8 @@ function canAnyTeamBid(room, player) {
 // Check if any team can bid on ANY of the remaining players
 function canAnyTeamBidOnAnyRemaining(room) {
     for (let i = room.currentPlayerIndex; i < room.players.length; i++) {
-        if (canAnyTeamBid(room, room.players[i])) return true;
+        // Ignore the 8-overseas limit so the auction doesn't abruptly end if teams still have budget/slots left
+        if (canAnyTeamBid(room, room.players[i], true)) return true;
     }
     return false;
 }
@@ -1386,6 +1387,23 @@ app.post("/api/room/:roomId/end-trading", (req, res) => {
     // Initialize playing XII storage
     room.playingXII = new Map();
     room.submittedTeams = new Set();
+
+    // Check if any teams are eligible for squad selection (>= 12 players)
+    let eligibleCount = 0;
+    for (const [tid, t] of room.teams) {
+        if (t.squad.length >= 12) eligibleCount++;
+    }
+
+    if (eligibleCount === 0) {
+        // All teams are disqualified! Skip straight to results
+        room.status = "finished";
+        const teamRatings = calculateTeamRatingsWithPlayingXII(room);
+        io.to(req.params.roomId).emit("auction-complete", {
+            teams: getRoomState(req.params.roomId).teams,
+            teamRatings
+        });
+        return res.json({ success: true, message: "All teams disqualified. Skipped to results." });
+    }
 
     io.to(req.params.roomId).emit("squad-selection-started", {
         roomState: getRoomState(req.params.roomId)

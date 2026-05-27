@@ -87,6 +87,21 @@ function SquadSelectionContent() {
                 setTimeout(() => setError(null), 2500);
                 return prev;
             }
+
+            // Check overseas limit
+            const entry = mySquad.find(s => s.player.name === name);
+            if (entry && entry.player.countryCode !== "IN") {
+                const currentOverseasCount = prev.reduce((count, pName) => {
+                    const s = mySquad.find(sq => sq.player.name === pName);
+                    return s && s.player.countryCode !== "IN" ? count + 1 : count;
+                }, 0);
+                if (currentOverseasCount >= 4) {
+                    setError("Maximum 4 overseas players allowed in Playing XII");
+                    setTimeout(() => setError(null), 2500);
+                    return prev;
+                }
+            }
+
             return [...prev, name];
         });
     };
@@ -389,9 +404,12 @@ function SquadSelectionContent() {
                                 <span className="text-sm text-gray-400 flex items-center gap-2">
                                     ✈️ Overseas in XII
                                 </span>
-                                <span className="text-lg font-bold text-neon-cyan font-mono">
-                                    {selectionBreakdown.overseas}
-                                </span>
+                                <div className="flex items-center gap-1">
+                                    <span className={`text-lg font-bold font-mono ${selectionBreakdown.overseas === 4 ? "text-amber-400" : "text-neon-cyan"}`}>
+                                        {selectionBreakdown.overseas}
+                                    </span>
+                                    <span className="text-gray-500 font-mono">/4</span>
+                                </div>
                             </div>
 
                             {/* Submit Button */}
