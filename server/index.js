@@ -690,11 +690,15 @@ io.on("connection", (socket) => {
         // Mark as withdrawn
         room.bidWithdrawals.add(teamId);
 
+        // Remove ONLY the current highest bid (which belongs to teamId)
+        if (room.recentBids.length > 0 && room.recentBids[0].teamId === teamId) {
+            room.recentBids.shift();
+        }
+
         // Revert to previous bid or base price
-        const previousBids = room.recentBids.filter(b => b.teamId !== teamId);
-        if (previousBids.length > 0) {
-            // Revert to previous highest bid
-            const prevBid = previousBids[0];
+        if (room.recentBids.length > 0) {
+            // Revert to the new highest bid
+            const prevBid = room.recentBids[0];
             room.currentBid = prevBid.amount;
             room.currentHolderId = prevBid.oderId;
             room.currentHolderTeamId = prevBid.teamId;
@@ -705,9 +709,6 @@ io.on("connection", (socket) => {
             room.currentHolderId = null;
             room.currentHolderTeamId = null;
         }
-
-        // Remove this team's bids from recent bids
-        room.recentBids = room.recentBids.filter(b => b.teamId !== teamId);
 
         // Reset timer
         room.timerSeconds = 20;
