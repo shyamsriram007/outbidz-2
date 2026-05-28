@@ -183,6 +183,13 @@ function AuctionPageContent() {
             });
         }
 
+        function onTimerPaused(data: { isPaused: boolean }) {
+            setRoomState((prev) => {
+                if (!prev) return prev;
+                return { ...prev, isTimerPaused: data.isPaused };
+            });
+        }
+
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
         socket.on("bid-placed", onBidPlaced);
@@ -193,6 +200,7 @@ function AuctionPageContent() {
         socket.on("auction-complete", onAuctionComplete);
         socket.on("trade-window-started", onTradeWindowStarted);
         socket.on("bid-withdrawn", onBidWithdrawn);
+        socket.on("timer-paused", onTimerPaused);
 
         // Listen for auction restart from host
         socket.on("auction-restart", (data: { roomId: string }) => {
@@ -296,6 +304,30 @@ function AuctionPageContent() {
         setShowSoldOverlay(false);
         setSoldInfo(null);
     }, []);
+
+    // Host Action: Next Player (Skips Timer)
+    const handleNextPlayerAction = useCallback(async () => {
+        if (!roomIdParam) return;
+        try {
+            await fetch(`${SERVER_URL}/api/room/${roomIdParam}/next-player-action`, {
+                method: "POST",
+            });
+        } catch (err) {
+            console.error("Failed to skip timer:", err);
+        }
+    }, [roomIdParam]);
+
+    // Host Action: Toggle Timer (Pause/Resume)
+    const handleToggleTimer = useCallback(async () => {
+        if (!roomIdParam) return;
+        try {
+            await fetch(`${SERVER_URL}/api/room/${roomIdParam}/toggle-timer`, {
+                method: "POST",
+            });
+        } catch (err) {
+            console.error("Failed to toggle timer:", err);
+        }
+    }, [roomIdParam]);
 
     // DEV TOOL: Force end auction
     const handleForceEndAuction = useCallback(async () => {
@@ -725,6 +757,23 @@ function AuctionPageContent() {
                         {/* Host Only: Force End Auction Button */}
                         {isHost && (
                             <div className="flex items-center gap-2">
+                                <button
+                                    onClick={handleToggleTimer}
+                                    className={`px-3 py-1 text-xs border rounded transition-all ${roomState.isTimerPaused
+                                            ? "bg-green-500/20 hover:bg-green-500/30 border-green-500/50 text-green-400"
+                                            : "bg-blue-500/20 hover:bg-blue-500/30 border-blue-500/50 text-blue-400"
+                                        }`}
+                                    title="Pause/Resume Timer (Host Only)"
+                                >
+                                    {roomState.isTimerPaused ? "Resume ⏱️" : "Pause ⏸️"}
+                                </button>
+                                <button
+                                    onClick={handleNextPlayerAction}
+                                    className="px-3 py-1 text-xs bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 text-purple-400 rounded transition-all"
+                                    title="Skip timer & sell to highest bidder or mark unsold (Host Only)"
+                                >
+                                    Next Player ⏭
+                                </button>
                                 <button
                                     onClick={handleSkipCategory}
                                     className="px-3 py-1 text-xs bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-400 rounded transition-all"

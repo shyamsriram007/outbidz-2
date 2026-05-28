@@ -23,6 +23,50 @@ const io = new Server(httpServer, {
     },
 });
 
+
+// Next Player (Host only) - Skips the timer and immediately ends it
+app.post("/api/room/:roomId/next-player-action", (req, res) => {
+    const room = rooms.get(req.params.roomId);
+    if (!room) return res.status(404).json({ error: "Room not found" });
+
+    // Stop current timer if running
+    if (room.timerInterval) {
+        clearInterval(room.timerInterval);
+        room.timerInterval = null;
+    }
+    
+    // Clear pause state if any
+    room.isTimerPaused = false;
+    
+    // Trigger timer end logic immediately
+    handleTimerEnd(req.params.roomId);
+    
+    res.json({ success: true, message: "Timer skipped, player handled." });
+});
+
+// Toggle Timer (Host only) - Pauses or Resumes the timer
+app.post("/api/room/:roomId/toggle-timer", (req, res) => {
+    const room = rooms.get(req.params.roomId);
+    if (!room) return res.status(404).json({ error: "Room not found" });
+
+    if (room.timerInterval) {
+        // Currently running -> Pause it
+        clearInterval(room.timerInterval);
+        room.timerInterval = null;
+        room.isTimerPaused = true;
+        io.to(req.params.roomId).emit("timer-paused", { isPaused: true });
+        return res.json({ success: true, isPaused: true });
+    } else if (room.isTimerPaused) {
+        // Currently paused -> Resume it
+        room.isTimerPaused = false;
+        io.to(req.params.roomId).emit("timer-paused", { isPaused: false });
+        startTimer(req.params.roomId);
+        return res.json({ success: true, isPaused: false });
+    }
+
+    res.json({ success: false, error: "Timer cannot be toggled right now." });
+});
+
 // ============================================================================
 // DATA STRUCTURES
 // ============================================================================

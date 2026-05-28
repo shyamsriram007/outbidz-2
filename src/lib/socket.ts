@@ -50,6 +50,7 @@ export interface RoomState {
     currentHolderId: string | null;
     currentHolderTeamId: string | null;
     timerSeconds: number;
+    isTimerPaused?: boolean;
     recentBids: BidEntry[];
     auctionRound: number;
     unsoldCount: number;
