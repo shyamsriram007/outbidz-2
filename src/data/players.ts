@@ -4131,3 +4131,56 @@ export const PLAYERS: Player[] = [
     }
   }
 ];
+
+
+export type PlayerRole = "batsman" | "bowler" | "wicket-keeper" | "all-rounder";
+export type PlayerCategory = "marquee" | "batsman" | "bowler" | "wicket-keeper" | "all-rounder" | "uncapped";
+
+export const formatPrice = (priceLakhs: number): string => {
+    if (priceLakhs >= 100) {
+        const crores = priceLakhs / 100;
+        return crores % 1 === 0 ? `₹${crores} Cr` : `₹${crores.toFixed(2)} Cr`;
+    }
+    return `₹${priceLakhs} L`;
+};
+
+export const getBidIncrement = (currentBidLakhs: number): number => {
+    // currentBidLakhs is in lakhs
+    if (currentBidLakhs < 100) return 5;       // ₹20L – ₹1Cr: increments of ₹5L
+    if (currentBidLakhs < 500) return 25;      // ₹1Cr – ₹5Cr: increments of ₹25L
+    if (currentBidLakhs < 1000) return 50;     // ₹5Cr – ₹10Cr: increments of ₹50L
+    if (currentBidLakhs < 1500) return 75;     // ₹10Cr – ₹15Cr: increments of ₹75L
+    return 100;                                 // Above ₹15Cr: increments of ₹1Cr
+};
+
+export const getRoleDisplay = (role: PlayerRole): string => {
+    const displays: Record<PlayerRole, string> = {
+        batsman: "Batsman",
+        bowler: "Bowler",
+        "all-rounder": "All-Rounder",
+        "wicket-keeper": "Wicket-Keeper",
+    };
+    return displays[role];
+};
+
+export const getCategoryDisplay = (category: PlayerCategory): string => {
+    const displays: Record<PlayerCategory, string> = {
+        marquee: "Marquee",
+        batsman: "Capped Batsmen",
+        bowler: "Capped Bowlers",
+        "wicket-keeper": "Capped Wicket-Keepers",
+        "all-rounder": "Capped All-Rounders",
+        uncapped: "Uncapped",
+    };
+    return displays[category];
+};
+
+export const getRoleBadgeColor = (role: string): string => {
+    const colors: Record<string, string> = {
+        batsman: "bg-blue-500/20 text-blue-400",
+        bowler: "bg-red-500/20 text-red-400",
+        "all-rounder": "bg-purple-500/20 text-purple-400",
+        "wicket-keeper": "bg-green-500/20 text-green-400",
+    };
+    return colors[role] || "bg-gray-500/20 text-gray-400";
+};
