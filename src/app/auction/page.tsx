@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import LeftSidebar from "@/components/auction/LeftSidebar";
 import CenterStage from "@/components/auction/CenterStage";
 import RightSidebar from "@/components/auction/RightSidebar";
@@ -67,6 +67,7 @@ function AuctionPageContent() {
     const [viewingSquadTeamId, setViewingSquadTeamId] = useState<string | null>(null);
     const [showSetPreview, setShowSetPreview] = useState(false);
     const [setPreviewData, setSetPreviewData] = useState<any>(null);
+    const [showUpcomingPanel, setShowUpcomingPanel] = useState(false);
 
     // Socket event handlers
     useEffect(() => {
@@ -326,6 +327,20 @@ function AuctionPageContent() {
             });
         } catch (err) {
             console.error("Failed to toggle timer:", err);
+        }
+    }, [roomIdParam]);
+
+    // Host Action: Skip to a specific player
+    const handleSkipToPlayer = useCallback(async (targetIndex: number) => {
+        if (!roomIdParam) return;
+        try {
+            await fetch(`${SERVER_URL}/api/room/${roomIdParam}/skip-to-player`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ targetIndex }),
+            });
+        } catch (err) {
+            console.error("Failed to skip to player:", err);
         }
     }, [roomIdParam]);
 
@@ -754,9 +769,9 @@ function AuctionPageContent() {
                                 {roomState.teams.length} Teams
                             </span>
                         </div>
-                        {/* Host Only: Force End Auction Button */}
+                        {/* Host Only: Auction Controls */}
                         {isHost && (
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 relative">
                                 <button
                                     onClick={handleToggleTimer}
                                     className={`px-3 py-1 text-xs border rounded transition-all ${roomState.isTimerPaused
@@ -775,6 +790,16 @@ function AuctionPageContent() {
                                     Next Player ⏭
                                 </button>
                                 <button
+                                    onClick={() => setShowUpcomingPanel(prev => !prev)}
+                                    className={`px-3 py-1 text-xs border rounded transition-all ${showUpcomingPanel
+                                            ? "bg-cyan-500/20 hover:bg-cyan-500/30 border-cyan-500/50 text-cyan-400"
+                                            : "bg-teal-500/20 hover:bg-teal-500/30 border-teal-500/50 text-teal-400"
+                                        }`}
+                                    title="Skip to a specific upcoming player (Host Only)"
+                                >
+                                    Skip To… 🎯
+                                </button>
+                                <button
                                     onClick={handleSkipCategory}
                                     className="px-3 py-1 text-xs bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-400 rounded transition-all"
                                     title="Skip remaining players in this set (Host Only)"
@@ -788,6 +813,78 @@ function AuctionPageContent() {
                                 >
                                     {roomState.auctionRound === 1 ? 'End 1st Round' : 'End 2nd Round'}
                                 </button>
+
+                                {/* Upcoming Players Dropdown Panel */}
+                                <AnimatePresence>
+                                    {showUpcomingPanel && roomState.upcomingPlayers && roomState.upcomingPlayers.length > 0 && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                                            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                            transition={{ duration: 0.15 }}
+                                            className="absolute bottom-full right-0 mb-2 w-96 max-h-80 overflow-y-auto bg-stadium-900 border border-stadium-600/50 rounded-xl shadow-2xl shadow-black/50 z-50"
+                                        >
+                                            <div className="sticky top-0 bg-stadium-900 border-b border-stadium-600/30 px-4 py-3 flex items-center justify-between">
+                                                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                                                    🎯 Skip to Player
+                                                    <span className="text-xs text-gray-500 font-normal">
+                                                        ({roomState.upcomingPlayers.length} upcoming)
+                                                    </span>
+                                                </h3>
+                                                <button
+                                                    onClick={() => setShowUpcomingPanel(false)}
+                                                    className="text-gray-500 hover:text-white text-xs"
+                                                >
+                                                    ✕
+                                                </button>
+                                            </div>
+                                            <div className="p-2 space-y-1">
+                                                {roomState.upcomingPlayers.map((player) => {
+                                                    const roleIcon = player.role === "batsman" ? "🏏" : player.role === "bowler" ? "🎯" : player.role === "all-rounder" ? "⚡" : "🧤";
+                                                    const isOverseas = player.countryCode !== "IN";
+                                                    return (
+                                                        <button
+                                                            key={player.index}
+                                                            onClick={() => {
+                                                                if (confirm(`Skip to ${player.name}? All players in between will be marked unsold.`)) {
+                                                                    handleSkipToPlayer(player.index);
+                                                                    setShowUpcomingPanel(false);
+                                                                }
+                                                            }}
+                                                            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-stadium-700/50 transition-all text-left group"
+                                                        >
+                                                            <span className="text-sm">{roleIcon}</span>
+                                                            <div className="flex-1 min-w-0">
+                                                                <div className="flex items-center gap-2">
+                                                                    <span className="text-sm text-white font-medium truncate group-hover:text-neon-cyan transition-colors">
+                                                                        {player.name}
+                                                                    </span>
+                                                                    {isOverseas && (
+                                                                        <span className="text-[10px] px-1.5 py-0.5 bg-sky-500/20 text-sky-400 rounded">
+                                                                            ✈️ {player.country}
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                <div className="text-[10px] text-gray-500">
+                                                                    {player.category === "marquee" ? "Marquee" :
+                                                                        player.category === "uncapped" ? "Uncapped" :
+                                                                            `Capped ${player.role === "batsman" ? "Bat" : player.role === "bowler" ? "Bowl" : player.role === "all-rounder" ? "AR" : "WK"}`
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                            <span className="text-xs text-neon-gold font-mono shrink-0">
+                                                                {formatPrice(player.basePrice)}
+                                                            </span>
+                                                            <span className="text-gray-600 group-hover:text-cyan-500 text-xs transition-colors">
+                                                                →
+                                                            </span>
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </div>
                         )}
                     </div>

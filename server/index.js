@@ -44,6 +44,81 @@ app.post("/api/room/:roomId/next-player-action", (req, res) => {
     res.json({ success: true, message: "Timer skipped, player handled." });
 });
 
+// Skip to a specific player (Host only) - Jumps to a player index, marking skipped ones as unsold
+app.post("/api/room/:roomId/skip-to-player", (req, res) => {
+    const room = rooms.get(req.params.roomId);
+    if (!room) return res.status(404).json({ error: "Room not found" });
+    if (room.status !== "active") return res.status(400).json({ error: "Auction is not active" });
+
+    const { targetIndex } = req.body;
+    if (typeof targetIndex !== "number" || targetIndex <= room.currentPlayerIndex || targetIndex >= room.players.length) {
+        return res.status(400).json({ error: "Invalid target player index" });
+    }
+
+    // Stop current timer
+    if (room.timerInterval) {
+        clearInterval(room.timerInterval);
+        room.timerInterval = null;
+    }
+    room.isTimerPaused = false;
+
+    // Handle current player first (sell to highest bidder or mark unsold)
+    const currentPlayer = room.players[room.currentPlayerIndex];
+    if (room.currentHolderTeamId) {
+        const team = room.teams.get(room.currentHolderTeamId);
+        if (team) {
+            team.purse -= room.currentBid;
+            team.squad.push({ player: currentPlayer, price: room.currentBid });
+            if (currentPlayer.countryCode !== "IN") {
+                team.overseasCount++;
+            }
+        }
+        io.to(req.params.roomId).emit("player-sold", {
+            player: currentPlayer,
+            teamId: room.currentHolderTeamId,
+            price: room.currentBid,
+            updatedTeams: getRoomState(req.params.roomId).teams,
+        });
+    } else {
+        if (room.auctionRound === 1) {
+            room.unsoldPlayers.push(currentPlayer);
+        }
+        io.to(req.params.roomId).emit("player-unsold", { player: currentPlayer });
+    }
+
+    // Mark all players between current+1 and targetIndex as unsold
+    let skippedCount = 0;
+    for (let i = room.currentPlayerIndex + 1; i < targetIndex; i++) {
+        if (room.auctionRound === 1) {
+            room.unsoldPlayers.push(room.players[i]);
+        }
+        skippedCount++;
+    }
+
+    // Jump to target player
+    room.currentPlayerIndex = targetIndex;
+    const targetPlayer = room.players[targetIndex];
+
+    room.currentBid = targetPlayer.basePrice;
+    room.currentHolderId = null;
+    room.currentHolderTeamId = null;
+    room.timerSeconds = 25;
+    room.recentBids = [];
+    room.bidWithdrawals = new Set();
+
+    // Brief delay then emit the new player
+    setTimeout(() => {
+        io.to(req.params.roomId).emit("next-player", {
+            player: targetPlayer,
+            playerIndex: room.currentPlayerIndex,
+            totalPlayers: room.players.length,
+        });
+        startTimer(req.params.roomId);
+    }, 2000);
+
+    res.json({ success: true, message: `Skipped ${skippedCount} players. Now on: ${targetPlayer.name}` });
+});
+
 // Toggle Timer (Host only) - Pauses or Resumes the timer
 app.post("/api/room/:roomId/toggle-timer", (req, res) => {
     const room = rooms.get(req.params.roomId);
@@ -204,6 +279,15 @@ function getRoomState(roomId) {
         tradeHistory: room.tradeHistory || [],
         playingXII: room.playingXII ? Object.fromEntries(room.playingXII) : {},
         submittedTeams: room.submittedTeams ? Array.from(room.submittedTeams) : [],
+        upcomingPlayers: room.players.slice(room.currentPlayerIndex + 1, room.currentPlayerIndex + 21).map((p, i) => ({
+            index: room.currentPlayerIndex + 1 + i,
+            name: p.name,
+            country: p.country,
+            countryCode: p.countryCode,
+            role: p.role,
+            basePrice: p.basePrice,
+            category: p.category,
+        })),
     };
 }
 

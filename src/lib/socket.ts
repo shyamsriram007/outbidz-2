@@ -56,6 +56,17 @@ export interface RoomState {
     unsoldCount: number;
     users: User[];
     teams: TeamState[];
+    upcomingPlayers?: UpcomingPlayer[];
+}
+
+export interface UpcomingPlayer {
+    index: number;
+    name: string;
+    country: string;
+    countryCode: string;
+    role: string;
+    basePrice: number;
+    category: string;
 }
 
 export interface User {
