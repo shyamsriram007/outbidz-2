@@ -823,9 +823,9 @@ function AuctionPageContent() {
                                             animate={{ opacity: 1, y: 0, scale: 1 }}
                                             exit={{ opacity: 0, y: 10, scale: 0.95 }}
                                             transition={{ duration: 0.15 }}
-                                            className="absolute bottom-full right-0 mb-2 w-96 max-h-80 overflow-y-auto bg-stadium-900 border border-stadium-600/50 rounded-xl shadow-2xl shadow-black/50 z-50"
+                                            className="absolute bottom-full right-0 mb-3 w-[90vw] sm:w-80 max-h-[60vh] flex flex-col bg-stadium-900 border border-stadium-600/50 rounded-xl shadow-2xl shadow-black/50 z-50 origin-bottom-right"
                                         >
-                                            <div className="sticky top-0 bg-stadium-900 border-b border-stadium-600/30 px-4 py-3 flex items-center justify-between">
+                                            <div className="bg-stadium-900 border-b border-stadium-600/30 px-4 py-3 flex items-center justify-between rounded-t-xl shrink-0">
                                                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
                                                     🎯 Skip to Player
                                                     <span className="text-xs text-gray-500 font-normal">
@@ -839,7 +839,7 @@ function AuctionPageContent() {
                                                     ✕
                                                 </button>
                                             </div>
-                                            <div className="p-2 space-y-1">
+                                            <div className="p-2 space-y-1 overflow-y-auto custom-scrollbar flex-1">
                                                 {roomState.upcomingPlayers.map((player) => {
                                                     const roleIcon = player.role === "batsman" ? "🏏" : player.role === "bowler" ? "🎯" : player.role === "all-rounder" ? "⚡" : "🧤";
                                                     const isOverseas = player.countryCode !== "IN";
