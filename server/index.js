@@ -106,15 +106,14 @@ app.post("/api/room/:roomId/skip-to-player", (req, res) => {
     room.recentBids = [];
     room.bidWithdrawals = new Set();
 
-    // Brief delay then emit the new player
-    setTimeout(() => {
-        io.to(req.params.roomId).emit("next-player", {
-            player: targetPlayer,
-            playerIndex: room.currentPlayerIndex,
-            totalPlayers: room.players.length,
-        });
-        startTimer(req.params.roomId);
-    }, 2000);
+    // Emit the new player without delay
+    io.to(req.params.roomId).emit("next-player", {
+        player: targetPlayer,
+        playerIndex: room.currentPlayerIndex,
+        totalPlayers: room.players.length,
+        upcomingPlayers: getRoomState(req.params.roomId).upcomingPlayers,
+    });
+    startTimer(req.params.roomId);
 
     res.json({ success: true, message: `Skipped ${skippedCount} players. Now on: ${targetPlayer.name}` });
 });
@@ -482,6 +481,7 @@ function moveToNextPlayer(roomId) {
         player: actualNextPlayer,
         playerIndex: room.currentPlayerIndex,
         totalPlayers: room.players.length,
+        upcomingPlayers: getRoomState(roomId).upcomingPlayers,
     });
 
     startTimer(roomId);
@@ -1448,6 +1448,7 @@ app.post("/api/room/:roomId/skip-category", (req, res) => {
         player: actualNextPlayer,
         playerIndex: room.currentPlayerIndex,
         totalPlayers: room.players.length,
+        upcomingPlayers: getRoomState(req.params.roomId).upcomingPlayers,
     });
 
     startTimer(req.params.roomId);

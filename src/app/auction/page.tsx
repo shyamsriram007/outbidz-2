@@ -130,7 +130,7 @@ function AuctionPageContent() {
             console.log("Player unsold:", data.player.name);
         }
 
-        function onNextPlayer(data: { player: any; playerIndex: number; totalPlayers: number }) {
+        function onNextPlayer(data: { player: any; playerIndex: number; totalPlayers: number; upcomingPlayers?: any[] }) {
             setShowSoldOverlay(false);
             setSoldInfo(null);
             setHasWithdrawn(false);
@@ -146,6 +146,7 @@ function AuctionPageContent() {
                     currentHolderTeamId: null,
                     timerSeconds: 25,
                     recentBids: [],
+                    upcomingPlayers: data.upcomingPlayers || prev.upcomingPlayers,
                 };
             });
         }
