@@ -38,8 +38,8 @@ app.post("/api/room/:roomId/next-player-action", (req, res) => {
     // Clear pause state if any
     room.isTimerPaused = false;
     
-    // Trigger timer end logic immediately, with skipDelay = true
-    handleTimerEnd(req.params.roomId, true);
+    // Trigger timer end logic immediately
+    handleTimerEnd(req.params.roomId);
     
     res.json({ success: true, message: "Timer skipped, player handled." });
 });
@@ -332,7 +332,7 @@ function stopTimer(roomId) {
     room.timerInterval = null;
 }
 
-function handleTimerEnd(roomId, skipDelay = false) {
+function handleTimerEnd(roomId) {
     const room = rooms.get(roomId);
     if (!room) return;
 
@@ -363,14 +363,10 @@ function handleTimerEnd(roomId, skipDelay = false) {
         io.to(roomId).emit("player-unsold", { player: currentPlayer });
     }
 
-    if (skipDelay) {
+    // Move to next player after delay
+    setTimeout(() => {
         moveToNextPlayer(roomId);
-    } else {
-        // Move to next player after delay
-        setTimeout(() => {
-            moveToNextPlayer(roomId);
-        }, 3500);
-    }
+    }, 3500);
 }
 
 // Check if any team can bid on a specific player
